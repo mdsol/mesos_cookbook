@@ -17,5 +17,13 @@
 # limitations under the License.
 #
 
-#if node['mesos']['use_exhibitor_discovery'] == true
-#end
+if node['mesos']['use_exhibitor_discovery'] == true
+end
+
+bash "start-mesos" do
+  user "root"
+  code <<-EOH
+  start mesos-master
+  EOH
+  not_if "status mesos-master|grep start/running"
+end

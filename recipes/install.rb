@@ -48,7 +48,6 @@ bash "reload-configuration" do
   user "root"
   code <<-EOH
   initctl reload-configuration
-  start mesos-master
   EOH
   not_if "status mesos-master|grep start/running"
 end
