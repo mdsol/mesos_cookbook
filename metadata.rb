@@ -11,6 +11,6 @@ version          '0.1.0'
 end
 
 # Cookbook dependencies
-%w{ chef-zookeeper }.each do |cb|
+%w{ zookeeper java apt }.each do |cb|
   depends cb
 end

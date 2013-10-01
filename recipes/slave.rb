@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: mesos
-# Recipe:: default
+# Recipe:: slave
 #
 # Copyright (C) 2013 Medidata Solutions, Inc.
 #
@@ -17,15 +17,5 @@
 # limitations under the License.
 #
 
-# install mesos package
-include_recipe 'mesos::install'
-
-if node['mesos']['master'] == true
-  include_recipe 'mesos::master'
-end
-
-if node['mesos']['slave'] == true
-  include_recipe 'mesos::slave'
-end
-
-
+#if node['mesos']['use_exhibitor_discovery'] == true
+#end
