@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: mesos
-# Recipe:: default
+# Recipe:: master
 #
 # Copyright (C) 2013 Medidata Solutions, Inc.
 #
@@ -17,15 +17,13 @@
 # limitations under the License.
 #
 
-# install mesos package
-include_recipe 'mesos::install'
-
-if node['mesos']['master']
-  include_recipe 'mesos::master'
+if node['mesos']['use_exhibitor_discovery'] == true
 end
 
-if node['mesos']['slave']
-  include_recipe 'mesos::slave'
+bash "start-mesos" do
+  user "root"
+  code <<-EOH
+  start mesos-master
+  EOH
+  not_if "status mesos-master|grep start/running"
 end
-
-
