@@ -21,16 +21,10 @@ include_recipe 'apt'
 
 distro_version = node['platform_version']
 
-package 'unzip' do
-  action :install
-end
-
-package 'default-jre-headless' do
-  action :install
-end
-
-package 'libcurl3' do
-  action :install
+%w{ unzip default-jre-headless libcurl3 }.each do |pkg|
+  package pkg do
+    action :install
+  end
 end
 
 remote_file "#{Chef::Config[:file_cache_path]}/mesos.deb" do
