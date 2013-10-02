@@ -1,7 +1,9 @@
 default['mesos']['version']                       = '0.14.0'
 default['mesos']['cluster_name']                  = 'MyMesosCluster'
-default['mesos']['zookeeper_url']                 = nil
-default['mesos']['use_exhibitor_discovery']       = false
-default['mesos']['exhibitor_url']                 = nil
 default['mesos']['master']                        = true
 default['mesos']['slave']                         = true
+default['mesos']['zookeeper_server_list']         = []
+default['mesos']['zookeeper_port']                = 2181
+default['mesos']['zookeeper_path']                = 'mesos'
+default['mesos']['zookeeper_exhibitor_discovery'] = false
+default['mesos']['zookeeper_exhibitor_url']       = nil
