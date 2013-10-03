@@ -17,8 +17,6 @@
 # limitations under the License.
 #
 
-
-
 # install mesos package
 include_recipe 'mesos::install'
 
@@ -29,5 +27,3 @@ end
 if node['mesos']['slave']
   include_recipe 'mesos::slave'
 end
-
-

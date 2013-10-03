@@ -45,3 +45,4 @@ bash "reload-configuration" do
   EOH
   not_if "status mesos-master|grep start/running"
 end
+
