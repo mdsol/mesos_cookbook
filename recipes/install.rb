@@ -43,6 +43,6 @@ bash "reload-configuration" do
   code <<-EOH
   initctl reload-configuration
   EOH
-  not_if "status mesos-master|grep start/running"
+  not_if { ::File.exists? "/usr/local/sbin/mesos-master" }
 end
 
