@@ -1,11 +1,11 @@
 default['mesos']['version']                       = '0.14.0'
 default['mesos']['cluster_name']                  = 'MyMesosCluster'
 default['mesos']['port']                          = 5050
-default['mesos']['logs_directory']                = '/var/log/mesos'
-default['mesos']['master']                        = true
-default['mesos']['slave']                         = true
-default['mesos']['work_directory']                = '/var/run/mesos'
-default['mesos']['isolation_type']                = 'cgroups'
+default['mesos']['logs_dir']                      = '/var/log/mesos'
+default['mesos']['enable_master']                 = true
+default['mesos']['enable_slave']                  = true
+default['mesos']['work_dir']                      = '/tmp/mesos'
+default['mesos']['isolation_type']                = 'process'
 default['mesos']['zookeeper_server_list']         = []
 default['mesos']['zookeeper_port']                = 2181
 default['mesos']['zookeeper_path']                = 'mesos'
