@@ -24,11 +24,9 @@ suites:
   - recipe[apt]
   attributes:
     mesos:
-      version: '0.15.0-trunk-d20130921'
-      master: false
-      slave: true
-      #zookeeper_server_list: [ 'ec2-54-211-195-173.compute-1.amazonaws.com', 'ec2-54-242-24-191.compute-1.amazonaws.com', 'ec2-50-16-61-190.compute-1.amazonaws.com' ]
+      version: '0.14.0'
+      enable_master: true
+      enable_slave: true
+      zookeeper_server_list: []
       zookeeper_port: 2181
       zookeeper_path: 'mesos-test'
-      zookeeper_exhibitor_discovery: false
-      zookeeper_exhibitor_url: 'http://zk-sandbox.imedidata.net:8080'
