@@ -96,6 +96,7 @@ run_list:
 ```
 
 [Apache Mesos]: http://http://mesos.apache.org
+[Netflix Exhibitor]: https://github.com/Netflix/exhibitor
 
 ## Contributing
 
