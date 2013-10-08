@@ -1,0 +1,27 @@
+# This file contains environment variables that are passed to mesos-slave.
+# To get a description of all options run mesos-slave --help; any option
+# supported as a command-line option is also supported as an environment
+# variable.
+
+# You must at least set MESOS_master.
+
+# The mesos master URL to contact. Should be host:port for
+# non-ZooKeeper based masters, otherwise a zk:// or file:// URL.
+
+<% # ZK multi-node syntax: zk://host1:port1,host2:port2,.../path
+  zk_url_list = []
+  @zookeeper_server_list.each do |zk_server|
+    zk_url_list << "#{zk_server}:#{@zookeeper_port}"
+  end
+%>
+
+<% if zk_url_list.count > 0 %>
+  export MESOS_master=<%= 'zk://' + zk_url_list.join(',') + ',/' + @zookeeper_path %>
+<% else %>
+  export MESOS_master=unknown-machine:5050
+<% end %>
+
+# Other options you're likely to want to set:
+export MESOS_log_dir=<%= @logs_dir %>
+export MESOS_work_dir=<%= @work_dir %>
+export MESOS_isolation=<%= @isolation_type %>

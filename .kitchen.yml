@@ -1,0 +1,32 @@
+---
+driver_plugin: vagrant
+driver_config:
+  require_chef_omnibus: true
+
+platforms:
+- name: ubuntu-12.04
+  driver_config:
+    box: opscode-ubuntu-12.04
+    box_url: https://opscode-vm-bento.s3.amazonaws.com/vagrant/opscode_ubuntu-12.04_provisionerless.box
+    customize:
+      memory: 1024
+- name: ubuntu-10.04
+  driver_config:
+    box: opscode-ubuntu-10.04
+    box_url: https://opscode-vm-bento.s3.amazonaws.com/vagrant/opscode_ubuntu-10.04_provisionerless.box
+    customize:
+      memory: 1024
+
+suites:
+- name: default
+  run_list:
+  - recipe[mesos]
+  - recipe[apt]
+  attributes:
+    mesos:
+      version: '0.14.0'
+      enable_master: true
+      enable_slave: true
+      zookeeper_server_list: []
+      zookeeper_port: 2181
+      zookeeper_path: 'mesos-test'
