@@ -24,7 +24,7 @@ zk_path = ''
 template '/etc/default/mesos' do
   source 'mesos.erb'
   variables(
-    :logs_directory => node['mesos']['logs_directory'],
+    :logs_dir => node['mesos']['logs_dir'],
   )
   notifies :run, "bash[restart-mesos-slave]", :delayed
 end
@@ -65,12 +65,28 @@ template '/usr/local/var/mesos/deploy/mesos-slave-env.sh.template' do
     :zookeeper_server_list => zk_server_list,
     :zookeeper_port => zk_port,
     :zookeeper_path => zk_path,
-    :logs_directory => node['mesos']['logs_directory'],
-    :work_directory => node['mesos']['work_directory'],
+    :logs_dir => node['mesos']['logs_dir'],
+    :work_dir => node['mesos']['work_dir'],
     :isolation_type => node['mesos']['isolation_type'],
   )
   notifies :run, "bash[restart-mesos-slave]", :delayed
 end
+
+# If we are on ec2 set the public dns as the hostname so that
+# mesos slave reports work properly in the UI.
+if node.attribute?('ec2')
+  bash 'set-aws-public-hostname' do
+    user 'root'
+    code <<-EOH
+      PUBLIC_DNS=`wget -q -O - http://instance-data.ec2.internal/latest/meta-data/public-hostname`
+      hostname $PUBLIC_DNS
+      echo $PUBLIC_DNS > /etc/hostname
+      HOSTNAME=$PUBLIC_DNS  # Fix the bash built-in hostname variable too
+    EOH
+    not_if 'hostname | grep amazonaws.com'
+  end
+end
+
 
 bash 'start-mesos-slave' do
   user 'root'
