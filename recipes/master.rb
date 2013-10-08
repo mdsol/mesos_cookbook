@@ -20,7 +20,7 @@
 template '/etc/default/mesos' do
   source 'mesos.erb'
   variables(
-    :logs_directory => node['mesos']['logs_directory'],
+    :logs_dir => node['mesos']['logs_dir'],
   )
   notifies :run, "bash[restart-mesos-master]", :delayed
 end

@@ -24,7 +24,7 @@ zk_path = ''
 template '/etc/default/mesos' do
   source 'mesos.erb'
   variables(
-    :logs_directory => node['mesos']['logs_directory'],
+    :logs_dir => node['mesos']['logs_dir'],
   )
   notifies :run, "bash[restart-mesos-slave]", :delayed
 end
@@ -65,8 +65,8 @@ template '/usr/local/var/mesos/deploy/mesos-slave-env.sh.template' do
     :zookeeper_server_list => zk_server_list,
     :zookeeper_port => zk_port,
     :zookeeper_path => zk_path,
-    :logs_directory => node['mesos']['logs_directory'],
-    :work_directory => node['mesos']['work_directory'],
+    :logs_dir => node['mesos']['logs_dir'],
+    :work_dir => node['mesos']['work_dir'],
     :isolation_type => node['mesos']['isolation_type'],
   )
   notifies :run, "bash[restart-mesos-slave]", :delayed
