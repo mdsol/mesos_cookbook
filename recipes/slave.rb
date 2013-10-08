@@ -72,6 +72,22 @@ template '/usr/local/var/mesos/deploy/mesos-slave-env.sh.template' do
   notifies :run, "bash[restart-mesos-slave]", :delayed
 end
 
+# If we are on ec2 set the public dns as the hostname so that
+# mesos slave reports work properly in the UI.
+if node.attribute?('ec2')
+  bash 'set-aws-public-hostname' do
+    user 'root'
+    code <<-EOH
+      PUBLIC_DNS=`wget -q -O - http://instance-data.ec2.internal/latest/meta-data/public-hostname`
+      hostname $PUBLIC_DNS
+      echo $PUBLIC_DNS > /etc/hostname
+      HOSTNAME=$PUBLIC_DNS  # Fix the bash built-in hostname variable too
+    EOH
+    not_if 'hostname | grep amazonaws.com'
+  end
+end
+
+
 bash 'start-mesos-slave' do
   user 'root'
   code <<-EOH
