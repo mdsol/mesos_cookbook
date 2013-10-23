@@ -18,12 +18,12 @@
 #
 
 # install mesos package
-include_recipe 'mesos::install'
+include_recipe 'mesosphere_mesos::install'
 
 if node['mesos']['enable_master']
-  include_recipe 'mesos::master'
+  include_recipe 'mesosphere_mesos::master'
 end
 
 if node['mesos']['enable_slave']
-  include_recipe 'mesos::slave'
+  include_recipe 'mesosphere_mesos::slave'
 end

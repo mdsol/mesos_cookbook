@@ -1,4 +1,4 @@
-name             'mesos'
+name             'mesosphere_mesos'
 maintainer       'Medidata Solutions'
 maintainer_email 'rarodriguez@mdsol.com'
 license          'Apache 2.0'

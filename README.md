@@ -3,21 +3,22 @@ Description
 
 Application cookbook for installing the [Apache Mesos][] cluster manager.
 Mesos provides efficient resource isolation and sharing across distributed 
-applications, or frameworks.
+applications, or frameworks.  This cookbook installs Mesos via packages
+provided by [Mesosphere][].
 
 Requirements
 ============
 
 Chef 11.4.0+
 
-This cookbook assumes you will be running a zookeeper ensemble for production 
+This cookbook assumes you will be running a ZooKeeper ensemble for production 
 use of Mesos.
 
 The following cookbooks are dependencies:
 
 * apt
 * java
-* zookeeper (used for discovering zookeeper ensembles via [Netflix Exhibitor][])
+* zookeeper (used for discovering ZooKeeper ensembles via [Netflix Exhibitor][])
 
 ## Platform:
 
@@ -25,13 +26,15 @@ Tested on
 
 * Ubuntu 12.04
 
+I intend to release updates to this cookbook to support rhel and centos 6.
+
 This cookbook includes cross-platform testing support via `test-kitchen`, see `TESTING.md`.
 
 
 Attributes
 ==========
 
-* `node['mesos']['version']` - Mesosphere Mesos package version. Default: '0.14.0'.
+* `node['mesos']['version']` - Mesosphere Mesos package version. Default: '0.14.0-rc4'.
 * `node['mesos']['cluster_name']` - Human readable name for the cluster, displayed in the 
 webui. Default: 'MyMesosCluster'.
 * `node['mesos']['port']` - Port to listen on. Default: 5050.
@@ -42,16 +45,16 @@ webui. Default: 'MyMesosCluster'.
 '/tmp/mesos'
 * `node['mesos']['isolation_type']` - Isolation mechanism, may be one of: process, cgroups. 
 Default: 'process'.
-* `node['mesos']['zookeeper_server_list']` - List of zookeeper hostnames or IP addresses. Default: [].
-* `node['mesos']['zookeeper_port']` - Zookeeper port. Default: 2181.
-* `node['mesos']['zookeeper_path']` - Zookeeper path. Default: 'mesos'.
-* `node['mesos']['zookeeper_exhibitor_discovery']` - Flag to enable zookeeper ensemble discovery via Netflix Exhibitor. Default: false.
-* `node['mesos']['zookeeper_exhibitor_url']` - Netflix Exhibitor zookeeper ensemble url.
+* `node['mesos']['zookeeper_server_list']` - List of ZooKeeper hostnames or IP addresses. Default: [].
+* `node['mesos']['zookeeper_port']` - ZooKeeper port. Default: 2181.
+* `node['mesos']['zookeeper_path']` - ZooKeeper path. Default: 'mesos'.
+* `node['mesos']['zookeeper_exhibitor_discovery']` - Flag to enable ZooKeeper ensemble discovery via Netflix Exhibitor. Default: false.
+* `node['mesos']['zookeeper_exhibitor_url']` - Netflix Exhibitor ZooKeeper ensemble url.
 
 
 ## Usage
 
-Here is a sample role for configuring a Mesos master in a zookeeper backed production mode.
+Here is a sample role for configuring a Mesos master in a ZooKeeper backed production mode.
 
 ```YAML
 chef_type:           role
@@ -73,7 +76,7 @@ run_list:
   recipe[mesos]
 ```
 
-Here is a sample role for creating a Mesos slave node with a seperate zookeeper ensemble
+Here is a sample role for creating a Mesos slave node with a seperate ZooKeeper ensemble
 dynamically discovered via Netflix Exhibitor:
 ```YAML
 chef_type:           role
@@ -97,6 +100,7 @@ run_list:
 
 [Apache Mesos]: http://http://mesos.apache.org
 [Netflix Exhibitor]: https://github.com/Netflix/exhibitor
+[Mesosphere]: http://mesosphere.io
 
 ## Contributing
 
