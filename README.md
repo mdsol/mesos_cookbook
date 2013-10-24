@@ -25,6 +25,7 @@ The following cookbooks are dependencies:
 Tested on
 
 * Ubuntu 12.04
+* Ubuntu 13.04
 
 I intend to release updates to this cookbook to support rhel and centos 6.
 
@@ -62,7 +63,7 @@ default_attributes:
 description:
 env_run_lists:
 json_class:          Chef::Role
-name:                mesos
+name:                mesosphere_mesos
 override_attributes:
   mesos:
     version: 0.14.0
@@ -73,7 +74,7 @@ override_attributes:
     zookeeper_port: 2181
     zookeeper_path: 'mesos-sandbox'
 run_list:
-  recipe[mesos]
+  recipe[mesosphere_mesos]
 ```
 
 Here is a sample role for creating a Mesos slave node with a seperate ZooKeeper ensemble
@@ -84,7 +85,7 @@ default_attributes:
 description:
 env_run_lists:
 json_class:          Chef::Role
-name:                mesos
+name:                mesosphere_mesos
 override_attributes:
   mesos:
     version: 0.14.0
@@ -95,7 +96,30 @@ override_attributes:
     zookeeper_exhibitor_discovery: true
     zookeeper_exhibitor_url: 'http://zk-exhibitor-endpoint.example.com:8080'
 run_list:
-  recipe[mesos]
+  recipe[mesosphere_mesos]
+```
+
+Here is a sample role for creating a Mesos slave node running the experimental 
+docker executor.  This node is also dynamically configured via zookeeper and
+exhibitor.  (Note: this recipe only works with Ubuntu 13.04 as of now.)
+```YAML
+chef_type:           role
+default_attributes:
+description:
+env_run_lists:
+json_class:          Chef::Role
+name:                mesosphere_mesos_docker
+override_attributes:
+  mesos:
+    version: 0.14.0
+    cluster_name: mesos-sandbox
+    master: false,
+    slave: true,
+    zookeeper_path: 'mesos'
+    zookeeper_exhibitor_discovery: true
+    zookeeper_exhibitor_url: 'http://zk-exhibitor-endpoint.example.com:8080'
+run_list:
+  recipe[mesosphere_mesos::docker]
 ```
 
 [Apache Mesos]: http://http://mesos.apache.org
