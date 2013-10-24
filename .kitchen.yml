@@ -17,10 +17,19 @@ platforms:
     customize:
       memory: 1024
 
+- name: ubuntu-13.04
+  driver_config:
+    box: opscode-ubuntu-13.04
+    box_url: https://opscode-vm-bento.s3.amazonaws.com/vagrant/opscode_ubuntu-13.04_provisionerless.box
+    customize:
+      memory: 1024
+    network:
+    - ["forwarded_port", {guest: 5050, host: 5050}]
+
 suites:
 - name: default
   run_list:
-  - recipe[mesos]
+  - recipe[mesosphere_mesos]
   - recipe[apt]
   attributes:
     mesos:
@@ -30,3 +39,4 @@ suites:
       zookeeper_server_list: []
       zookeeper_port: 2181
       zookeeper_path: 'mesos-test'
+

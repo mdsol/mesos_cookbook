@@ -17,6 +17,8 @@
 # limitations under the License.
 #
 
+include_recipe 'mesosphere_mesos::install'
+
 template '/etc/default/mesos' do
   source 'mesos.erb'
   variables(

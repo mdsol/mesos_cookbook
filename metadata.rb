@@ -1,4 +1,4 @@
-name             'mesos'
+name             'mesosphere_mesos'
 maintainer       'Medidata Solutions'
 maintainer_email 'rarodriguez@mdsol.com'
 license          'Apache 2.0'
@@ -11,6 +11,6 @@ version          '0.1.3'
 end
 
 # Cookbook dependencies
-%w{ zookeeper java apt }.each do |cb|
+%w{ zookeeper java apt docker }.each do |cb|
   depends cb
 end
