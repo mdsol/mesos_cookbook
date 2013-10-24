@@ -17,6 +17,8 @@
 # limitations under the License.
 #
 
+include_recipe 'mesosphere_mesos::install'
+
 zk_server_list = []
 zk_port = ''
 zk_path = ''

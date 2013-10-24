@@ -25,6 +25,7 @@ The following cookbooks are dependencies:
 Tested on
 
 * Ubuntu 12.04
+* Ubuntu 13.04
 
 I intend to release updates to this cookbook to support rhel and centos 6.
 
