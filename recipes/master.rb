@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: mesos
+# Cookbook Name:: mesosphere_mesos
 # Recipe:: master
 #
 # Copyright (C) 2013 Medidata Solutions, Inc.

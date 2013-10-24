@@ -10,12 +10,8 @@ platforms:
     box_url: https://opscode-vm-bento.s3.amazonaws.com/vagrant/opscode_ubuntu-12.04_provisionerless.box
     customize:
       memory: 1024
-- name: ubuntu-10.04
-  driver_config:
-    box: opscode-ubuntu-10.04
-    box_url: https://opscode-vm-bento.s3.amazonaws.com/vagrant/opscode_ubuntu-10.04_provisionerless.box
-    customize:
-      memory: 1024
+    network:
+    - ["forwarded_port", {guest: 5050, host: 5050}]
 
 - name: ubuntu-13.04
   driver_config:
@@ -36,7 +32,6 @@ suites:
       version: '0.14.0'
       enable_master: true
       enable_slave: true
-      zookeeper_server_list: []
-      zookeeper_port: 2181
-      zookeeper_path: 'mesos-test'
-
+      #zookeeper_server_list: []
+      #zookeeper_port: 2181
+      #zookeeper_path: 'mesos-test'
