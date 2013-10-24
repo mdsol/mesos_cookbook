@@ -24,6 +24,7 @@ The following cookbooks are dependencies:
 Tested on
 
 * Ubuntu 12.04
+* Ubuntu 13.04
 
 This cookbook includes cross-platform testing support via `test-kitchen`, see `TESTING.md`.
 
