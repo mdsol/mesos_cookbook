@@ -85,7 +85,7 @@ mesos-slave using zookeeper.  Lastly it sets the mesos-slave init config to
 The docker recipe installs docker via [Brian Flad's docker cookbook][] as well
 as [Jason Dusek's mesos-docker script][] as a mesos executor.  After running 
 this recipe on a mesos slave you should be able to run the mesos-docker
-examples listed in [Jason Dusek's docker on mesos blog post][]
+examples listed in [Jason Dusek's docker on mesos blog post][].
 
 ## Usage
 
