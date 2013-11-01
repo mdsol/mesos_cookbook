@@ -24,7 +24,7 @@ template '/etc/default/mesos' do
   variables(
     :logs_dir => node['mesos']['logs_dir'],
   )
-  notifies :run, "bash[restart-mesos-master]", :delayed
+  notifies :run, 'bash[restart-mesos-master]', :delayed
 end
 
 template '/etc/default/mesos-master' do
@@ -33,7 +33,7 @@ template '/etc/default/mesos-master' do
     :port => node['mesos']['port'],
     :cluster_name => node['mesos']['cluster_name']
   )
-  notifies :run, "bash[restart-mesos-master]", :delayed
+  notifies :run, 'bash[restart-mesos-master]', :delayed
 end
 
 if node['mesos']['zookeeper_server_list'].count > 0
@@ -62,7 +62,7 @@ unless zk_server_list.nil? && zk_port.nil? && zk_path.nil?
       :zookeeper_port => zk_port,
       :zookeeper_path => zk_path
     )
-    notifies :run, "bash[restart-mesos-master]", :delayed
+    notifies :run, 'bash[restart-mesos-master]', :delayed
   end
 end
 
@@ -81,6 +81,24 @@ if node.attribute?('ec2')
   end
 end
 
+# Set init to 'start' by default for mesos master.
+# This ensures that mesos-master is started on restart
+template '/etc/init/mesos-master.conf' do
+  source 'mesos-master.conf.erb'
+  variables(
+    :action => 'start'
+  )
+  notifies :run, 'bash[reload-configuration]'
+end
+
+bash 'reload-configuration' do
+  action :nothing
+  user 'root'
+  code <<-EOH
+  initctl reload-configuration
+  EOH
+end
+
 bash 'start-mesos-master' do
   user 'root'
   code <<-EOH
@@ -97,3 +115,4 @@ bash 'restart-mesos-master' do
   EOH
   not_if 'status mesos-master|grep stop/waiting'
 end
+

@@ -38,11 +38,28 @@ dpkg_package "mesos" do
   not_if { ::File.exists? "/usr/local/sbin/mesos-master" }
 end
 
-bash "reload-configuration" do
-  user "root"
+# Set init to 'stop' by default for mesos master.
+# Running mesosphere_mesos::master recipe will reset this to 'start'
+template '/etc/init/mesos-master.conf' do
+  source 'mesos-master.conf.erb'
+  variables(
+    :action => 'stop'
+  )
+end
+
+# Set init to 'stop' by default for mesos slave.
+# Running mesosphere_mesos::slave recipe will reset this to 'start'
+template '/etc/init/mesos-slave.conf' do
+  source 'mesos-slave.conf.erb'
+  variables(
+    :action => 'stop'
+  )
+end
+
+bash 'reload-configuration' do
+  user 'root'
   code <<-EOH
   initctl reload-configuration
   EOH
   not_if { ::File.exists? "/usr/local/sbin/mesos-master" }
 end
-
