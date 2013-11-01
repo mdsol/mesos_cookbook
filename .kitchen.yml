@@ -25,13 +25,14 @@ platforms:
 suites:
 - name: default
   run_list:
-  - recipe[mesosphere_mesos]
+  - recipe[mesosphere_mesos::master]
+  - recipe[mesosphere_mesos::slave]
   - recipe[apt]
   attributes:
     mesos:
       version: '0.14.0'
-      enable_master: true
-      enable_slave: true
+      enable_master: false
+      enable_slave: false
       #zookeeper_server_list: []
       #zookeeper_port: 2181
       #zookeeper_path: 'mesos-test'
