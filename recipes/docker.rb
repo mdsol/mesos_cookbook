@@ -51,5 +51,5 @@ bash 'install-mesos-egg' do
   code <<-EOH
     easy_install "#{Chef::Config[:file_cache_path]}/mesos.egg"
   EOH
-  not_if { ::File.exists?("/usr/local/lib/python2.7/dist-packages/mesos.egg") }
+  not_if { ::File.exists?('/usr/local/lib/python2.7/dist-packages/mesos.egg') }
 end

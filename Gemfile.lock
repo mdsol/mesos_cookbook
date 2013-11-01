@@ -8,6 +8,7 @@ GEM
     akami (1.2.0)
       gyoku (>= 0.4.0)
       nokogiri (>= 1.4.0)
+    ast (1.1.0)
     berkshelf (2.0.10)
       activesupport (~> 3.2.0)
       addressable (~> 2.3.4)
@@ -133,12 +134,17 @@ GEM
       mixlib-shellout
       systemu
       yajl-ruby
+    parser (2.0.0)
+      ast (~> 1.1)
+      slop (~> 3.4, >= 3.4.5)
     polyglot (0.3.3)
+    powerpack (0.0.9)
     pry (0.9.12.2)
       coderay (~> 1.0.5)
       method_source (~> 0.8)
       slop (~> 3.4)
     rack (1.5.2)
+    rainbow (1.1.4)
     rake (10.1.0)
     rbzip2 (0.2.0)
     rest-client (1.6.7)
@@ -164,6 +170,10 @@ GEM
       solve (>= 0.4.4)
       varia_model (~> 0.1)
       winrm (~> 1.1.0)
+    rubocop (0.14.1)
+      parser (~> 2.0)
+      powerpack (~> 0.0.6)
+      rainbow (>= 1.1.4)
     ruby-hmac (0.4.0)
     rubyntlm (0.1.1)
     safe_yaml (0.9.7)
@@ -217,4 +227,5 @@ DEPENDENCIES
   kitchen-ec2
   kitchen-vagrant
   knife-ec2 (~> 0.6.4)
+  rubocop
   test-kitchen

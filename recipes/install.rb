@@ -30,12 +30,12 @@ end
 remote_file "#{Chef::Config[:file_cache_path]}/mesos.deb" do
   source "http://downloads.mesosphere.io/master/ubuntu/#{distro_version}/mesos_#{node['mesos']['version']}_amd64.deb"
   action :create
-  not_if { ::File.exists? "/usr/local/sbin/mesos-master" }
+  not_if { ::File.exists? '/usr/local/sbin/mesos-master' }
 end
 
-dpkg_package "mesos" do
+dpkg_package 'mesos' do
   source "#{Chef::Config[:file_cache_path]}/mesos.deb"
-  not_if { ::File.exists? "/usr/local/sbin/mesos-master" }
+  not_if { ::File.exists? '/usr/local/sbin/mesos-master' }
 end
 
 # Set init to 'stop' by default for mesos master.
@@ -61,5 +61,5 @@ bash 'reload-configuration' do
   code <<-EOH
   initctl reload-configuration
   EOH
-  not_if { ::File.exists? "/usr/local/sbin/mesos-master" }
+  not_if { ::File.exists? '/usr/local/sbin/mesos-master' }
 end

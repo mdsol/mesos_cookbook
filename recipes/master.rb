@@ -115,4 +115,3 @@ bash 'restart-mesos-master' do
   EOH
   not_if 'status mesos-master|grep stop/waiting'
 end
-
