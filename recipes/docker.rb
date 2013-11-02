@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: mesosphere_mesos
+# Cookbook Name:: mesos
 # Recipe:: docker
 #
 # Copyright (C) 2013 Medidata Solutions, Inc.
@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 include_recipe 'docker'
-include_recipe 'mesosphere_mesos::slave'
+include_recipe 'mesos::slave'
 
 package 'python-setuptools'
 

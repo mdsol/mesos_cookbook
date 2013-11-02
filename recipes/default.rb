@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: mesosphere_mesos
+# Cookbook Name:: mesos
 # Recipe:: default
 #
 # Copyright (C) 2013 Medidata Solutions, Inc.
@@ -18,4 +18,4 @@
 #
 
 # install mesos package
-include_recipe 'mesosphere_mesos::install'
+include_recipe 'mesos::install'
