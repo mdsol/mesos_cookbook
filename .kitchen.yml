@@ -10,12 +10,6 @@ platforms:
     box_url: https://opscode-vm-bento.s3.amazonaws.com/vagrant/opscode_ubuntu-12.04_provisionerless.box
     customize:
       memory: 1024
-- name: ubuntu-10.04
-  driver_config:
-    box: opscode-ubuntu-10.04
-    box_url: https://opscode-vm-bento.s3.amazonaws.com/vagrant/opscode_ubuntu-10.04_provisionerless.box
-    customize:
-      memory: 1024
 
 suites:
 - name: default
