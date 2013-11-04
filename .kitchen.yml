@@ -20,8 +20,9 @@ platforms:
 suites:
 - name: default
   run_list:
-  - recipe[mesos]
   - recipe[apt]
+  - recipe[mesos]
+  - recipe[minitest-handler]
   attributes:
     mesos:
       version: '0.14.0'
