@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: mesosphere_mesos
+# Cookbook Name:: mesos
 # Recipe:: master
 #
 # Copyright (C) 2013 Medidata Solutions, Inc.
@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-include_recipe 'mesosphere_mesos::install'
+include_recipe 'mesos::install'
 
 template '/etc/default/mesos' do
   source 'mesos.erb'

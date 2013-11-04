@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: mesosphere_mesos
+# Cookbook Name:: mesos
 # Recipe:: install
 #
 # Copyright (C) 2013 Medidata Solutions, Inc.
@@ -39,7 +39,7 @@ dpkg_package 'mesos' do
 end
 
 # Set init to 'stop' by default for mesos master.
-# Running mesosphere_mesos::master recipe will reset this to 'start'
+# Running mesos::master recipe will reset this to 'start'
 template '/etc/init/mesos-master.conf' do
   source 'mesos-master.conf.erb'
   variables(
@@ -48,7 +48,7 @@ template '/etc/init/mesos-master.conf' do
 end
 
 # Set init to 'stop' by default for mesos slave.
-# Running mesosphere_mesos::slave recipe will reset this to 'start'
+# Running mesos::slave recipe will reset this to 'start'
 template '/etc/init/mesos-slave.conf' do
   source 'mesos-slave.conf.erb'
   variables(

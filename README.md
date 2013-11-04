@@ -59,7 +59,7 @@ ensemble url.
 ## Recipes
 
 ### default
-The default mesosphere_mesos recipe will run mesosphere_mesos::install.
+The default mesos recipe will run mesos::install.
 
 ### install
 The install recipe pulls down the specified version of the mesosphere mesos 
@@ -68,14 +68,14 @@ mesos-slave init files so that they don't automatically start on server
 restart.
 
 ### master
-The master recipe runs mesosphere_mesos::install as well as creating several
+The master recipe runs mesos::install as well as creating several
 mesos-master configuration files that are used at startup.  This recipe also
 uses the zookeeper attributes and/or exhibitor attributes to configure the 
 mesos-master using zookeeper.  Lastly it sets the mesos-master init config to
 'start' so that mesos-master is started on server restart.
 
 ### slave
-The slave recipe runs mesosphere_mesos::install as well as creating several
+The slave recipe runs mesos::install as well as creating several
 mesos-slave configuration files that are used at startup.  This recipe also
 uses the zookeeper attributes and/or exhibitor attributes to configure the 
 mesos-slave using zookeeper.  Lastly it sets the mesos-slave init config to
@@ -98,7 +98,7 @@ default_attributes:
 description:
 env_run_lists:
 json_class:          Chef::Role
-name:                mesosphere_mesos
+name:                mesos_master
 override_attributes:
   mesos:
     version: 0.14.0-rc4
@@ -107,7 +107,7 @@ override_attributes:
     zookeeper_port: 2181
     zookeeper_path: 'mesos-sandbox'
 run_list:
-  recipe[mesosphere_mesos::master]
+  recipe[mesos::master]
 ```
 
 Here is a sample role for creating a Mesos slave node with a seperate ZooKeeper 
@@ -118,7 +118,7 @@ default_attributes:
 description:
 env_run_lists:
 json_class:          Chef::Role
-name:                mesosphere_mesos
+name:                mesos_slave
 override_attributes:
   mesos:
     version: 0.14.0-rc4
@@ -127,7 +127,7 @@ override_attributes:
     zookeeper_exhibitor_discovery: true
     zookeeper_exhibitor_url: 'http://zk-exhibitor-endpoint.example.com:8080'
 run_list:
-  recipe[mesosphere_mesos::slave]
+  recipe[mesos::slave]
 ```
 
 Here is a sample role for creating a Mesos slave node running the experimental 
@@ -139,7 +139,7 @@ default_attributes:
 description:
 env_run_lists:
 json_class:          Chef::Role
-name:                mesosphere_mesos_docker
+name:                mesos_slave_docker
 override_attributes:
   mesos:
     version: 0.14.0-rc4
@@ -148,7 +148,7 @@ override_attributes:
     zookeeper_exhibitor_discovery: true
     zookeeper_exhibitor_url: 'http://zk-exhibitor-endpoint.example.com:8080'
 run_list:
-  recipe[mesosphere_mesos::docker]
+  recipe[mesos::docker]
 ```
 
 [Apache Mesos]: http://http://mesos.apache.org
