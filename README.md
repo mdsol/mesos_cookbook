@@ -169,7 +169,7 @@ run_list:
 
 ## License and Author
 
-* Author: [Ray Rodriguez](https://github.com/rayrod2030)
+* Author: [Ray Rodriguez](https://github.com/rayrod2030)(rayrod2030@gmail.com)
 
 Copyright 2013 Medidata Solutions Worldwide
 
