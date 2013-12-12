@@ -19,11 +19,3 @@
 
 # install mesos package
 include_recipe 'mesos::install'
-
-if node['mesos']['enable_master']
-  include_recipe 'mesos::master'
-end
-
-if node['mesos']['enable_slave']
-  include_recipe 'mesos::slave'
-end

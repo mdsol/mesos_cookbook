@@ -17,6 +17,8 @@
 # limitations under the License.
 #
 
+include_recipe 'mesos::install'
+
 zk_server_list = []
 zk_port = ''
 zk_path = ''
@@ -26,7 +28,7 @@ template '/etc/default/mesos' do
   variables(
     :logs_dir => node['mesos']['logs_dir'],
   )
-  notifies :run, "bash[restart-mesos-slave]", :delayed
+  notifies :run, 'bash[restart-mesos-slave]', :delayed
 end
 
 if node['mesos']['zookeeper_server_list'].count > 0
@@ -55,7 +57,7 @@ unless zk_server_list.count == 0 && zk_port.empty? && zk_path.empty?
       :zookeeper_port => zk_port,
       :zookeeper_path => zk_path
     )
-    notifies :run, "bash[restart-mesos-slave]", :delayed
+    notifies :run, 'bash[restart-mesos-slave]', :delayed
   end
 end
 
@@ -69,7 +71,7 @@ template '/usr/local/var/mesos/deploy/mesos-slave-env.sh.template' do
     :work_dir => node['mesos']['work_dir'],
     :isolation_type => node['mesos']['isolation_type'],
   )
-  notifies :run, "bash[restart-mesos-slave]", :delayed
+  notifies :run, 'bash[restart-mesos-slave]', :delayed
 end
 
 # If we are on ec2 set the public dns as the hostname so that
@@ -87,6 +89,23 @@ if node.attribute?('ec2')
   end
 end
 
+# Set init to 'start' by default for mesos slave.
+# This ensures that mesos-slave is started on restart
+template '/etc/init/mesos-slave.conf' do
+  source 'mesos-slave.conf.erb'
+  variables(
+    :action => 'start'
+  )
+  notifies :run, 'bash[reload-configuration]'
+end
+
+bash 'reload-configuration' do
+  action :nothing
+  user 'root'
+  code <<-EOH
+  initctl reload-configuration
+  EOH
+end
 
 bash 'start-mesos-slave' do
   user 'root'
