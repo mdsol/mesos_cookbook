@@ -151,7 +151,7 @@ run_list:
   recipe[mesos::docker]
 ```
 
-[Apache Mesos]: http://http://mesos.apache.org
+[Apache Mesos]: http://mesos.apache.org
 [Netflix Exhibitor]: https://github.com/Netflix/exhibitor
 [Mesosphere]: http://mesosphere.io
 [Brian Flad's docker cookbook]: https://github.com/bflad/chef-docker
