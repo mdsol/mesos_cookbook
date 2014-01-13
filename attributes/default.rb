@@ -9,4 +9,4 @@ default['mesos']['zookeeper_port']                = 2181
 default['mesos']['zookeeper_path']                = 'mesos'
 default['mesos']['zookeeper_exhibitor_discovery'] = false
 default['mesos']['zookeeper_exhibitor_url']       = nil
-default['mesos']['python_egg']                    = 'http://downloads.mesosphere.io/master/ubuntu/12.04/mesos-0.15.0-py2.7-linux-x86_64.egg'
+default['mesos']['python_egg']                    = 'http://downloads.mesosphere.io/master/ubuntu/13.04/mesos-0.15.0-py2.7-linux-x86_64.egg'
