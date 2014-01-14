@@ -40,7 +40,7 @@ end
 remote_file "#{Chef::Config[:file_cache_path]}/mesos.egg" do
   owner 'root'
   group 'root'
-  source 'http://downloads.mesosphere.io/master/ubuntu/13.04/mesos-0.14.0-py2.7-linux-x86_64.egg'
+  source node['mesos']['python_egg']
   mode 00755
   not_if { ::File.exists?("#{Chef::Config[:file_cache_path]}/mesos.egg") }
 end

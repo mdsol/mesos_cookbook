@@ -55,6 +55,7 @@ IP addresses. Default: [].
 ensemble discovery via Netflix Exhibitor. Default: false.
 * `node['mesos']['zookeeper_exhibitor_url']` - Netflix Exhibitor ZooKeeper 
 ensemble url.
+* `node['mesos']['python_egg']` - URL of mesos python egg to download
 
 ## Recipes
 
@@ -121,7 +122,7 @@ json_class:          Chef::Role
 name:                mesos_slave
 override_attributes:
   mesos:
-    version: 0.14.0-rc4
+    version: 0.14.2
     cluster_name: mesos-sandbox
     zookeeper_path: 'mesos'
     zookeeper_exhibitor_discovery: true
@@ -142,7 +143,7 @@ json_class:          Chef::Role
 name:                mesos_slave_docker
 override_attributes:
   mesos:
-    version: 0.14.0-rc4
+    version: 0.14.2
     cluster_name: mesos-sandbox
     zookeeper_path: 'mesos'
     zookeeper_exhibitor_discovery: true
@@ -151,7 +152,7 @@ run_list:
   recipe[mesos::docker]
 ```
 
-[Apache Mesos]: http://http://mesos.apache.org
+[Apache Mesos]: http://mesos.apache.org
 [Netflix Exhibitor]: https://github.com/Netflix/exhibitor
 [Mesosphere]: http://mesosphere.io
 [Brian Flad's docker cookbook]: https://github.com/bflad/chef-docker
