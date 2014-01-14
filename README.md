@@ -55,6 +55,7 @@ IP addresses. Default: [].
 ensemble discovery via Netflix Exhibitor. Default: false.
 * `node['mesos']['zookeeper_exhibitor_url']` - Netflix Exhibitor ZooKeeper 
 ensemble url.
+* `node['mesos']['python_egg']` - URL of mesos python egg to download
 
 ## Recipes
 
