@@ -27,8 +27,8 @@ Tested on
 
 * Ubuntu 12.04
 * Ubuntu 13.04
-
-I intend to release updates to this cookbook to support rhel and centos 6.
+* Amazon Linux 2013/09
+* CentOS 6
 
 This cookbook includes cross-platform testing support via `test-kitchen`, see 
 `TESTING.md`.
@@ -55,6 +55,8 @@ IP addresses. Default: [].
 ensemble discovery via Netflix Exhibitor. Default: false.
 * `node['mesos']['zookeeper_exhibitor_url']` - Netflix Exhibitor ZooKeeper 
 ensemble url.
+* `node['mesos']['set_ec2_hostname']` - If true and running in ec2, set hostname
+to public dns name.  Default: true
 * `node['mesos']['python_egg']` - URL of mesos python egg to download
 
 ## Recipes
