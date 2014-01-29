@@ -102,7 +102,7 @@ json_class:          Chef::Role
 name:                mesos_master
 override_attributes:
   mesos:
-    version: 0.14.0-rc4
+    version: 0.15.0
     cluster_name: mesos-sandbox
     zookeeper_server_list: [ '203.0.113.2', '203.0.113.3', '203.0.113.4' ]
     zookeeper_port: 2181
@@ -122,7 +122,7 @@ json_class:          Chef::Role
 name:                mesos_slave
 override_attributes:
   mesos:
-    version: 0.14.2
+    version: 0.15.0
     cluster_name: mesos-sandbox
     zookeeper_path: 'mesos'
     zookeeper_exhibitor_discovery: true
@@ -143,7 +143,7 @@ json_class:          Chef::Role
 name:                mesos_slave_docker
 override_attributes:
   mesos:
-    version: 0.14.2
+    version: 0.15.0
     cluster_name: mesos-sandbox
     zookeeper_path: 'mesos'
     zookeeper_exhibitor_discovery: true
