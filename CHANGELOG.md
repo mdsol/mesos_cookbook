@@ -1,3 +1,7 @@
+## 1.0.2 / 2013-01-31
+
+* Fix docker-mesos egg url ([@rayrod2030][])
+
 ## 1.0.1 / 2013-01-13
 
 * Update default mesos version to 0.15.0 ([@stevendborrelli][])
