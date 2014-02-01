@@ -17,6 +17,10 @@
 # limitations under the License.
 #
 
+class ::Chef::Recipe
+  include ::Mesos
+end
+
 include_recipe 'mesos::install'
 
 zk_server_list = []
@@ -26,7 +30,7 @@ zk_path = ''
 template '/etc/default/mesos' do
   source 'mesos.erb'
   variables(
-    :logs_dir => node['mesos']['logs_dir'],
+    :logs_dir => node['mesos']['logs_dir']
   )
   notifies :run, 'bash[restart-mesos-slave]', :delayed
 end
@@ -38,7 +42,7 @@ if node['mesos']['zookeeper_server_list'].count > 0
 end
 
 if node['mesos']['zookeeper_exhibitor_discovery'] && !node['mesos']['zookeeper_exhibitor_url'].nil?
-  zk_nodes = discover_zookeepers(node['mesos']['zookeeper_exhibitor_url'])
+  zk_nodes = discover_zookeepers_with_retry(node['mesos']['zookeeper_exhibitor_url'])
 
   zk_server_list = zk_nodes['servers']
   zk_port = zk_nodes['port']
@@ -69,7 +73,7 @@ template '/usr/local/var/mesos/deploy/mesos-slave-env.sh.template' do
     :zookeeper_path => zk_path,
     :logs_dir => node['mesos']['logs_dir'],
     :work_dir => node['mesos']['work_dir'],
-    :isolation_type => node['mesos']['isolation_type'],
+    :isolation_type => node['mesos']['isolation_type']
   )
   notifies :run, 'bash[restart-mesos-slave]', :delayed
 end
