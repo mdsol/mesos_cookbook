@@ -26,7 +26,7 @@ include_recipe 'mesos::install'
 template '/etc/default/mesos' do
   source 'mesos.erb'
   variables(
-    :logs_dir => node['mesos']['logs_dir']
+    logs_dir: node['mesos']['logs_dir'],
   )
   notifies :run, 'bash[restart-mesos-master]', :delayed
 end
@@ -34,8 +34,8 @@ end
 template '/etc/default/mesos-master' do
   source 'mesos-master.erb'
   variables(
-    :port => node['mesos']['port'],
-    :cluster_name => node['mesos']['cluster_name']
+    port: node['mesos']['port'],
+    cluster_name: node['mesos']['cluster_name'],
   )
   notifies :run, 'bash[restart-mesos-master]', :delayed
 end
@@ -66,9 +66,9 @@ unless zk_server_list.nil? && zk_port.nil? && zk_path.nil?
   template '/etc/mesos/zk' do
     source 'zk.erb'
     variables(
-      :zookeeper_server_list => zk_server_list,
-      :zookeeper_port => zk_port,
-      :zookeeper_path => zk_path
+      zookeeper_server_list: zk_server_list,
+      zookeeper_port: zk_port,
+      zookeeper_path: zk_path,
     )
     notifies :run, 'bash[restart-mesos-master]', :delayed
   end
@@ -94,7 +94,7 @@ end
 template '/etc/init/mesos-master.conf' do
   source 'mesos-master.conf.erb'
   variables(
-    :action => 'start'
+    action: 'start',
   )
   notifies :run, 'bash[reload-configuration]'
 end
