@@ -17,12 +17,16 @@
 # limitations under the License.
 #
 
+class ::Chef::Recipe
+  include ::Mesos
+end
+
 include_recipe 'mesos::install'
 
 template '/etc/default/mesos' do
   source 'mesos.erb'
   variables(
-    :logs_dir => node['mesos']['logs_dir'],
+    :logs_dir => node['mesos']['logs_dir']
   )
   notifies :run, 'bash[restart-mesos-master]', :delayed
 end
@@ -43,7 +47,11 @@ if node['mesos']['zookeeper_server_list'].count > 0
 end
 
 if node['mesos']['zookeeper_exhibitor_discovery'] && !node['mesos']['zookeeper_exhibitor_url'].nil?
-  zk_nodes = discover_zookeepers(node['mesos']['zookeeper_exhibitor_url'])
+  zk_nodes = discover_zookeepers_with_retry(node['mesos']['zookeeper_exhibitor_url'])
+
+  if zk_nodes.nil?
+    Chef::Application.fatal!('Failed to discover zookeepers.  Cannot continue')
+  end
 
   zk_server_list = zk_nodes['servers']
   zk_port = zk_nodes['port']
