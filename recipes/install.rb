@@ -47,6 +47,26 @@ when 'rhel', 'centos'
         end
     end
 
+    yum_package "jdk" do
+        action :purge
+    end
+
+    execute "update java alternatives" do
+        command "/usr/sbin/alternatives --auto java"
+        action :run
+    end
+
+    execute "ldconfig" do
+        command "/sbin/ldconfig"
+        action :nothing
+    end
+
+    file "/etc/ld.so.conf.d/jre.conf" do
+        content "#{node['java']['java_home']}/jre/lib/amd64/server"
+        notifies :run, "execute[ldconfig]", :immediately
+        mode 0644
+    end
+
     remote_file "#{Chef::Config[:file_cache_path]}/mesos-#{node['mesos']['version']}.rpm" do
         source "http://downloads.mesosphere.io/master/centos/6/mesos_#{node['mesos']['version']}_x86_64.rpm"
         action :create
