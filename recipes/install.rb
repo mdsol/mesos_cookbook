@@ -43,7 +43,7 @@ end
 template '/etc/init/mesos-master.conf' do
   source 'mesos-master.conf.erb'
   variables(
-    :action => 'stop'
+    action: 'stop',
   )
 end
 
@@ -52,7 +52,7 @@ end
 template '/etc/init/mesos-slave.conf' do
   source 'mesos-slave.conf.erb'
   variables(
-    :action => 'stop'
+    action: 'stop',
   )
 end
 
