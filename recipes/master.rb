@@ -76,7 +76,7 @@ end
 
 # If we are on ec2 set the public dns as the hostname so that
 # mesos master redirection works properly.
-if node.attribute?('ec2')
+if node.attribute?('ec2') && node['mesos']['set_ec2_hostname']
   bash 'set-aws-public-hostname' do
     user 'root'
     code <<-EOH

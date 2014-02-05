@@ -35,6 +35,16 @@ template '/etc/default/mesos' do
   notifies :run, 'bash[restart-mesos-slave]', :delayed
 end
 
+template '/etc/default/mesos-slave' do
+  source 'mesos-slave.erb'
+  variables(
+    :port => node['mesos']['port'],
+    :work_dir => node['mesos']['work_dir'],
+    :isolation_type => node['mesos']['isolation_type']
+  )
+  notifies :run, 'bash[restart-mesos-slave]', :delayed
+end
+
 if node['mesos']['zookeeper_server_list'].count > 0
   zk_server_list = node['mesos']['zookeeper_server_list']
   zk_port = node['mesos']['zookeeper_port']
@@ -80,7 +90,7 @@ end
 
 # If we are on ec2 set the public dns as the hostname so that
 # mesos slave reports work properly in the UI.
-if node.attribute?('ec2')
+if node.attribute?('ec2') && node['mesos']['set_ec2_hostname']
   bash 'set-aws-public-hostname' do
     user 'root'
     code <<-EOH
