@@ -28,18 +28,18 @@ when 'debian'
     package pkg do
       action :install
     end
-end
+  end
 
-remote_file "#{Chef::Config[:file_cache_path]}/mesos.deb" do
-  source "http://downloads.mesosphere.io/master/ubuntu/#{distro_version}/mesos_#{node['mesos']['version']}_amd64.deb"
-  action :create
-  not_if { ::File.exists? '/usr/local/sbin/mesos-master' }
-end
+  remote_file "#{Chef::Config[:file_cache_path]}/mesos.deb" do
+    source "http://downloads.mesosphere.io/master/ubuntu/#{distro_version}/mesos_#{node['mesos']['version']}_amd64.deb"
+    action :create
+    not_if { ::File.exists? '/usr/local/sbin/mesos-master' }
+  end
 
-dpkg_package 'mesos' do
-  source "#{Chef::Config[:file_cache_path]}/mesos.deb"
-  not_if { ::File.exists? '/usr/local/sbin/mesos-master' }
-end
+  dpkg_package 'mesos' do
+    source "#{Chef::Config[:file_cache_path]}/mesos.deb"
+    not_if { ::File.exists? '/usr/local/sbin/mesos-master' }
+  end
 when 'rhel', 'centos'
   %w{ unzip libcurl }.each do |pkg|
     yum_package pkg do
