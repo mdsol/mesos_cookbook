@@ -14,5 +14,5 @@ default['mesos']['python_egg']                    = 'http://downloads.mesosphere
 
 case node['platform_family']
 when 'rhel'
-    default['java']['jdk_version'] = '7'
+  default['java']['jdk_version'] = '7'
 end

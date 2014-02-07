@@ -38,9 +38,8 @@ end
 template '/etc/default/mesos-slave' do
   source 'mesos-slave.erb'
   variables(
-    :port => node['mesos']['port'],
-    :work_dir => node['mesos']['work_dir'],
-    :isolation_type => node['mesos']['isolation_type']
+    work_dir: node['mesos']['work_dir'],
+    isolation_type: node['mesos']['isolation_type'],
   )
   notifies :run, 'bash[restart-mesos-slave]', :delayed
 end
