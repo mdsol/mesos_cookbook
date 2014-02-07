@@ -1,13 +1,18 @@
-## 1.0.3 / 2013-02-03
+## 1.0.4 / 2014-02-07
+
+* Add support for RHEL linux family. ([@asher][])
+* Updated integration tests (serverspec). ([@rayrod2030][])
+
+## 1.0.3 / 2014-02-03
 
 * Fix zk_string generating logic to strip triailing comma. ([@stevendborrelli][])
 * Add exhibitor discover zookeepers retry logic. ([@rayrod2030][])
 
-## 1.0.2 / 2013-01-31
+## 1.0.2 / 2014-01-31
 
 * Fix docker-mesos egg url ([@rayrod2030][])
 
-## 1.0.1 / 2013-01-13
+## 1.0.1 / 2014-01-13
 
 * Update default mesos version to 0.15.0 ([@stevendborrelli][])
 * Use attribute for mesos python bindings egg ([@stevendborrelli][])
@@ -24,3 +29,4 @@
 
 [@rayrod2030]: https://github.com/rayrod2030
 [@stevendborrelli]: https://github.com/stevendborrelli
+[@asher]: https://github.com/asher
