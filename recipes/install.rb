@@ -18,24 +18,65 @@
 #
 
 include_recipe 'apt'
+include_recipe 'java::default'
 
 distro_version = node['platform_version']
 
-%w{ unzip default-jre-headless libcurl3 }.each do |pkg|
-  package pkg do
-    action :install
+case node['platform_family']
+when 'debian'
+  %w{ unzip default-jre-headless libcurl3 }.each do |pkg|
+    package pkg do
+      action :install
+    end
   end
-end
 
-remote_file "#{Chef::Config[:file_cache_path]}/mesos.deb" do
-  source "http://downloads.mesosphere.io/master/ubuntu/#{distro_version}/mesos_#{node['mesos']['version']}_amd64.deb"
-  action :create
-  not_if { ::File.exists? '/usr/local/sbin/mesos-master' }
-end
+  remote_file "#{Chef::Config[:file_cache_path]}/mesos.deb" do
+    source "http://downloads.mesosphere.io/master/ubuntu/#{distro_version}/mesos_#{node['mesos']['version']}_amd64.deb"
+    action :create
+    not_if { ::File.exists? '/usr/local/sbin/mesos-master' }
+  end
 
-dpkg_package 'mesos' do
-  source "#{Chef::Config[:file_cache_path]}/mesos.deb"
-  not_if { ::File.exists? '/usr/local/sbin/mesos-master' }
+  dpkg_package 'mesos' do
+    source "#{Chef::Config[:file_cache_path]}/mesos.deb"
+    not_if { ::File.exists? '/usr/local/sbin/mesos-master' }
+  end
+when 'rhel', 'centos'
+  %w{ unzip libcurl }.each do |pkg|
+    yum_package pkg do
+      action :install
+    end
+  end
+
+  yum_package 'jdk' do
+    action :purge
+  end
+
+  execute 'update java alternatives' do
+    command '/usr/sbin/alternatives --auto java'
+    action :run
+  end
+
+  execute 'ldconfig' do
+    command '/sbin/ldconfig'
+    action :nothing
+  end
+
+  file '/etc/ld.so.conf.d/jre.conf' do
+    content "#{node['java']['java_home']}/jre/lib/amd64/server"
+    notifies :run, 'execute[ldconfig]', :immediately
+    mode 0644
+  end
+
+  remote_file "#{Chef::Config[:file_cache_path]}/mesos-#{node['mesos']['version']}.rpm" do
+    source "http://downloads.mesosphere.io/master/centos/6/mesos_#{node['mesos']['version']}_x86_64.rpm"
+    action :create
+    not_if { ::File.exists? '/usr/local/sbin/mesos-master' }
+  end
+
+  rpm_package 'mesos' do
+    source "#{Chef::Config[:file_cache_path]}/mesos-#{node['mesos']['version']}.rpm"
+    not_if { ::File.exists? '/usr/local/sbin/mesos-master' }
+  end
 end
 
 # Set init to 'stop' by default for mesos master.
@@ -43,7 +84,7 @@ end
 template '/etc/init/mesos-master.conf' do
   source 'mesos-master.conf.erb'
   variables(
-    :action => 'stop'
+    action: 'stop',
   )
 end
 
@@ -52,7 +93,7 @@ end
 template '/etc/init/mesos-slave.conf' do
   source 'mesos-slave.conf.erb'
   variables(
-    :action => 'stop'
+    action: 'stop',
   )
 end
 

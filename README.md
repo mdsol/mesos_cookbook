@@ -1,3 +1,8 @@
+Mesos Cookbook
+==============
+[![Build Status](https://secure.travis-ci.org/mdsol/mesos_cookbook.png?branch=master)](http://travis-ci.org/mdsol/mesos_cookbook)
+
+
 Description
 ===========
 
@@ -27,12 +32,8 @@ Tested on
 
 * Ubuntu 12.04
 * Ubuntu 13.04
-
-I intend to release updates to this cookbook to support rhel and centos 6.
-
-This cookbook includes cross-platform testing support via `test-kitchen`, see 
-`TESTING.md`.
-
+* Amazon Linux 2013/09
+* CentOS 6
 
 ## Attributes
 
@@ -55,6 +56,8 @@ IP addresses. Default: [].
 ensemble discovery via Netflix Exhibitor. Default: false.
 * `node['mesos']['zookeeper_exhibitor_url']` - Netflix Exhibitor ZooKeeper 
 ensemble url.
+* `node['mesos']['set_ec2_hostname']` - If true and running in ec2, set hostname
+to public dns name.  Default: true
 * `node['mesos']['python_egg']` - URL of mesos python egg to download
 
 ## Recipes
@@ -159,20 +162,18 @@ run_list:
 [Jason Dusek's mesos-docker script]: https://github.com/mesosphere/mesos-docker
 [Jason Dusek's docker on mesos blog post]: http://mesosphere.io/2013/09/26/docker-on-mesos/
 
-## Contributing
+Development
+-----------
+Please see the [Contributing](CONTRIBUTING.md) Guidelines.
 
-1. Fork the repository on Github
-2. Create a named feature branch (like `add_component_x`)
-3. Write your change
-4. Write tests for your change (if applicable)
-5. Run the tests, ensuring they all pass
-6. Submit a Pull Request using Github
-
-## License and Author
-
+License and Author
+------------------
 * Author: [Ray Rodriguez](https://github.com/rayrod2030)(rayrod2030@gmail.com)
+* Author: [Mark Corwin](https://github.com/mjcdiggity)
+* Contributor: [Asher Feldman](https://github.com/asher)
+* Contributor: [Steven Borrelli](https://github.com/stevendborrelli)
 
-Copyright 2013 Medidata Solutions Worldwide
+Copyright 2014 Medidata Solutions Worldwide
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use 
 this file except in compliance with the License. You may obtain a copy of the 
