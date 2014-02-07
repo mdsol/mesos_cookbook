@@ -6,7 +6,7 @@ description      'Installs/Configures Apache Mesos'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version          '1.0.4'
 
-%w{ ubuntu }.each do |os|
+%w{ ubuntu centos amazon }.each do |os|
   supports os
 end
 
