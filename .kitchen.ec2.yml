@@ -62,6 +62,5 @@ platforms:
 suites:
 - name: default
   run_list:
-  - recipe[apt]
   - recipe[mesos::master]
   - recipe[mesos::slave]
