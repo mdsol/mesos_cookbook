@@ -1,0 +1,67 @@
+<%  # This file contains ERB-interpreted YAML directives for testkitchen.
+    # Secrets are read from the local execution ENV into this file, and
+    # passed to the Chef tests via node attributes applied to the test suites.
+
+# To keep the YAML as simple as possible, some values are computed here with defaults set so kitchen will run without
+# values being set in ENV - at least as far as listing or running on the vagrant driver
+AWS_ACCESS_KEY_ID = ENV['AWS_BLUE_ACCESS_KEY_ID'] ||'(ENTER_AWS_ACCESS_KEY_ID)'
+AWS_ACCESS_KEY_SECRET = ENV['AWS_BLUE_SECRET_ACCESS_KEY_ID'] || '(ENTER_AWS_SECRET_ACCESS_KEY)'
+AWS_SSH_KEY_ID = ENV['AWS_SSH_KEY_ID'] || 'default'
+AWS_SSH_KEYPATH = File.expand_path(ENV['AWS_SSH_KEY_PATH'] || "#{ENV['HOME']}/.ssh/id_rsa")
+
+# support function, needed for inserting raw RSA private key data into YAML
+def yaml_section(hash, indentation)
+  YAML.dump(hash).sub(/\A---\s/, '').split("\n").map do |l|
+    (" " * indentation) + l
+  end.join("\n")
+end
+%>
+---
+driver:
+  name: ec2
+  aws_access_key_id: <%= ENV['AWS_BLUE_ACCESS_KEY_ID'] ||
+                        '(ENTER_AWS_ACCESS_KEY_ID)' %>
+  aws_secret_access_key: <%= ENV['AWS_BLUE_SECRET_ACCESS_KEY_ID'] ||
+                            'ENTER_AWS_SECRET_ACCESS_KEY_ID' %>
+  aws_ssh_key_id: <%= ENV['AWS_SSH_KEY_ID'] || 'default' %>
+  ssh_key: <%= File.expand_path(ENV['AWS_SSH_KEY_PATH'] ||
+                             "#{ENV['HOME']}/.ssh/id_rsa") %>
+  region: us-east-1
+  availability_zone: us-east-1c
+  flavor_id: <%= ENV['AWS_FLAVOR_ID'] || '(ENTER_AWS_FLAVOR_ID)' %>
+
+busser:
+  sudo: true
+
+provisioner:
+  name: chef_zero
+  require_chef_omnibus: 11.10.0
+  data_path: test/shared
+
+platforms:
+- name: ubuntu-12.04
+  driver_config:
+    image_id: ami-e7582d8e
+    username: ubuntu
+
+- name: ubuntu-13.04
+  driver_config:
+    image_id: ami-1d132274
+    username: ubuntu
+
+- name: centos-6.4
+  driver_config:
+    image_id: ami-56009e3f
+    username: ec2-user
+
+- name: amazon-linux-2013-09-2
+  driver_config:
+    image_id: ami-bba18dd2
+    username: ec2-user
+
+suites:
+- name: default
+  run_list:
+  - recipe[apt]
+  - recipe[mesos::master]
+  - recipe[mesos::slave]

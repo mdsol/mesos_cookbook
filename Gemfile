@@ -7,7 +7,7 @@ gem 'stove'
 gem 'chefspec', '~> 3.1.4'
 gem 'serverspec', '~> 0.14.2'
 
-gem 'chef', '~> 11.4.2'
+gem 'chef', '~> 11.10.0'
 gem 'json', '~> 1.7.7'
 gem 'faraday', '0.8.5'
 
