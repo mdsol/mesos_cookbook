@@ -11,6 +11,8 @@ version          '1.0.4'
 end
 
 # Cookbook dependencies
-%w{ zookeeper java apt yum docker }.each do |cb|
+%w{ zookeeper java apt docker }.each do |cb|
   depends cb
 end
+
+depends 'yum', '~> 3.0'
