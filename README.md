@@ -38,7 +38,7 @@ Tested on
 ## Attributes
 
 * `node['mesos']['version']` - Mesosphere Mesos package version. Default: 
-'0.14.0-rc4'.
+'0.15.0'.
 * `node['mesos']['cluster_name']` - Human readable name for the cluster, 
 displayed in the webui. Default: 'MyMesosCluster'.
 * `node['mesos']['port']` - Port to listen on. Default: 5050.
