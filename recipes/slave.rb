@@ -32,7 +32,7 @@ template '/etc/default/mesos' do
   variables(
     logs_dir: node['mesos']['logs_dir'],
     java_home: node['java']['java_home'],
-    set_ld_library_path: platform_family?('debian')
+    set_ld_library_path: platform_family?('debian'),
   )
   notifies :run, 'bash[restart-mesos-slave]', :delayed
 end
