@@ -1,0 +1,8 @@
+image: ruby1.9.3
+
+script:
+  - mv .kitchen.ec2.yml .kitchen.yml
+  - gem install bundler
+  - bundle install
+  - rubocop
+  - foodcritic -f 'all' .
