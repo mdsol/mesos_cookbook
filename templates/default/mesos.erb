@@ -1,2 +1,16 @@
 LOGS=<%= @logs_dir %>
 ULIMIT="-n 16384"
+<% if @set_ld_library_path && @java_home %>
+LD_LIBRARY_PATH=${LD_LIBRARY_PATH:-}
+for _libjvm_path in <%= File.join(@java_home, 'jre/lib/*/server/libjvm.so') %>; do
+  if [ -f "${_libjvm_path}" ]; then
+    if [ -n "${LD_LIBRARY_PATH}" ]; then
+      LD_LIBRARY_PATH+=":"
+    fi
+    LD_LIBRARY_PATH+="${_libjvm_path%/*}"
+    break
+  fi
+done
+export LD_LIBRARY_PATH
+unset _libjvm_path
+<% end %>
