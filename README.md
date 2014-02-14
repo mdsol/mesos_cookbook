@@ -32,8 +32,10 @@ Tested on
 
 * Ubuntu 12.04
 * Ubuntu 13.04
+* Debian Wheezy
 * Amazon Linux 2013/09
 * CentOS 6
+* Scientific Linux 6.3
 
 ## Attributes
 
