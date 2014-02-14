@@ -4,5 +4,5 @@ script:
   - mv .kitchen.ec2.yml .kitchen.yml
   - gem install bundler
   - bundle install
-  - rubocop
-  - foodcritic -f 'all' .
+  - bundle exec rubocop
+  - bundle exec foodcritic -f 'all' .
