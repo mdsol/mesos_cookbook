@@ -114,27 +114,58 @@ template '/etc/init/mesos-slave.conf' do
   notifies :run, 'bash[reload-configuration]'
 end
 
-bash 'reload-configuration' do
-  action :nothing
-  user 'root'
-  code <<-EOH
-  initctl reload-configuration
-  EOH
+if node['platform'] == 'debian'
+  bash 'reload-configuration' do
+    action :nothing
+    user 'root'
+    code <<-EOH
+    update-rc.d mesos-slave defaults
+    EOH
+  end
+else
+  bash 'reload-configuration' do
+    action :nothing
+    user 'root'
+    code <<-EOH
+    initctl reload-configuration
+    EOH
+  end
 end
 
-bash 'start-mesos-slave' do
-  user 'root'
-  code <<-EOH
-  start mesos-slave
-  EOH
-  not_if 'status mesos-slave|grep start/running'
+if node['platform'] == 'debian'
+  bash 'start-mesos-slave' do
+    user 'root'
+    code <<-EOH
+    service mesos-slave start
+    EOH
+    not_if 'service mesos-slave status|grep start/running'
+  end
+else
+  bash 'start-mesos-slave' do
+    user 'root'
+    code <<-EOH
+    start mesos-slave
+    EOH
+    not_if 'status mesos-slave|grep start/running'
+  end
 end
 
-bash 'restart-mesos-slave' do
-  action :nothing
-  user 'root'
-  code <<-EOH
-  restart mesos-slave
-  EOH
-  not_if 'status mesos-slave|grep stop/waiting'
+if node['platform'] == 'debian'
+  bash 'restart-mesos-slave' do
+    action :nothing
+    user 'root'
+    code <<-EOH
+    service mesos-slave restart
+    EOH
+    not_if 'service mesos-slave status|grep stop/waiting'
+  end
+else
+  bash 'restart-mesos-slave' do
+    action :nothing
+    user 'root'
+    code <<-EOH
+    restart mesos-slave
+    EOH
+    not_if 'status mesos-slave|grep stop/waiting'
+  end
 end

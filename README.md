@@ -32,8 +32,9 @@ Tested on
 
 * Ubuntu 12.04
 * Ubuntu 13.04
-* Amazon Linux 2013/09
+* Debian 7
 * CentOS 6
+* Amazon Linux 2013/09
 
 ## Attributes
 

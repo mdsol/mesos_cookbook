@@ -49,6 +49,11 @@ platforms:
     image_id: ami-1d132274
     username: ubuntu
 
+- name: debian-wheezy
+  driver_config:
+    image_id: ami-0da18864
+    username: root
+
 - name: centos-6.4
   driver_config:
     image_id: ami-56009e3f
