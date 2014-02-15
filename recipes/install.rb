@@ -22,9 +22,9 @@ include_recipe 'java::default'
 
 distro_version = node['platform_version']
 
-case node['platform_family']
-when 'debian'
-  %w{ unzip default-jre-headless libcurl3 }.each do |pkg|
+case node['platform']
+when 'debian', 'ubuntu'
+  %w{ unzip libcurl3 }.each do |pkg|
     package pkg do
       action :install
     end
@@ -40,7 +40,7 @@ when 'debian'
     source "#{Chef::Config[:file_cache_path]}/mesos.deb"
     not_if { ::File.exists? '/usr/local/sbin/mesos-master' }
   end
-when 'rhel', 'centos'
+when 'rhel', 'centos', 'amazon', 'scientific'
   %w{ unzip libcurl }.each do |pkg|
     yum_package pkg do
       action :install

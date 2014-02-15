@@ -38,7 +38,7 @@ Tested on
 ## Attributes
 
 * `node['mesos']['version']` - Mesosphere Mesos package version. Default: 
-'0.14.0-rc4'.
+'0.15.0'.
 * `node['mesos']['cluster_name']` - Human readable name for the cluster, 
 displayed in the webui. Default: 'MyMesosCluster'.
 * `node['mesos']['port']` - Port to listen on. Default: 5050.
@@ -57,8 +57,14 @@ ensemble discovery via Netflix Exhibitor. Default: false.
 * `node['mesos']['zookeeper_exhibitor_url']` - Netflix Exhibitor ZooKeeper 
 ensemble url.
 * `node['mesos']['set_ec2_hostname']` - If true and running in ec2, set hostname
-to public dns name.  Default: true
+to public dns name.  Default: true.
 * `node['mesos']['python_egg']` - URL of mesos python egg to download
+* `node['mesos']['slave']['checkpoint']` - Enable slave recovery. Default:
+'true'.
+* `node['mesos']['slave']['strict']` - If true, any recovery error is fatal.
+Default: 'false'.
+* `node['mesos']['slave']['recover']` - Whether to recover status updates and 
+reconnect with old executors. Default: 'reconnect'
 
 ## Recipes
 

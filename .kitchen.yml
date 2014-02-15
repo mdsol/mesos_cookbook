@@ -12,7 +12,7 @@ driver:
 
 provisioner:
   name: chef_zero
-  require_chef_omnibus: 11.8.0
+  require_chef_omnibus: 11.10.0
   data_path: test/shared
 
 platforms:
@@ -21,19 +21,20 @@ platforms:
     box: opscode-ubuntu-12.04
     box_url: https://opscode-vm-bento.s3.amazonaws.com/vagrant/opscode_ubuntu-12.04_provisionerless.box
 
-- name: centos-6.5
-  driver_config:
-    box: opscode-centos-6.5
-    box_url: http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_centos-6.5_chef-provisionerless.box
-
 - name: ubuntu-13.04
   driver_config:
     box: opscode-ubuntu-13.04
     box_url: https://opscode-vm-bento.s3.amazonaws.com/vagrant/opscode_ubuntu-13.04_provisionerless.box
 
+- name: centos-6.5
+  driver_config:
+    box: opscode-centos-6.5
+    box_url: http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_centos-6.5_chef-provisionerless.box
+
 suites:
 - name: default
   run_list:
   - recipe[apt]
+  - recipe[yum]
   - recipe[mesos::master]
   - recipe[mesos::slave]
