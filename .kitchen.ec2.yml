@@ -52,7 +52,7 @@ platforms:
 - name: debian-wheezy
   driver_config:
     image_id: ami-0da18864
-    username: root
+    username: admin
 
 - name: centos-6.4
   driver_config:
