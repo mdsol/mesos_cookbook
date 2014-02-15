@@ -32,8 +32,10 @@ when 'debian', 'ubuntu'
   end
 
   if distro == 'debian'
-    if match = distro_version.match(/(\d{1})(\.?\d+)?/i)
-      major_version, minor_version = match.captures
+    match = distro_version.match(/(\d{1})(\.?\d+)?/i)
+
+    unless match.nil?
+      major_version, _minor_version = match.captures
       distro_version = major_version
     end
   end
