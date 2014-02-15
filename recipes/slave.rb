@@ -114,6 +114,20 @@ template '/etc/init/mesos-slave.conf' do
   notifies :run, 'bash[reload-configuration]'
 end
 
+directory '/etc/mesos-slave' do
+  owner 'root'
+  mode 0755
+end
+
+node['mesos']['slave'].each do |opt, arg|
+  file "/etc/mesos-slave/#{opt}" do
+    content arg
+    mode 0644
+    action :create
+    notifies :run, 'bash[restart-mesos-slave]', :delayed
+  end
+end
+
 bash 'reload-configuration' do
   action :nothing
   user 'root'
