@@ -11,6 +11,13 @@ Mesos provides efficient resource isolation and sharing across distributed
 applications, or frameworks.  This cookbook installs Mesos via packages
 provided by [Mesosphere][].
 
+This cookbook serves as the base for the following additional Mesos framework
+cookbooks maintained by [Medidata Solutions][]:
+
+* [marathon][] - This cookbook installs the Apache Mesos Marathon framework.
+* [chronos][] - This cookbook installs the Apache Mesos Chronos framework.
+
+
 Requirements
 ============
 
@@ -162,6 +169,9 @@ run_list:
 [Brian Flad's docker cookbook]: https://github.com/bflad/chef-docker
 [Jason Dusek's mesos-docker script]: https://github.com/mesosphere/mesos-docker
 [Jason Dusek's docker on mesos blog post]: http://mesosphere.io/2013/09/26/docker-on-mesos/
+[Medidata Solutions]: http://www.mdsol.com
+[marathon]: https://github.com/mdsol/marathon_cookbook
+[chronos]: https://github.com/mdsol/chronos_cookbook
 
 Development
 -----------
