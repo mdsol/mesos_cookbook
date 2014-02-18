@@ -5,6 +5,7 @@ describe 'mesos install' do
   it 'should install required packages' do
     case RSpec.configuration.os
     when 'Debian'
+      expect(package 'default-jre-headless').to be_installed
       expect(package 'unzip').to be_installed
       expect(package 'libcurl3').to be_installed
       expect(package 'mesos').to be_installed
