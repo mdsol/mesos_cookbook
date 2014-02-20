@@ -2,6 +2,13 @@ mesos Cookbook CHANGELOG
 ==========================
 This file is used to list changes made in each version of the mesos cookbook.
 
+1.0.6 (2014-02-19)
+------------------
+
+- Re-added default-jre-headless as required package due to breaking issues with
+  mesos debian package when used with a non-openjdk java like Oracle.
+- Added some serverspecs to verify working cookbook with oracle jdk 7.
+
 1.0.5 (2014-02-15)
 ------------------
 
