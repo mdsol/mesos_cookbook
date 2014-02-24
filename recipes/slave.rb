@@ -31,8 +31,6 @@ template '/etc/default/mesos' do
   source 'mesos.erb'
   variables(
     logs_dir: node['mesos']['logs_dir'],
-    java_home: node['java']['java_home'],
-    set_ld_library_path: platform_family?('debian'),
   )
   notifies :run, 'bash[restart-mesos-slave]', :delayed
 end
@@ -129,6 +127,20 @@ else
     code <<-EOH
     initctl reload-configuration
     EOH
+  end
+end
+
+directory '/etc/mesos-slave' do
+  owner 'root'
+  mode 0755
+end
+
+node['mesos']['slave'].each do |opt, arg|
+  file "/etc/mesos-slave/#{opt}" do
+    content arg
+    mode 0644
+    action :create
+    notifies :run, 'bash[restart-mesos-slave]', :delayed
   end
 end
 

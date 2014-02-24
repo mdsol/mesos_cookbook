@@ -40,26 +40,36 @@ provisioner:
 
 platforms:
 - name: ubuntu-12.04
+  run_list:
+    - recipe[apt]
   driver_config:
     image_id: ami-e7582d8e
     username: ubuntu
 
 - name: ubuntu-13.04
+  run_list:
+    - recipe[apt]
   driver_config:
     image_id: ami-1d132274
     username: ubuntu
 
 - name: debian-wheezy
+  run_list:
+    - recipe[apt]
   driver_config:
     image_id: ami-0da18864
     username: admin
 
 - name: centos-6.4
+  run_list:
+    - recipe[yum]
   driver_config:
     image_id: ami-56009e3f
     username: ec2-user
 
 - name: amazon-linux-2013-09-2
+  run_list:
+    - recipe[yum]
   driver_config:
     image_id: ami-bba18dd2
     username: ec2-user
@@ -67,7 +77,17 @@ platforms:
 suites:
 - name: default
   run_list:
-  - recipe[apt]
-  - recipe[yum]
-  - recipe[mesos::master]
-  - recipe[mesos::slave]
+    - recipe[mesos::master]
+    - recipe[mesos::slave]
+
+- name: oraclejdk7
+  run_list:
+    - recipe[java]
+    - recipe[mesos::master]
+    - recipe[mesos::slave]
+  attributes:
+    java:
+      jdk_version: '7'
+      install_flavor: 'oracle'
+      oracle:
+        accept_oracle_download_terms: true
