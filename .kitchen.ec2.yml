@@ -29,13 +29,16 @@ driver:
   region: us-east-1
   availability_zone: us-east-1c
   flavor_id: <%= ENV['AWS_FLAVOR_ID'] || '(ENTER_AWS_FLAVOR_ID)' %>
+  tags:
+    created-by: 'test-kitchen'
+    launched-by: <%= ENV['USER'] || '(ENTER_USER)' %>
 
 busser:
   sudo: true
 
 provisioner:
   name: chef_zero
-  require_chef_omnibus: 11.10.0
+  require_chef_omnibus: 11.10.4
   data_path: test/shared
 
 platforms:
