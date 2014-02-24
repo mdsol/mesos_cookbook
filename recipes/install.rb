@@ -20,9 +20,10 @@
 include_recipe 'apt'
 include_recipe 'java::default'
 
+distro = node['platform']
 distro_version = node['platform_version']
 
-case node['platform']
+case distro
 when 'debian', 'ubuntu'
   %w{ unzip default-jre-headless libcurl3 }.each do |pkg|
     package pkg do
@@ -30,8 +31,17 @@ when 'debian', 'ubuntu'
     end
   end
 
+  if distro == 'debian'
+    match = distro_version.match(/(\d{1})(\.?\d+)?/i)
+
+    unless match.nil?
+      major_version, _minor_version = match.captures
+      distro_version = major_version
+    end
+  end
+
   remote_file "#{Chef::Config[:file_cache_path]}/mesos.deb" do
-    source "http://downloads.mesosphere.io/master/ubuntu/#{distro_version}/mesos_#{node['mesos']['version']}_amd64.deb"
+    source "http://downloads.mesosphere.io/master/#{distro}/#{distro_version}/mesos_#{node['mesos']['version']}_amd64.deb"
     action :create
     not_if { ::File.exists? '/usr/local/sbin/mesos-master' }
   end
@@ -97,10 +107,20 @@ template '/etc/init/mesos-slave.conf' do
   )
 end
 
-bash 'reload-configuration' do
-  user 'root'
-  code <<-EOH
-  initctl reload-configuration
-  EOH
-  not_if { ::File.exists? '/usr/local/sbin/mesos-master' }
+if distro == 'debian'
+  bash 'reload-configuration' do
+    user 'root'
+    code <<-EOH
+    update-rc.d -f mesos-master remove
+    EOH
+    not_if { ::File.exists? '/usr/local/sbin/mesos-master' }
+  end
+else
+  bash 'reload-configuration' do
+    user 'root'
+    code <<-EOH
+    initctl reload-configuration
+    EOH
+    not_if { ::File.exists? '/usr/local/sbin/mesos-master' }
+  end
 end
