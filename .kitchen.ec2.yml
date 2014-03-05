@@ -60,7 +60,7 @@ platforms:
   run_list:
     - recipe[apt]
   driver_config:
-    image_id: ami-9f675df6
+    image_id: ami-655a600c
     username: admin
 
 - name: centos-6.4
