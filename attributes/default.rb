@@ -1,4 +1,4 @@
-default['mesos']['version']                       = '0.15.0'
+default['mesos']['version']                       = '0.16.0'
 default['mesos']['cluster_name']                  = 'MyMesosCluster'
 default['mesos']['port']                          = 5050
 default['mesos']['logs_dir']                      = '/var/log/mesos'
