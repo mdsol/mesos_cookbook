@@ -1,4 +1,4 @@
-default['mesos']['version']                       = '0.15.0'
+default['mesos']['version']                       = '0.16.0'
 default['mesos']['cluster_name']                  = 'MyMesosCluster'
 default['mesos']['port']                          = 5050
 default['mesos']['logs_dir']                      = '/var/log/mesos'
@@ -11,6 +11,10 @@ default['mesos']['zookeeper_exhibitor_discovery'] = false
 default['mesos']['zookeeper_exhibitor_url']       = nil
 default['mesos']['set_ec2_hostname']              = true
 default['mesos']['python_egg']                    = 'http://downloads.mesosphere.io/master/ubuntu/13.04/mesos-0.14.0-py2.7-linux-x86_64.egg'
+# attributes under default['mesos']['slave'] are written to /etc/mesos-slave/$key = $value
+default['mesos']['slave']['checkpoint']           = 'true'
+default['mesos']['slave']['strict']               = 'false'
+default['mesos']['slave']['recover']              = 'reconnect'
 
 case node['platform_family']
 when 'rhel'

@@ -12,21 +12,34 @@ driver:
 
 provisioner:
   name: chef_zero
-  require_chef_omnibus: 11.10.0
+  require_chef_omnibus: 11.10.4
   data_path: test/shared
 
 platforms:
 - name: ubuntu-12.04
+  run_list:
+    - recipe[apt]
   driver_config:
     box: opscode-ubuntu-12.04
     box_url: https://opscode-vm-bento.s3.amazonaws.com/vagrant/opscode_ubuntu-12.04_provisionerless.box
 
 - name: ubuntu-13.04
+  run_list:
+    - recipe[apt]
   driver_config:
     box: opscode-ubuntu-13.04
     box_url: https://opscode-vm-bento.s3.amazonaws.com/vagrant/opscode_ubuntu-13.04_provisionerless.box
 
+- name: debian-wheezy
+  run_list:
+    - recipe[apt]
+  driver_config:
+    box: opscode-debian-7.2.0
+    box_url: http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_debian-7.2.0_chef-provisionerless.box
+
 - name: centos-6.5
+  run_list:
+    - recipe[yum]
   driver_config:
     box: opscode-centos-6.5
     box_url: http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_centos-6.5_chef-provisionerless.box
@@ -34,7 +47,17 @@ platforms:
 suites:
 - name: default
   run_list:
-  - recipe[apt]
-  - recipe[yum]
-  - recipe[mesos::master]
-  - recipe[mesos::slave]
+    - recipe[mesos::master]
+    - recipe[mesos::slave]
+
+- name: oraclejdk7
+  run_list:
+    - recipe[java]
+    - recipe[mesos::master]
+    - recipe[mesos::slave]
+  attributes:
+    java:
+      jdk_version: '7'
+      install_flavor: 'oracle'
+      oracle:
+        accept_oracle_download_terms: true

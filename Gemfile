@@ -1,8 +1,9 @@
 source 'https://rubygems.org'
 
-gem 'berkshelf'
+gem 'berkshelf', github: 'berkshelf/berkshelf'
 gem 'foodcritic', '~> 3.0'
 gem 'rubocop',    '~> 0.18'
+gem 'rubocop-checkstyle_formatter'
 gem 'stove'
 gem 'chefspec', '~> 3.1.4'
 gem 'serverspec', '~> 0.14.2'

@@ -29,32 +29,50 @@ driver:
   region: us-east-1
   availability_zone: us-east-1c
   flavor_id: <%= ENV['AWS_FLAVOR_ID'] || '(ENTER_AWS_FLAVOR_ID)' %>
+  tags:
+    created-by: 'test-kitchen'
+    launched-by: <%= ENV['USER'] || '(ENTER_USER)' %>
 
 busser:
   sudo: true
 
 provisioner:
   name: chef_zero
-  require_chef_omnibus: 11.10.0
+  require_chef_omnibus: 11.10.4
   data_path: test/shared
 
 platforms:
 - name: ubuntu-12.04
+  run_list:
+    - recipe[apt]
   driver_config:
     image_id: ami-e7582d8e
     username: ubuntu
 
 - name: ubuntu-13.04
+  run_list:
+    - recipe[apt]
   driver_config:
     image_id: ami-1d132274
     username: ubuntu
 
+- name: debian-wheezy
+  run_list:
+    - recipe[apt]
+  driver_config:
+    image_id: ami-d3675dba
+    username: admin
+
 - name: centos-6.4
+  run_list:
+    - recipe[yum]
   driver_config:
     image_id: ami-56009e3f
     username: ec2-user
 
 - name: amazon-linux-2013-09-2
+  run_list:
+    - recipe[yum]
   driver_config:
     image_id: ami-bba18dd2
     username: ec2-user
@@ -62,7 +80,17 @@ platforms:
 suites:
 - name: default
   run_list:
-  - recipe[apt]
-  - recipe[yum]
-  - recipe[mesos::master]
-  - recipe[mesos::slave]
+    - recipe[mesos::master]
+    - recipe[mesos::slave]
+
+- name: oraclejdk7
+  run_list:
+    - recipe[java]
+    - recipe[mesos::master]
+    - recipe[mesos::slave]
+  attributes:
+    java:
+      jdk_version: '7'
+      install_flavor: 'oracle'
+      oracle:
+        accept_oracle_download_terms: true
