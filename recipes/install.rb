@@ -113,7 +113,7 @@ template '/etc/init/mesos-slave.conf' do
 end
 
 if distro == 'debian'
-  bash 'reload-configuration' do
+  bash 'reload-configuration-debian' do
     user 'root'
     code <<-EOH
     update-rc.d -f mesos-master remove
