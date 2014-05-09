@@ -34,7 +34,7 @@ remote_file '/var/lib/mesos/executors/docker' do
   group 'root'
   source 'https://raw.github.com/mesosphere/mesos-docker/master/bin/mesos-docker'
   mode 00755
-  not_if { ::File.exists?('/var/lib/mesos/executors/docker') }
+  not_if { ::File.exist?('/var/lib/mesos/executors/docker') }
 end
 
 remote_file "#{Chef::Config[:file_cache_path]}/mesos.egg" do
@@ -42,7 +42,7 @@ remote_file "#{Chef::Config[:file_cache_path]}/mesos.egg" do
   group 'root'
   source node['mesos']['python_egg']
   mode 00755
-  not_if { ::File.exists?("#{Chef::Config[:file_cache_path]}/mesos.egg") }
+  not_if { ::File.exist?("#{Chef::Config[:file_cache_path]}/mesos.egg") }
 end
 
 bash 'install-mesos-egg' do
@@ -51,5 +51,5 @@ bash 'install-mesos-egg' do
   code <<-EOH
     easy_install "#{Chef::Config[:file_cache_path]}/mesos.egg"
   EOH
-  not_if { ::File.exists?('/usr/local/lib/python2.7/dist-packages/mesos.egg') }
+  not_if { ::File.exist?('/usr/local/lib/python2.7/dist-packages/mesos.egg') }
 end

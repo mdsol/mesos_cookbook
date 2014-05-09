@@ -46,7 +46,7 @@ if node['mesos']['zookeeper_server_list'].count > 0
   zk_path = node['mesos']['zookeeper_path']
 end
 
-if node['mesos']['zookeeper_exhibitor_discovery'] && !node['mesos']['zookeeper_exhibitor_url'].nil?
+if node['mesos']['zookeeper_exhibitor_discovery'] && node['mesos']['zookeeper_exhibitor_url']
   zk_nodes = discover_zookeepers_with_retry(node['mesos']['zookeeper_exhibitor_url'])
 
   if zk_nodes.nil?
