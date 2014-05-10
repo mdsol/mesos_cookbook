@@ -1,5 +1,4 @@
 require 'bundler/setup'
-require 'rspec/core/rake_task'
 require 'rubocop/rake_task'
 require 'foodcritic'
 require 'kitchen'
@@ -26,10 +25,6 @@ end
 desc 'Run all style checks'
 task style: ['style:chef', 'style:ruby']
 
-# Rspec and ChefSpec
-desc 'Run ChefSpec examples'
-RSpec::Core::RakeTask.new(:spec)
-
 # Integration tests. Kitchen.ci
 namespace :integration do
   desc 'Run Test Kitchen with Vagrant'
@@ -42,7 +37,7 @@ namespace :integration do
 end
 
 desc 'Run all tests on Travis'
-task travis: %w(style spec)
+task travis: %w(style)
 
 # Default
-task default: ['style', 'spec', 'integration:vagrant']
+task default: %w(style integration:vagrant)
