@@ -24,7 +24,7 @@ bash 'initialize-zookeeper' do
   code <<-EOH
   service zookeeper-server init
   EOH
-  not_if ("ps aux | grep -v grep | grep zookeeper")
+  not_if('ps aux | grep -v grep | grep zookeeper')
 end
 
 bash 'start-zookeeper' do
@@ -32,5 +32,5 @@ bash 'start-zookeeper' do
   code <<-EOH
   service zookeeper-server start
   EOH
-  not_if ("ps aux | grep -v grep | grep zookeeper")
+  not_if('ps aux | grep -v grep | grep zookeeper')
 end
