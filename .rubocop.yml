@@ -13,5 +13,7 @@ LineLength:
   Enabled: false
 MethodLength:
   Enabled: false
+ClassAndModuleChildren:
+  Enabled: false
 TrailingComma:
   EnforcedStyleForMultiline: comma
