@@ -21,7 +21,7 @@ cookbooks maintained by [Medidata Solutions][]:
 Requirements
 ============
 
-Chef 11.4.0+
+Chef 11.12.2+
 
 This cookbook assumes you will be running a ZooKeeper ensemble for production 
 use of Mesos.
@@ -29,9 +29,13 @@ use of Mesos.
 The following cookbooks are dependencies:
 
 * apt
+* yum
 * java
-* zookeeper (used for discovering ZooKeeper ensembles via [Netflix Exhibitor][])
 * docker
+
+The following cookbooks are suggested:
+
+* zookeeper (used for discovering ZooKeeper ensembles via [Netflix Exhibitor][])
 
 ## Platform:
 
@@ -39,14 +43,15 @@ Tested on
 
 * Ubuntu 12.04
 * Ubuntu 13.04
-* Debian 7
+* Ubuntu 14.04
+* Debian Wheezy
 * CentOS 6
-* Amazon Linux 2013/09
+* Scientific Linux 6.3
 
 ## Attributes
 
 * `node['mesos']['version']` - Mesosphere Mesos package version. Default: 
-'0.16.0'.
+'0.17.0'.
 * `node['mesos']['cluster_name']` - Human readable name for the cluster, 
 displayed in the webui. Default: 'MyMesosCluster'.
 * `node['mesos']['port']` - Port to listen on. Default: 5050.
@@ -119,7 +124,7 @@ json_class:          Chef::Role
 name:                mesos_master
 override_attributes:
   mesos:
-    version: 0.16.0
+    version: 0.17.0
     cluster_name: mesos-sandbox
     zookeeper_server_list: [ '203.0.113.2', '203.0.113.3', '203.0.113.4' ]
     zookeeper_port: 2181
@@ -139,7 +144,7 @@ json_class:          Chef::Role
 name:                mesos_slave
 override_attributes:
   mesos:
-    version: 0.16.0
+    version: 0.17.0
     cluster_name: mesos-sandbox
     zookeeper_path: 'mesos'
     zookeeper_exhibitor_discovery: true
@@ -160,7 +165,7 @@ json_class:          Chef::Role
 name:                mesos_slave_docker
 override_attributes:
   mesos:
-    version: 0.16.0
+    version: 0.17.0
     cluster_name: mesos-sandbox
     zookeeper_path: 'mesos'
     zookeeper_exhibitor_discovery: true
