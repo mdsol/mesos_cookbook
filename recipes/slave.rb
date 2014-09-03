@@ -129,20 +129,6 @@ else
   end
 end
 
-directory '/etc/mesos-slave' do
-  owner 'root'
-  mode 0755
-end
-
-node['mesos']['slave'].each do |opt, arg|
-  file "/etc/mesos-slave/#{opt}" do
-    content arg
-    mode 0644
-    action :create
-    notifies :run, 'bash[restart-mesos-slave]', :delayed
-  end
-end
-
 if node['platform'] == 'debian'
   bash 'start-mesos-slave' do
     user 'root'
