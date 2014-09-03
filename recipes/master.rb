@@ -26,16 +26,15 @@ include_recipe 'mesos::install'
 template '/etc/default/mesos' do
   source 'mesos.erb'
   variables(
-    logs_dir: node['mesos']['logs_dir'],
+    config: node['mesos']['common']
   )
   notifies :run, 'bash[restart-mesos-master]', :delayed
 end
 
 template '/etc/default/mesos-master' do
-  source 'mesos-master.erb'
+  source 'mesos.erb'
   variables(
-    port: node['mesos']['port'],
-    cluster_name: node['mesos']['cluster_name'],
+    config: node['mesos']['master']
   )
   notifies :run, 'bash[restart-mesos-master]', :delayed
 end
