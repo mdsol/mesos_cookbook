@@ -1,5 +1,5 @@
 default['mesos']['version']                       = '0.17.0'
-default['mesos']['common']['port']                = 5050,
+default['mesos']['common']['port']                = 5050
 default['mesos']['common']['logs_dir']            = '/var/log/mesos'
 default['mesos']['common']['logging_level']       = 'ERROR'
 default['mesos']['common']['ulimit']              = '-n 16384'

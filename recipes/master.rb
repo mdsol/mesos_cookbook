@@ -25,17 +25,13 @@ include_recipe 'mesos::install'
 
 template '/etc/default/mesos' do
   source 'mesos.erb'
-  variables(
-    config: node['mesos']['common']
-  )
+  variables config: node['mesos']['common']
   notifies :run, 'bash[restart-mesos-master]', :delayed
 end
 
 template '/etc/default/mesos-master' do
   source 'mesos.erb'
-  variables(
-    config: node['mesos']['master']
-  )
+  variables config: node['mesos']['master']
   notifies :run, 'bash[restart-mesos-master]', :delayed
 end
 

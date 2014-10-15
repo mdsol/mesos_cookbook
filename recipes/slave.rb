@@ -29,17 +29,13 @@ zk_path = ''
 
 template '/etc/default/mesos' do
   source 'mesos.erb'
-  variables(
-    config: node['mesos']['common']
-  )
+  variables config: node['mesos']['common']
   notifies :run, 'bash[restart-mesos-slave]', :delayed
 end
 
 template '/etc/default/mesos-slave' do
   source 'mesos.erb'
-  variables(
-    config: node['mesos']['slave']
-  )
+  variables config: node['mesos']['slave']
   notifies :run, 'bash[restart-mesos-slave]', :delayed
 end
 
