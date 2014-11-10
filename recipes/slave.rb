@@ -29,18 +29,13 @@ zk_path = ''
 
 template '/etc/default/mesos' do
   source 'mesos.erb'
-  variables(
-    logs_dir: node['mesos']['logs_dir'],
-  )
+  variables config: node['mesos']['common']
   notifies :run, 'bash[restart-mesos-slave]', :delayed
 end
 
 template '/etc/default/mesos-slave' do
-  source 'mesos-slave.erb'
-  variables(
-    work_dir: node['mesos']['work_dir'],
-    isolation_type: node['mesos']['isolation_type'],
-  )
+  source 'mesos.erb'
+  variables config: node['mesos']['slave']
   notifies :run, 'bash[restart-mesos-slave]', :delayed
 end
 
@@ -80,8 +75,8 @@ template '/usr/local/var/mesos/deploy/mesos-slave-env.sh.template' do
     zookeeper_server_list: zk_server_list,
     zookeeper_port: zk_port,
     zookeeper_path: zk_path,
-    logs_dir: node['mesos']['logs_dir'],
-    work_dir: node['mesos']['work_dir'],
+    logs_dir: node['mesos']['common']['logs_dir'],
+    work_dir: node['mesos']['slave']['work_dir'],
     isolation_type: node['mesos']['isolation_type'],
   )
   notifies :run, 'bash[restart-mesos-slave]', :delayed
@@ -127,20 +122,6 @@ else
     code <<-EOH
     initctl reload-configuration
     EOH
-  end
-end
-
-directory '/etc/mesos-slave' do
-  owner 'root'
-  mode 0755
-end
-
-node['mesos']['slave'].each do |opt, arg|
-  file "/etc/mesos-slave/#{opt}" do
-    content arg
-    mode 0644
-    action :create
-    notifies :run, 'bash[restart-mesos-slave]', :delayed
   end
 end
 

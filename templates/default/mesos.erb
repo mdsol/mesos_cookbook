@@ -1,2 +1,1 @@
-LOGS=<%= @logs_dir %>
-ULIMIT="-n 16384"
+<%= @config.map{|k,v| "#{k.upcase}=\"#{v}\""}.join("\n") %>
