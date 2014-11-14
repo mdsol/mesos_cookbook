@@ -25,3 +25,10 @@ end
 describe port(5050) do
   it { should be_listening }
 end
+
+describe file('/var/log/mesos/mesos-master.INFO') do
+  its(:content) { should match(/Master started on/) }
+  its(:content) { should match(/Joining the ZK group/) }
+  its(:content) { should match(/Added slave/) }
+  its(:content) { should match(/Elected as the leading master!/) }
+end

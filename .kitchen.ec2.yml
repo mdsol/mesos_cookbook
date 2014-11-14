@@ -29,47 +29,64 @@ driver:
   region: us-east-1
   availability_zone: us-east-1c
   flavor_id: <%= ENV['AWS_FLAVOR_ID'] || '(ENTER_AWS_FLAVOR_ID)' %>
+  tags:
+    created-by: 'test-kitchen'
+    launched-by: <%= ENV['USER'] || '(ENTER_USER)' %>
 
 busser:
   sudo: true
 
 provisioner:
   name: chef_zero
-  require_chef_omnibus: 11.10.0
+  require_chef_omnibus: 11.12.2
   data_path: test/shared
 
 platforms:
 - name: ubuntu-12.04
+  run_list:
+    - recipe[apt]
+    - recipe[zookeeper-apt]
   driver_config:
-    run_list:
-      - recipe[apt]
     image_id: ami-e7582d8e
     username: ubuntu
 
 - name: ubuntu-13.04
+  run_list:
+    - recipe[apt]
+    - recipe[zookeeper-apt]
   driver_config:
-    run_list:
-      - recipe[apt]
     image_id: ami-1d132274
     username: ubuntu
 
-- name: centos-6.4
+- name: ubuntu-14.04
+  run_list:
+    - recipe[apt]
+    - recipe[zookeeper-apt]
   driver_config:
-    run_list:
-      - recipe[yum]
-    image_id: ami-56009e3f
-    username: ec2-user
+    image_id: ami-018c9568
+    username: ubuntu
 
-- name: amazon-linux-2013-09-2
+- name: debian-wheezy
+  run_list:
+    - recipe[apt]
+    - recipe[zookeeper-apt]
   driver_config:
-    image_id: ami-bba18dd2
+    image_id: ami-2c886c44
+    username: admin
+
+- name: centos-6.4
+  run_list:
+    - recipe[yum]
+    - recipe[zookeeper-yum]
+  driver_config:
+    image_id: ami-56009e3f
     username: ec2-user
 
 suites:
 - name: default
   run_list:
-  - recipe[mesos::master]
-  - recipe[mesos::slave]
+    - recipe[mesos::master]
+    - recipe[mesos::slave]
 
 - name: oraclejdk7
   run_list:

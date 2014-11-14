@@ -1,7 +1,7 @@
 AllCops:
-  Excludes:
-    - vendor/**
-    - bin/**
+  Exclude:
+    - vendor/**/*
+    - bin/**/*
 
 ClassLength:
   Enabled: false
@@ -12,6 +12,8 @@ Encoding:
 LineLength:
   Enabled: false
 MethodLength:
+  Enabled: false
+ClassAndModuleChildren:
   Enabled: false
 TrailingComma:
   EnforcedStyleForMultiline: comma

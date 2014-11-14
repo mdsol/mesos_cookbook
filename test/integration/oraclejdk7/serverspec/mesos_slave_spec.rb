@@ -25,3 +25,9 @@ end
 describe port(5051) do
   it { should be_listening }
 end
+
+describe file('/var/log/mesos/mesos-slave.INFO') do
+  its(:content) { should match(/Slave started on/) }
+  its(:content) { should match(/connected to ZooKeeper/) }
+  its(:content) { should match(/New master detected/) }
+end

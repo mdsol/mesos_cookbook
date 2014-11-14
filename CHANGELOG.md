@@ -2,6 +2,13 @@ mesos Cookbook CHANGELOG
 ==========================
 This file is used to list changes made in each version of the mesos cookbook.
 
+1.0.7 (2014-11-14)
+------------------
+- Writes all attributes under `node['mesos']['common]`/`node['mesos']['master']` to respective config files
+- Adds support for Ubuntu 14.04 (Trusty Tahr)
+- Adds support for Debian 7 (Wheezy)
+
+
 1.0.6 (2014-02-19)
 ------------------
 
