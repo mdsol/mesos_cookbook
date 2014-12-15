@@ -69,6 +69,11 @@ unless zk_server_list.count == 0 && zk_port.empty? && zk_path.empty?
   end
 end
 
+# this directory doesn't exist on newer versions of Mesos, i.e. 0.21.0+
+directory '/usr/local/var/mesos/deploy/' do
+  recursive true
+end
+
 template '/usr/local/var/mesos/deploy/mesos-slave-env.sh.template' do
   source 'mesos-slave-env.sh.template.erb'
   variables(
