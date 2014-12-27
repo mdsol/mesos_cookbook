@@ -118,7 +118,7 @@ if node['platform'] == 'debian'
     code <<-EOH
     service mesos-master start
     EOH
-    not_if 'service mesos-master status|grep start/running'
+    not_if 'service mesos-master status|grep "start\|running"'
   end
 else
   bash 'start-mesos-master' do
@@ -126,7 +126,7 @@ else
     code <<-EOH
     start mesos-master
     EOH
-    not_if 'status mesos-master|grep start/running'
+    not_if 'status mesos-master|grep "start\|running"'
   end
 end
 
@@ -137,7 +137,7 @@ if node['platform'] == 'debian'
     code <<-EOH
     service mesos-master restart
     EOH
-    not_if 'service mesos-master status|grep stop/waiting'
+    not_if 'service mesos-master status|grep "stop\|waiting"'
   end
 else
   bash 'restart-mesos-master' do
@@ -146,6 +146,6 @@ else
     code <<-EOH
     restart mesos-master
     EOH
-    not_if 'status mesos-master|grep stop/waiting'
+    not_if 'status mesos-master|grep "stop\|waiting"'
   end
 end
