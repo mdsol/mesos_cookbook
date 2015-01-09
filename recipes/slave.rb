@@ -136,7 +136,7 @@ if node['platform'] == 'debian'
     code <<-EOH
     service mesos-slave start
     EOH
-    not_if 'service mesos-slave status|grep start/running'
+    not_if 'service mesos-slave status|grep "start\|running"'
   end
 else
   bash 'start-mesos-slave' do
@@ -144,7 +144,7 @@ else
     code <<-EOH
     start mesos-slave
     EOH
-    not_if 'status mesos-slave|grep start/running'
+    not_if 'status mesos-slave|grep "start\|running"'
   end
 end
 
@@ -155,7 +155,7 @@ if node['platform'] == 'debian'
     code <<-EOH
     service mesos-slave restart
     EOH
-    not_if 'service mesos-slave status|grep stop/waiting'
+    not_if 'service mesos-slave status|grep "stop\|waiting"'
   end
 else
   bash 'restart-mesos-slave' do
@@ -164,6 +164,6 @@ else
     code <<-EOH
     restart mesos-slave
     EOH
-    not_if 'status mesos-slave|grep stop/waiting'
+    not_if 'status mesos-slave|grep "stop\|waiting"'
   end
 end
