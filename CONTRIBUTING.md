@@ -20,7 +20,7 @@ core team and/or other community members may make suggestions or ask questions
 about your change. This is part of the review process, and helps everyone to
 understand what is happening, why it is happening, and potentially optimizes
 your code.
-- Be understanding
+- Be understanding.
 
 If you're looking to contribute but aren't sure where to start, check out the
 open issues.
