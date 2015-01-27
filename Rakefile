@@ -29,4 +29,4 @@ namespace :travis do
 end
 
 # The default rake task should just run it all
-task default: ['style', 'integration']
+task default: %w( style integration )

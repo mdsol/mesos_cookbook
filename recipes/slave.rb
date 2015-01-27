@@ -17,9 +17,11 @@
 # limitations under the License.
 #
 
+# rubocop:disable Style/ClassAndModuleChildren
 class ::Chef::Recipe
   include ::Mesos
 end
+# rubocop:enable Style/ClassAndModuleChildren
 
 include_recipe 'mesos::install'
 
@@ -30,7 +32,7 @@ zk_path = ''
 template '/etc/default/mesos' do
   source 'mesos.erb'
   variables(
-    logs_dir: node['mesos']['logs_dir'],
+    logs_dir: node['mesos']['logs_dir']
   )
   notifies :run, 'bash[restart-mesos-slave]', :delayed
 end
@@ -39,7 +41,7 @@ template '/etc/default/mesos-slave' do
   source 'mesos-slave.erb'
   variables(
     work_dir: node['mesos']['work_dir'],
-    isolation_type: node['mesos']['isolation_type'],
+    isolation_type: node['mesos']['isolation_type']
   )
   notifies :run, 'bash[restart-mesos-slave]', :delayed
 end
@@ -68,7 +70,7 @@ unless zk_server_list.count == 0 && zk_port.empty? && zk_path.empty?
     variables(
       zookeeper_server_list: zk_server_list,
       zookeeper_port: zk_port,
-      zookeeper_path: zk_path,
+      zookeeper_path: zk_path
     )
     notifies :run, 'bash[restart-mesos-slave]', :delayed
   end
@@ -82,7 +84,7 @@ template '/usr/local/var/mesos/deploy/mesos-slave-env.sh.template' do
     zookeeper_path: zk_path,
     logs_dir: node['mesos']['logs_dir'],
     work_dir: node['mesos']['work_dir'],
-    isolation_type: node['mesos']['isolation_type'],
+    isolation_type: node['mesos']['isolation_type']
   )
   notifies :run, 'bash[restart-mesos-slave]', :delayed
 end
@@ -107,7 +109,7 @@ end
 template '/etc/init/mesos-slave.conf' do
   source 'mesos-slave.conf.erb'
   variables(
-    action: 'start',
+    action: 'start'
   )
   notifies :run, 'bash[reload-configuration]'
 end

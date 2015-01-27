@@ -166,7 +166,7 @@ run_list:
 
 Development
 -----------
-Please see the [Contributing](CONTRIBUTING.md) Guidelines.
+Please see the [Contributing](CONTRIBUTING.md) and [Issue Reporting](ISSUES.md) Guidelines.
 
 License and Author
 ------------------

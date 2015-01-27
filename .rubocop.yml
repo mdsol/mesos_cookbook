@@ -1,7 +1,6 @@
 AllCops:
-  Excludes:
+  Exclude:
     - vendor/**
-    - bin/**
 
 ClassLength:
   Enabled: false
@@ -13,5 +12,5 @@ LineLength:
   Enabled: false
 MethodLength:
   Enabled: false
-TrailingComma:
-  EnforcedStyleForMultiline: comma
+NumericLiterals:
+  Enabled: false

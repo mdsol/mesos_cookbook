@@ -24,7 +24,7 @@ distro_version = node['platform_version']
 
 case node['platform']
 when 'debian', 'ubuntu'
-  %w{ unzip default-jre-headless libcurl3 }.each do |pkg|
+  %w( unzip default-jre-headless libcurl3 ).each do |pkg|
     package pkg do
       action :install
     end
@@ -33,15 +33,15 @@ when 'debian', 'ubuntu'
   remote_file "#{Chef::Config[:file_cache_path]}/mesos.deb" do
     source "http://downloads.mesosphere.io/master/ubuntu/#{distro_version}/mesos_#{node['mesos']['version']}_amd64.deb"
     action :create
-    not_if { ::File.exists? '/usr/local/sbin/mesos-master' }
+    not_if { ::File.exist? '/usr/local/sbin/mesos-master' }
   end
 
   dpkg_package 'mesos' do
     source "#{Chef::Config[:file_cache_path]}/mesos.deb"
-    not_if { ::File.exists? '/usr/local/sbin/mesos-master' }
+    not_if { ::File.exist? '/usr/local/sbin/mesos-master' }
   end
 when 'rhel', 'centos', 'amazon', 'scientific'
-  %w{ unzip libcurl }.each do |pkg|
+  %w( unzip libcurl ).each do |pkg|
     yum_package pkg do
       action :install
     end
@@ -70,12 +70,12 @@ when 'rhel', 'centos', 'amazon', 'scientific'
   remote_file "#{Chef::Config[:file_cache_path]}/mesos-#{node['mesos']['version']}.rpm" do
     source "http://downloads.mesosphere.io/master/centos/6/mesos_#{node['mesos']['version']}_x86_64.rpm"
     action :create
-    not_if { ::File.exists? '/usr/local/sbin/mesos-master' }
+    not_if { ::File.exist? '/usr/local/sbin/mesos-master' }
   end
 
   rpm_package 'mesos' do
     source "#{Chef::Config[:file_cache_path]}/mesos-#{node['mesos']['version']}.rpm"
-    not_if { ::File.exists? '/usr/local/sbin/mesos-master' }
+    not_if { ::File.exist? '/usr/local/sbin/mesos-master' }
   end
 end
 
@@ -84,7 +84,7 @@ end
 template '/etc/init/mesos-master.conf' do
   source 'mesos-master.conf.erb'
   variables(
-    action: 'stop',
+    action: 'stop'
   )
 end
 
@@ -93,7 +93,7 @@ end
 template '/etc/init/mesos-slave.conf' do
   source 'mesos-slave.conf.erb'
   variables(
-    action: 'stop',
+    action: 'stop'
   )
 end
 
@@ -102,5 +102,5 @@ bash 'reload-configuration' do
   code <<-EOH
   initctl reload-configuration
   EOH
-  not_if { ::File.exists? '/usr/local/sbin/mesos-master' }
+  not_if { ::File.exist? '/usr/local/sbin/mesos-master' }
 end

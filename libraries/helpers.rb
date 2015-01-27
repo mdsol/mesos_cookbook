@@ -17,6 +17,7 @@
 # limitations under the License.
 #
 
+# rubocop:disable Style/ClassAndModuleChildren
 module ::Mesos
   # Adds retry logic to exhibitor discovery
   #
@@ -29,3 +30,4 @@ module ::Mesos
     retry unless (tries -= 1).zero?
   end
 end
+# rubocop:eable Style/ClassAndModuleChildren
