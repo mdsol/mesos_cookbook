@@ -17,13 +17,36 @@ provisioner:
 
 platforms:
   - name: ubuntu-14.04
+    run_list:
+    - recipe[apt]
+    - recipe[zookeeper-apt]
   - name: ubuntu-12.04
+    run_list:
+    - recipe[apt]
+    - recipe[zookeeper-apt]
+  - name: debian-wheezy
+    run_list:
+    - recipe[apt]
+    - recipe[zookeeper-apt]
   - name: centos-6.5
+    run_list:
+    - recipe[yum]
+    - recipe[zookeeper-yum]
 
 suites:
 - name: default
   run_list:
-  - recipe[apt]
-  - recipe[yum]
-  - recipe[mesos::master]
-  - recipe[mesos::slave]
+    - recipe[mesos::master]
+    - recipe[mesos::slave]
+
+- name: oraclejdk7
+  run_list:
+    - recipe[java]
+    - recipe[mesos::master]
+    - recipe[mesos::slave]
+  attributes:
+    java:
+      jdk_version: '7'
+      install_flavor: 'oracle'
+      oracle:
+        accept_oracle_download_terms: true

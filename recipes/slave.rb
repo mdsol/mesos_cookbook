@@ -31,18 +31,13 @@ zk_path = ''
 
 template '/etc/default/mesos' do
   source 'mesos.erb'
-  variables(
-    logs_dir: node['mesos']['logs_dir']
-  )
+  variables config: node['mesos']['common']
   notifies :run, 'bash[restart-mesos-slave]', :delayed
 end
 
 template '/etc/default/mesos-slave' do
-  source 'mesos-slave.erb'
-  variables(
-    work_dir: node['mesos']['work_dir'],
-    isolation_type: node['mesos']['isolation_type']
-  )
+  source 'mesos.erb'
+  variables config: node['mesos']['slave']
   notifies :run, 'bash[restart-mesos-slave]', :delayed
 end
 
@@ -52,7 +47,7 @@ if node['mesos']['zookeeper_server_list'].count > 0
   zk_path = node['mesos']['zookeeper_path']
 end
 
-if node['mesos']['zookeeper_exhibitor_discovery'] && !node['mesos']['zookeeper_exhibitor_url'].nil?
+if node['mesos']['zookeeper_exhibitor_discovery'] && node['mesos']['zookeeper_exhibitor_url']
   zk_nodes = discover_zookeepers_with_retry(node['mesos']['zookeeper_exhibitor_url'])
 
   zk_server_list = zk_nodes['servers']
@@ -74,6 +69,11 @@ unless zk_server_list.count == 0 && zk_port.empty? && zk_path.empty?
     )
     notifies :run, 'bash[restart-mesos-slave]', :delayed
   end
+end
+
+# this directory doesn't exist on newer versions of Mesos, i.e. 0.21.0+
+directory '/usr/local/var/mesos/deploy/' do
+  recursive true
 end
 
 template '/usr/local/var/mesos/deploy/mesos-slave-env.sh.template' do
@@ -114,27 +114,58 @@ template '/etc/init/mesos-slave.conf' do
   notifies :run, 'bash[reload-configuration]'
 end
 
-bash 'reload-configuration' do
-  action :nothing
-  user 'root'
-  code <<-EOH
-  initctl reload-configuration
-  EOH
+if node['platform'] == 'debian'
+  bash 'reload-configuration' do
+    action :nothing
+    user 'root'
+    code <<-EOH
+    update-rc.d mesos-slave defaults
+    EOH
+  end
+else
+  bash 'reload-configuration' do
+    action :nothing
+    user 'root'
+    code <<-EOH
+    initctl reload-configuration
+    EOH
+  end
 end
 
-bash 'start-mesos-slave' do
-  user 'root'
-  code <<-EOH
-  start mesos-slave
-  EOH
-  not_if 'status mesos-slave|grep start/running'
+if node['platform'] == 'debian'
+  bash 'start-mesos-slave' do
+    user 'root'
+    code <<-EOH
+    service mesos-slave start
+    EOH
+    not_if 'service mesos-slave status|grep "start\|running"'
+  end
+else
+  bash 'start-mesos-slave' do
+    user 'root'
+    code <<-EOH
+    start mesos-slave
+    EOH
+    not_if 'status mesos-slave|grep "start\|running"'
+  end
 end
 
-bash 'restart-mesos-slave' do
-  action :nothing
-  user 'root'
-  code <<-EOH
-  restart mesos-slave
-  EOH
-  not_if 'status mesos-slave|grep stop/waiting'
+if node['platform'] == 'debian'
+  bash 'restart-mesos-slave' do
+    action :nothing
+    user 'root'
+    code <<-EOH
+    service mesos-slave restart
+    EOH
+    not_if 'service mesos-slave status|grep "stop\|waiting"'
+  end
+else
+  bash 'restart-mesos-slave' do
+    action :nothing
+    user 'root'
+    code <<-EOH
+    restart mesos-slave
+    EOH
+    not_if 'status mesos-slave|grep "stop\|waiting"'
+  end
 end

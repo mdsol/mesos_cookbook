@@ -1,6 +1,7 @@
 AllCops:
   Exclude:
-    - vendor/**
+    - vendor/**/*
+    - bin/**/*
 
 ClassLength:
   Enabled: false
@@ -13,4 +14,6 @@ LineLength:
 MethodLength:
   Enabled: false
 NumericLiterals:
+  Enabled: false
+ClassAndModuleChildren:
   Enabled: false

@@ -33,6 +33,7 @@ platforms:
 - name: ubuntu-14.04
   run_list:
     - recipe[apt]
+    - recipe[zookeeper-apt]
   driver_config:
     image_id: ami-64e27e0c
     username: ubuntu
@@ -40,28 +41,41 @@ platforms:
 - name: ubuntu-12.04
   run_list:
     - recipe[apt]
+    - recipe[zookeeper-apt]
   driver_config:
     image_id: ami-ccaed0a4
     username: ubuntu
 
+- name: debian-wheezy
+  run_list:
+    - recipe[apt]
+    - recipe[zookeeper-apt]
+  driver_config:
+    image_id: ami-2c886c44
+    username: admin
+
 - name: centos-6.4
   run_list:
     - recipe[yum::default]
+    - recipe[zookeeper-yum]
   driver_config:
-    image_id: ami-56009e3f
-    username: ec2-user
-
-- name: amazon-linux-2014-09-1
-  run_list:
-    - recipe[yum::default]
-  driver_config:
-    image_id: ami-246ed34c
+    image_id: ami-52009e3b
     username: ec2-user
 
 suites:
 - name: default
   run_list:
-  - recipe[apt]
-  - recipe[yum]
-  - recipe[mesos::master]
-  - recipe[mesos::slave]
+    - recipe[mesos::master]
+    - recipe[mesos::slave]
+
+- name: oraclejdk7
+  run_list:
+    - recipe[java]
+    - recipe[mesos::master]
+    - recipe[mesos::slave]
+  attributes:
+    java:
+      jdk_version: '7'
+      install_flavor: 'oracle'
+      oracle:
+        accept_oracle_download_terms: true
