@@ -1,6 +1,6 @@
-Ice Cookbook Issues
+Mesos Cookbook Issues
 ============================
-This file documents the steps necessary to report any issue with the ice
+This file documents the steps necessary to report any issue with the mesos
 cookbook. Following these guidelines will help ensure your issue is resolved in a
 timely manner.
 
@@ -42,4 +42,4 @@ Here's a snippet you can copy-paste into the issue and fill out:
     ```
 ```
 
-[Create a ticket](https://github.com/mdsol/ice_cookbook/issues/new) describing your problem and include the information above.
+[Create a ticket](https://github.com/mdsol/mesos_cookbook/issues/new) describing your problem and include the information above.
