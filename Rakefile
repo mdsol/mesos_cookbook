@@ -16,8 +16,8 @@ namespace :style do
         '~FC005',
         '~FC007',
         '~FC023',
-        '~FC048',
-      ],
+        '~FC048'
+      ]
     }
   end
 end
@@ -39,10 +39,4 @@ end
 desc 'Run all tests on Travis'
 task travis: %w(style)
 
-<<<<<<< HEAD
-# The default rake task should just run it all
-task default: %w( style integration )
-=======
-# Default
-task default: %w(style integration:vagrant)
->>>>>>> develop
+task default: %w( style integration:vagrant )
