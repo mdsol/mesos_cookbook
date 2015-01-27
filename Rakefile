@@ -16,8 +16,8 @@ namespace :style do
         '~FC005',
         '~FC007',
         '~FC023',
-        '~FC048',
-      ],
+        '~FC048'
+      ]
     }
   end
 end
@@ -39,5 +39,4 @@ end
 desc 'Run all tests on Travis'
 task travis: %w(style)
 
-# Default
-task default: %w(style integration:vagrant)
+task default: %w( style integration:vagrant )

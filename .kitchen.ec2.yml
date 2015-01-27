@@ -1,69 +1,51 @@
-<%  # This file contains ERB-interpreted YAML directives for testkitchen.
-    # Secrets are read from the local execution ENV into this file, and
-    # passed to the Chef tests via node attributes applied to the test suites.
-
-# To keep the YAML as simple as possible, some values are computed here with defaults set so kitchen will run without
-# values being set in ENV - at least as far as listing or running on the vagrant driver
-AWS_ACCESS_KEY_ID = ENV['AWS_BLUE_ACCESS_KEY_ID'] ||'(ENTER_AWS_ACCESS_KEY_ID)'
-AWS_ACCESS_KEY_SECRET = ENV['AWS_BLUE_SECRET_ACCESS_KEY_ID'] || '(ENTER_AWS_SECRET_ACCESS_KEY)'
+<%
+# To keep the YAML as simple as possible, some values are computed here
+AWS_ACCESS_KEY_ID = ENV['AWS_ACCESS_KEY_ID'] ||'(ENTER_ACCESS_KEY_ID)'
+AWS_ACCESS_KEY_SECRET = ENV['AWS_SECRET_KEY'] || '(ENTER_AWS_SECRET_ID)'
+AWS_FLAVOR_ID = ENV['AWS_FLAVOR_ID'] || '(ENTER_AWS_FLAVOR_ID)'
 AWS_SSH_KEY_ID = ENV['AWS_SSH_KEY_ID'] || 'default'
 AWS_SSH_KEYPATH = File.expand_path(ENV['AWS_SSH_KEY_PATH'] || "#{ENV['HOME']}/.ssh/id_rsa")
-
-# support function, needed for inserting raw RSA private key data into YAML
-def yaml_section(hash, indentation)
-  YAML.dump(hash).sub(/\A---\s/, '').split("\n").map do |l|
-    (" " * indentation) + l
-  end.join("\n")
-end
+USER = ENV['USER'] || '(ENTER_USER)'
 %>
 ---
 driver:
   name: ec2
-  aws_access_key_id: <%= ENV['AWS_BLUE_ACCESS_KEY_ID'] ||
-                        '(ENTER_AWS_ACCESS_KEY_ID)' %>
-  aws_secret_access_key: <%= ENV['AWS_BLUE_SECRET_ACCESS_KEY_ID'] ||
-                            'ENTER_AWS_SECRET_ACCESS_KEY_ID' %>
-  aws_ssh_key_id: <%= ENV['AWS_SSH_KEY_ID'] || 'default' %>
-  ssh_key: <%= File.expand_path(ENV['AWS_SSH_KEY_PATH'] ||
-                             "#{ENV['HOME']}/.ssh/id_rsa") %>
+  aws_access_key_id: <%= AWS_ACCESS_KEY_ID %>
+  aws_secret_access_key: <%= AWS_ACCESS_KEY_SECRET %>
+  aws_ssh_key_id: <%= AWS_SSH_KEY_ID %>
+  ssh_key: <%= AWS_SSH_KEYPATH %>
   region: us-east-1
   availability_zone: us-east-1c
-  flavor_id: <%= ENV['AWS_FLAVOR_ID'] || '(ENTER_AWS_FLAVOR_ID)' %>
+  flavor_id: <%= AWS_FLAVOR_ID %>
+  require_chef_omnibus: true
   tags:
     created-by: 'test-kitchen'
-    launched-by: <%= ENV['USER'] || '(ENTER_USER)' %>
+    launched-by: <%= USER %>
+    Name: 'test-kitchen-mesos-cookbook-<%= Time.now.to_i %>'
 
 busser:
   sudo: true
 
 provisioner:
   name: chef_zero
-  require_chef_omnibus: 11.12.2
+  require_chef_omnibus: latest
   data_path: test/shared
 
 platforms:
-- name: ubuntu-12.04
-  run_list:
-    - recipe[apt]
-    - recipe[zookeeper-apt]
-  driver_config:
-    image_id: ami-e7582d8e
-    username: ubuntu
-
-- name: ubuntu-13.04
-  run_list:
-    - recipe[apt]
-    - recipe[zookeeper-apt]
-  driver_config:
-    image_id: ami-1d132274
-    username: ubuntu
-
 - name: ubuntu-14.04
   run_list:
     - recipe[apt]
     - recipe[zookeeper-apt]
   driver_config:
-    image_id: ami-018c9568
+    image_id: ami-64e27e0c
+    username: ubuntu
+
+- name: ubuntu-12.04
+  run_list:
+    - recipe[apt]
+    - recipe[zookeeper-apt]
+  driver_config:
+    image_id: ami-ccaed0a4
     username: ubuntu
 
 - name: debian-wheezy
@@ -76,10 +58,10 @@ platforms:
 
 - name: centos-6.4
   run_list:
-    - recipe[yum]
+    - recipe[yum::default]
     - recipe[zookeeper-yum]
   driver_config:
-    image_id: ami-56009e3f
+    image_id: ami-52009e3b
     username: ec2-user
 
 suites:
