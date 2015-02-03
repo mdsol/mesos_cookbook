@@ -3,11 +3,11 @@ driver:
   customize:
     cpus: 1
     memory: 1024
-  #network:
-  #  - - forwarded_port
-  #    - guest: 5050
-  #      host: 5050
-  #      auto_correct: true
+  network:
+    - - forwarded_port
+      - guest: 5050
+        host: 5050
+        auto_correct: true
 
 provisioner:
   name: chef_zero
