@@ -13,7 +13,8 @@ driver:
   aws_ssh_key_id: <%= AWS_SSH_KEY_ID %>
   ssh_key: <%= AWS_SSH_KEYPATH %>
   region: us-east-1
-  flavor_id: <%= ENV['AWS_FLAVOR_ID'] || '(ENTER_AWS_FLAVOR_ID)' %>
+  availability_zone: us-east-1c
+  flavor_id: <%= ENV['AWS_FLAVOR_ID'] %>
   require_chef_omnibus: true
   tags:
     created-by: 'test-kitchen'
