@@ -2,6 +2,7 @@
 # To keep the YAML as simple as possible, some values are computed here
 AWS_ACCESS_KEY_ID = ENV['AWS_ACCESS_KEY_ID'] ||'(ENTER_ACCESS_KEY_ID)'
 AWS_ACCESS_KEY_SECRET = ENV['AWS_SECRET_KEY'] || '(ENTER_AWS_SECRET_ID)'
+AWS_FLAVOR_ID = ENV['AWS_FLAVOR_ID'] || '(ENTER_AWS_FLAVOR_ID)'
 AWS_SSH_KEY_ID = ENV['AWS_SSH_KEY_ID'] || 'default'
 AWS_SSH_KEYPATH = File.expand_path(ENV['AWS_SSH_KEY_PATH'] || "#{ENV['HOME']}/.ssh/id_rsa")
 %>
@@ -14,7 +15,7 @@ driver:
   ssh_key: <%= AWS_SSH_KEYPATH %>
   region: us-east-1
   availability_zone: us-east-1c
-  flavor_id: <%= ENV['AWS_FLAVOR_ID'] %>
+  flavor_id: <%= AWS_FLAVOR_ID %>
   require_chef_omnibus: true
   tags:
     created-by: 'test-kitchen'
