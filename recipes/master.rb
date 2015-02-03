@@ -2,7 +2,7 @@
 # Cookbook Name:: mesos
 # Recipe:: master
 #
-# Copyright (C) 2013 Medidata Solutions, Inc.
+# Copyright (C) 2015 Medidata Solutions, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,22 +18,54 @@
 #
 
 # rubocop:disable Style/ClassAndModuleChildren
-class ::Chef::Recipe
-  include ::Mesos
-end
+# class ::Chef::Recipe
+#  include ::Mesos
+# end
 # rubocop:enable Style/ClassAndModuleChildren
+
+class Chef::Recipe
+  include MesosHelper
+end
 
 include_recipe 'mesos::install'
 
-template '/etc/default/mesos' do
-  source 'mesos.erb'
-  variables config: node['mesos']['common']
+# Check for valid configuration options
+node['mesos']['master']['flags'].keys.each do |config_key|
+  options_hash = node['mesos']['options']['master']
+  unless options_hash.key? config_key
+    Chef::Application.fatal!("Detected an invalid configuration option: #{config_key}. Aborting!", 1000)
+  end
+
+  unless options_hash[config_key]['version'].include?(node['mesos']['version'])
+    Chef::Application.fatal!("Detected a configuration option that isn't available for this version of Mesos: #{config_key}. Aborting!", 1000)
+  end
+
+  if options_hash[config_key]['deprecated'] == true
+    Chef::Log.warn("The following configuration option is deprecated: #{config_key}.")
+  end
+end
+
+directory '/etc/mesos-master/'
+
+template '/etc/default/mesos-master' do
+  source 'mesos-master.erb'
+  variables config: node['mesos']['master']['env']
   notifies :run, 'bash[restart-mesos-master]', :delayed
 end
 
-template '/etc/default/mesos-master' do
-  source 'mesos.erb'
-  variables config: node['mesos']['master']
+# generate our flag config template but only to detect changes
+template '/etc/mesos-chef/mesos-master-config' do
+  source 'mesos-master-chef-config.erb'
+  variables config: node['mesos']['master']['flags']
+  mode 0644
+  notifies :run, 'ruby_block[update_master_config]', :immediately
+end
+
+ruby_block 'update_master_config' do
+  block do
+    MesosHelper.update_mesos_options(node['mesos']['master']['flags'], MesosServerType::MASTER, node['mesos']['version'])
+  end
+  action :nothing
   notifies :run, 'bash[restart-mesos-master]', :delayed
 end
 
@@ -44,7 +76,7 @@ if node['mesos']['zookeeper_server_list'].count > 0
 end
 
 if node['mesos']['zookeeper_exhibitor_discovery'] && node['mesos']['zookeeper_exhibitor_url']
-  zk_nodes = discover_zookeepers_with_retry(node['mesos']['zookeeper_exhibitor_url'])
+  zk_nodes = MesosHelper.discover_zookeepers_with_retry(node['mesos']['zookeeper_exhibitor_url'])
 
   if zk_nodes.nil?
     Chef::Application.fatal!('Failed to discover zookeepers.  Cannot continue')
@@ -60,7 +92,7 @@ unless zk_server_list.nil? && zk_port.nil? && zk_path.nil?
   Chef::Log.info("Zookeeper Port: #{zk_port}")
   Chef::Log.info("Zookeeper Path: #{zk_path}")
 
-  template '/etc/mesos/zk' do
+  template '/etc/mesos-master/zk' do
     source 'zk.erb'
     variables(
       zookeeper_server_list: zk_server_list,
@@ -120,7 +152,7 @@ if node['platform'] == 'debian'
     code <<-EOH
     service mesos-master start
     EOH
-    not_if 'service mesos-master status|grep "start\|running"'
+    not_if 'service mesos-master status|grep "start\|is running"'
   end
 else
   bash 'start-mesos-master' do
@@ -139,7 +171,7 @@ if node['platform'] == 'debian'
     code <<-EOH
     service mesos-master restart
     EOH
-    not_if 'service mesos-master status|grep "stop\|waiting"'
+    not_if 'service mesos-master status|grep "stop\|is not running"'
   end
 else
   bash 'restart-mesos-master' do
