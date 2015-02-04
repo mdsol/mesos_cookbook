@@ -25,7 +25,7 @@ distro_version = node['platform_version']
 
 case distro
 when 'debian', 'ubuntu'
-  %w( unzip default-jre-headless libcurl3 ).each do |pkg|
+  %w( unzip default-jre-headless libcurl3 libsvn1).each do |pkg|
     package pkg do
       action :install
     end
