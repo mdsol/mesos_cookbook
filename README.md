@@ -140,7 +140,7 @@ json_class:          Chef::Role
 name:                mesos_master
 override_attributes:
   mesos:
-    version: 0.17.0
+    version: 0.21.0
     cluster_name: mesos-sandbox
     zookeeper_server_list: [ '203.0.113.2', '203.0.113.3', '203.0.113.4' ]
     zookeeper_port: 2181
@@ -149,7 +149,7 @@ run_list:
   recipe[mesos::master]
 ```
 
-Here is a sample role for creating a Mesos slave node with a seperate ZooKeeper 
+Here is a sample role for creating a Mesos slave node with a seperate ZooKeeper
 ensemble dynamically discovered via Netflix Exhibitor:
 ```YAML
 chef_type:           role
@@ -160,34 +160,13 @@ json_class:          Chef::Role
 name:                mesos_slave
 override_attributes:
   mesos:
-    version: 0.17.0
+    version: 0.21.0
     cluster_name: mesos-sandbox
     zookeeper_path: 'mesos'
     zookeeper_exhibitor_discovery: true
     zookeeper_exhibitor_url: 'http://zk-exhibitor-endpoint.example.com:8080'
 run_list:
   recipe[mesos::slave]
-```
-
-Here is a sample role for creating a Mesos slave node running the experimental 
-docker executor.  This node is also dynamically configured via zookeeper and
-exhibitor.  (Note: this recipe only works with Ubuntu 13.04 as of now.)
-```YAML
-chef_type:           role
-default_attributes:
-description:
-env_run_lists:
-json_class:          Chef::Role
-name:                mesos_slave_docker
-override_attributes:
-  mesos:
-    version: 0.17.0
-    cluster_name: mesos-sandbox
-    zookeeper_path: 'mesos'
-    zookeeper_exhibitor_discovery: true
-    zookeeper_exhibitor_url: 'http://zk-exhibitor-endpoint.example.com:8080'
-run_list:
-  recipe[mesos::docker]
 ```
 
 Development
