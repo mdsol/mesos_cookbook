@@ -45,8 +45,8 @@ This cookbook supports the following Apache Mesos versions:
 * 0.19.1
 * 0.19.0
 
-We intend to support at most three versions of Apache Mesos including all patch
-releases for supported major versions. Ex. 0.20.0 + 0.20.1 etc..
+We intend to support at most the three latest versions of Apache Mesos including
+all patch releases for supported major versions. Ex. 0.20.0 + 0.20.1 etc..
 
 Attributes
 ----------
