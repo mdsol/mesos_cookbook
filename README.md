@@ -34,6 +34,20 @@ Note: Mesosphere RPM’s are provided for Redhat Enterprise Linux 6 and 7 but
 due to licensing issues those distributions are not officially tested for this
 cookbook however we may test on Fedora in the future.
 
+Supported Mesos Versions
+------------------------
+
+This cookbook supports the following Apache Mesos versions:
+
+* 0.21.0
+* 0.20.1
+* 0.20.0
+* 0.19.1
+* 0.19.0
+
+We intend to support at most three versions of Apache Mesos including all patch
+releases for supported major versions. Ex. 0.20.0 + 0.20.1 etc..
+
 Attributes
 ----------
 In order to keep the README managable and in sync with the attributes, this
@@ -43,8 +57,8 @@ values for attributes can be found in the individual attribute files.
 Configuring Mesos via attributes
 -----------------------------------------
 This cookbook introduces a few points of validation to prevent passing Mesos
-invalid configuration options.  The file `attributes/mesos_options.rb` contains
-a hash of all valid Mesos configuration options for all Mesos versions
+invalid configuration options.  The file [attributes/mesos_options.rb](attributes/mesos_options.rb)
+contains a hash of all valid Mesos configuration options for all Mesos versions
 supported by this cookbook.  This cookbook will fail to converge if you try to
 use an invalid configuration option as a command line flag attribute under
 `[‘mesos’][‘master’][‘flags]` or `[‘mesos’][‘slave’][‘flags]` hashes.
@@ -56,10 +70,10 @@ options are available per Mesos version here:
 https://docs.google.com/spreadsheets/d/1IER03xhtOSj9unW5AYIqn-tu-laAHlPSOYhM6xw4QHg/edit#gid=0
 
 This cookbook also ensures that only Mesos versions that are defined in
-`attributes/mesosphere_packages.rb` hash can be installed.  If you wish to install
-a custom mesos package or version simply override the hash
-`[‘mesos’][‘mesosphere_packages’]` with the location of your mesos package along
-with a valid SHA256 checksum.
+[attributes/mesosphere_packages.rb](attributes/mesosphere_packages.rb) hash can be
+installed.  If you wish to install a custom mesos package or version simply override
+the hash `[‘mesos’][‘mesosphere_packages’]` with the location of your mesos package
+along with a valid SHA256 checksum.
 
 ## Recipes
 
