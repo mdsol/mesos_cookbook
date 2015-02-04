@@ -8,7 +8,7 @@ long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version '2.0.0'
 # rubocop:enable Style/SingleSpaceBeforeFirstArg
 
-%w( ubuntu centos amazon scientific ).each do |os|
+%w( ubuntu debian centos amazon scientific ).each do |os|
   supports os
 end
 
