@@ -17,7 +17,7 @@ cookbooks maintained by [Medidata Solutions][]:
 Requirements
 ------------
 
-- Chef 11
+- Chef >= 11
 - Ruby 1.9.3 or higher
 
 Platform
