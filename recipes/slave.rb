@@ -2,7 +2,7 @@
 # Cookbook Name:: mesos
 # Recipe:: slave
 #
-# Copyright (C) 2013 Medidata Solutions, Inc.
+# Copyright (C) 2015 Medidata Solutions, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,29 +17,55 @@
 # limitations under the License.
 #
 
-# rubocop:disable Style/ClassAndModuleChildren
-class ::Chef::Recipe
-  include ::Mesos
+class Chef::Recipe
+  include MesosHelper
 end
-# rubocop:enable Style/ClassAndModuleChildren
 
 include_recipe 'mesos::install'
+
+# Check for valid configuration options
+node['mesos']['slave']['flags'].keys.each do |config_key|
+  options_hash = node['mesos']['options']['slave']
+  unless options_hash.key? config_key
+    Chef::Application.fatal!("Detected an invalid configuration option: #{config_key}. Aborting!", 1000)
+  end
+
+  unless options_hash[config_key]['version'].include?(node['mesos']['version'])
+    Chef::Application.fatal!("Detected a configuration option that isn't available for this version of Mesos: #{config_key}. Aborting!", 1000)
+  end
+
+  if options_hash[config_key]['deprecated'] == true
+    Chef::Log.warn("The following configuration option is deprecated: #{config_key}.")
+  end
+end
+
+directory '/etc/mesos-slave/'
+
+template '/etc/default/mesos-slave' do
+  source 'mesos-slave.erb'
+  variables config: node['mesos']['slave']['env']
+  notifies :run, 'bash[restart-mesos-slave]', :delayed
+end
+
+# generate our flag config template but only to detect changes
+template '/etc/mesos-chef/mesos-slave-config' do
+  source 'mesos-slave-chef-config.erb'
+  variables config: node['mesos']['slave']['flags']
+  mode 0644
+  notifies :run, 'ruby_block[update_slave_config]', :immediately
+end
+
+ruby_block 'update_slave_config' do
+  block do
+    MesosHelper.update_mesos_options(node['mesos']['slave']['flags'], MesosServerType::SLAVE, node['mesos']['version'])
+  end
+  action :nothing
+  notifies :run, 'bash[restart-mesos-slave]', :delayed
+end
 
 zk_server_list = []
 zk_port = ''
 zk_path = ''
-
-template '/etc/default/mesos' do
-  source 'mesos.erb'
-  variables config: node['mesos']['common']
-  notifies :run, 'bash[restart-mesos-slave]', :delayed
-end
-
-template '/etc/default/mesos-slave' do
-  source 'mesos.erb'
-  variables config: node['mesos']['slave']
-  notifies :run, 'bash[restart-mesos-slave]', :delayed
-end
 
 if node['mesos']['zookeeper_server_list'].count > 0
   zk_server_list = node['mesos']['zookeeper_server_list']
@@ -138,7 +164,7 @@ if node['platform'] == 'debian'
     code <<-EOH
     service mesos-slave start
     EOH
-    not_if 'service mesos-slave status|grep "start\|running"'
+    not_if 'service mesos-slave status|grep "start\|is running"'
   end
 else
   bash 'start-mesos-slave' do
@@ -157,7 +183,7 @@ if node['platform'] == 'debian'
     code <<-EOH
     service mesos-slave restart
     EOH
-    not_if 'service mesos-slave status|grep "stop\|waiting"'
+    not_if 'service mesos-slave status|grep "stop\|is not running"'
   end
 else
   bash 'restart-mesos-slave' do

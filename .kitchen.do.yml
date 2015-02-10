@@ -1,13 +1,6 @@
+---
 driver:
-  name: vagrant
-  customize:
-    cpus: 1
-    memory: 1024
-  network:
-    - - forwarded_port
-      - guest: 5050
-        host: 5050
-        auto_correct: true
+  name: digitalocean
 
 provisioner:
   name: chef_zero
@@ -16,23 +9,38 @@ provisioner:
   data_bags_path: test/integration/default/data_bags
 
 platforms:
-  - name: ubuntu-14.04
+  - name: ubuntu-14-04-x64
+    driver_config:
+      image_id: 9801950
+      size: 2gb
     run_list:
-      - recipe[apt]
+      - recipe[apt::default]
       - recipe[zookeeper-apt]
-  - name: ubuntu-13.10
+  - name: ubuntu-13-10-x64
+    driver_config:
+      image_id: 3101918
+      size: 2gb
     run_list:
-      - recipe[apt]
+      - recipe[apt::default]
       - recipe[zookeeper-apt]
-  - name: ubuntu-12.04
+  - name: ubuntu-12-04-x64
+    driver_config:
+      image_id: 10321756
+      size: 2gb
     run_list:
-      - recipe[apt]
+      - recipe[apt::default]
       - recipe[zookeeper-apt]
-  - name: debian-7.7
+  - name: debian-7-0-x64
+    driver_config:
+      image_id: 10322059
+      size: 2gb
     run_list:
-      - recipe[apt]
+      - recipe[apt::default]
       - recipe[zookeeper-apt]
-  - name: centos-6.4
+  - name: centos-6-5-x64
+    driver_config:
+      image_id: 10325922
+      size: 2gb
     run_list:
       - recipe[yum::default]
       - recipe[zookeeper-yum]

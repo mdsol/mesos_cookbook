@@ -5,6 +5,8 @@
 
 include_recipe 'java'
 
+package 'wget'
+
 # Add clouder cdh4 repository for testing with a running local zookeeper
 bash 'install-cdh4-repo' do
   user 'root'
@@ -15,8 +17,10 @@ bash 'install-cdh4-repo' do
   not_if { ::File.directory? '/var/lib/zookeeper' }
 end
 
-package 'zookeeper-server' do
-  action :install
+%w( zookeeper-server curl ).each do |pkg|
+  package pkg do
+    action :install
+  end
 end
 
 bash 'initialize-zookeeper' do

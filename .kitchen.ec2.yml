@@ -28,7 +28,7 @@ busser:
 
 provisioner:
   name: chef_zero
-  require_chef_omnibus: latest
+  require_chef_omnibus: 12.0.3
   data_path: test/shared
 
 platforms:
@@ -38,6 +38,14 @@ platforms:
     - recipe[zookeeper-apt]
   driver_config:
     image_id: ami-64e27e0c
+    username: ubuntu
+
+- name: ubuntu-13.10
+  run_list:
+    - recipe[apt]
+    - recipe[zookeeper-apt]
+  driver_config:
+    image_id: ami-7461a11c
     username: ubuntu
 
 - name: ubuntu-12.04
@@ -53,7 +61,7 @@ platforms:
     - recipe[apt]
     - recipe[zookeeper-apt]
   driver_config:
-    image_id: ami-2c886c44
+    image_id: ami-3695e55e
     username: admin
 
 - name: centos-6.4
@@ -69,15 +77,108 @@ suites:
   run_list:
     - recipe[mesos::master]
     - recipe[mesos::slave]
+  attributes:
+    mesos:
+      version: '0.20.1'
+      zookeeper_server_list: [ '127.0.0.1' ]
+      zookeeper_port: 2181
+      zookeeper_path: 'mesos'
+      master:
+        flags:
+          authenticate: no
+          authenticate_slaves: false
+          logging_level: INFO
+          cluster: 'MyMesosCluster'
+      slave:
+        flags:
+          gc_delay: 1days
+          checkpoint: true
+          switch_user: yes
 
-- name: oraclejdk7
+- name: 0-21-0
   run_list:
-    - recipe[java]
     - recipe[mesos::master]
     - recipe[mesos::slave]
   attributes:
-    java:
-      jdk_version: '7'
-      install_flavor: 'oracle'
-      oracle:
-        accept_oracle_download_terms: true
+    mesos:
+      version: '0.21.0'
+      zookeeper_server_list: [ '127.0.0.1' ]
+      zookeeper_port: 2181
+      zookeeper_path: 'mesos'
+      master:
+        flags:
+          authenticate: no
+          authenticate_slaves: false
+          logging_level: INFO
+          cluster: 'MyMesosCluster'
+      slave:
+        flags:
+          gc_delay: 1days
+          checkpoint: true
+          switch_user: yes
+
+- name: 0-20-0
+  run_list:
+    - recipe[mesos::master]
+    - recipe[mesos::slave]
+  attributes:
+    mesos:
+      version: '0.20.0'
+      zookeeper_server_list: [ '127.0.0.1' ]
+      zookeeper_port: 2181
+      zookeeper_path: 'mesos'
+      master:
+        flags:
+          authenticate: no
+          authenticate_slaves: false
+          logging_level: INFO
+          cluster: 'MyMesosCluster'
+      slave:
+        flags:
+          gc_delay: 1days
+          checkpoint: true
+          switch_user: yes
+
+- name: 0-19-1
+  run_list:
+    - recipe[mesos::master]
+    - recipe[mesos::slave]
+  attributes:
+    mesos:
+      version: '0.19.1'
+      zookeeper_server_list: [ '127.0.0.1' ]
+      zookeeper_port: 2181
+      zookeeper_path: 'mesos'
+      master:
+        flags:
+          authenticate: no
+          authenticate_slaves: false
+          logging_level: INFO
+          cluster: 'MyMesosCluster'
+      slave:
+        flags:
+          gc_delay: 1days
+          checkpoint: true
+          switch_user: yes
+
+- name: 0-19-0
+  run_list:
+    - recipe[mesos::master]
+    - recipe[mesos::slave]
+  attributes:
+    mesos:
+      version: '0.19.0'
+      zookeeper_server_list: [ '127.0.0.1' ]
+      zookeeper_port: 2181
+      zookeeper_path: 'mesos'
+      master:
+        flags:
+          authenticate: no
+          authenticate_slaves: no
+          logging_level: INFO
+          cluster: 'MyMesosCluster'
+      slave:
+        flags:
+          gc_delay: 1days
+          checkpoint: true
+          switch_user: yes

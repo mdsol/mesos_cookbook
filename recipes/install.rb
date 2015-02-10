@@ -2,7 +2,7 @@
 # Cookbook Name:: mesos
 # Recipe:: install
 #
-# Copyright (C) 2013 Medidata Solutions, Inc.
+# Copyright (C) 2015 Medidata Solutions, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,11 +17,35 @@
 # limitations under the License.
 #
 
-include_recipe 'apt'
+include_recipe 'chef-sugar'
+
+include_recipe 'apt' if debian?
+
 include_recipe 'java::default'
 
 distro = node['platform']
 distro_version = node['platform_version']
+mesos_version = node['mesos']['version']
+
+# First check if we have metadata for configured version
+unless node['mesos']['mesosphere_packages'].key?(mesos_version)
+  Chef::Application.fatal!("There is no metadata defined for your configured Mesos version: #{mesos_version}", 1000)
+end
+
+# Next check if we support this distro
+unless node['mesos']['mesosphere_packages'][mesos_version].key?(distro)
+  Chef::Application.fatal!("There is no metadata defined for your OS: #{distro}", 1001)
+end
+
+# Finally check if we support this particular distro version
+unless node['mesos']['mesosphere_packages'][mesos_version][distro].key?(distro_version)
+  Chef::Application.fatal!("There is no metadata defined for your OS version: #{distro_version}", 1002)
+end
+
+package_url = node['mesos']['mesosphere_packages'][mesos_version][distro][distro_version]['package_url']
+package_checksum = node['mesos']['mesosphere_packages'][mesos_version][distro][distro_version]['checksum']
+
+directory '/etc/mesos-chef'
 
 case distro
 when 'debian', 'ubuntu'
@@ -31,22 +55,9 @@ when 'debian', 'ubuntu'
     end
   end
 
-  if distro == 'debian'
-    match = distro_version.match(/(\d{1})(\.?\d+)?/i)
-
-    unless match.nil?
-      major_version, _minor_version = match.captures
-      distro_version = major_version
-    end
-  elsif distro == 'ubuntu'
-    # For now we need to use the latest 13.x based deb
-    # package until a trusty mesos deb is available
-    # on mesosphere site.
-    distro_version = '13.10' if distro_version == '14.04'
-  end
-
   remote_file "#{Chef::Config[:file_cache_path]}/mesos.deb" do
-    source "http://downloads.mesosphere.io/master/#{distro}/#{distro_version}/mesos_#{node['mesos']['version']}_amd64.deb"
+    source package_url
+    checksum package_checksum
     action :create
     not_if { ::File.exist? '/usr/local/sbin/mesos-master' }
   end
@@ -83,7 +94,8 @@ when 'rhel', 'centos', 'amazon', 'scientific'
   end
 
   remote_file "#{Chef::Config[:file_cache_path]}/mesos-#{node['mesos']['version']}.rpm" do
-    source "http://downloads.mesosphere.io/master/centos/6/mesos_#{node['mesos']['version']}_x86_64.rpm"
+    source package_url
+    checksum package_checksum
     action :create
     not_if { ::File.exist? '/usr/local/sbin/mesos-master' }
   end
