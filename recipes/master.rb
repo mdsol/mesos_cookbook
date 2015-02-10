@@ -17,12 +17,6 @@
 # limitations under the License.
 #
 
-# rubocop:disable Style/ClassAndModuleChildren
-# class ::Chef::Recipe
-#  include ::Mesos
-# end
-# rubocop:enable Style/ClassAndModuleChildren
-
 class Chef::Recipe
   include MesosHelper
 end
