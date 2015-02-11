@@ -71,7 +71,7 @@ default['mesos']['mesosphere_packages'] = {
         'python_egg' => 'http://downloads.mesosphere.io/master/centos/7/mesos-0.21.0-py2.7-linux-x86_64.egg'
       }
     },
-    'rhel' => {
+    'redhat' => {
       '6.5' => {
         'package_url' => 'http://downloads.mesosphere.io/master/redhat/6/mesos-0.21.0-1.0.redhat65.x86_64.rpm',
         'checksum' => 'ddb2f004b280ba1920e9a10c845aea8bc308029f06d92058ba129dd82a3401df',
@@ -156,7 +156,7 @@ default['mesos']['mesosphere_packages'] = {
         'python_egg' => 'http://downloads.mesosphere.io/master/centos/6/mesos-0.20.1-py2.6.egg'
       }
     },
-    'rhel' => {
+    'redhat' => {
       '7' => {
         'package_url' => 'http://downloads.mesosphere.io/master/centos/7/mesos-0.20.1-1.0.centos701406.x86_64.rpm',
         'checksum' => '5a21a7ddf36597ebddace420c5654bf0725fa1f2e91d4ccced3fa54f23c02a84',
@@ -241,7 +241,7 @@ default['mesos']['mesosphere_packages'] = {
         'python_egg' => 'http://downloads.mesosphere.io/master/centos/6/mesos-0.20.0-py2.6.egg'
       }
     },
-    'rhel' => {
+    'redhat' => {
       '6.5' => {
         'package_url' => 'http://downloads.mesosphere.io/master/redhat/6/mesos-0.20.0-1.0.redhat65.x86_64.rpm',
         'checksum' => '1293fabc24d6b76e83efaf02007a16fafb42979d8ab652b66f010a3469101a9f',
@@ -321,7 +321,7 @@ default['mesos']['mesosphere_packages'] = {
         'python_egg' => 'http://downloads.mesosphere.io/master/centos/6/mesos-0.19.1-py2.6.egg'
       }
     },
-    'rhel' => {
+    'redhat' => {
       '6.5' => {
         'package_url' => 'http://downloads.mesosphere.io/master/redhat/6/mesos-0.19.1-1.0.redhat64.x86_64.rpm',
         'checksum' => '59196eb8b80ecb409ca9d4c70b00c7bcbdfda02ba00096de05c475a285a92413',
@@ -401,7 +401,7 @@ default['mesos']['mesosphere_packages'] = {
         'python_egg' => 'http://downloads.mesosphere.io/master/centos/6/mesos-0.19.0_rc2-py2.6.egg'
       }
     },
-    'rhel' => {
+    'redhat' => {
       '6.5' => {
         'package_url' => 'http://downloads.mesosphere.io/master/redhat/6/mesos_0.19.0_x86_64.rpm',
         'checksum' => 'dec5f83aec146ce3c34ce32d54c250d6c7d3614da4a6a478bb3870f182b6f783',
