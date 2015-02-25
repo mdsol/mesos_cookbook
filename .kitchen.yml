@@ -32,6 +32,10 @@ platforms:
     run_list:
       - recipe[apt]
       - recipe[zookeeper-apt]
+  - name: centos-6.5
+    run_list:
+      - recipe[yum::default]
+      - recipe[zookeeper-yum]
   - name: centos-6.4
     run_list:
       - recipe[yum::default]
@@ -59,6 +63,31 @@ suites:
           gc_delay: 1days
           checkpoint: true
           switch_user: yes
+
+- name: attributes
+  run_list:
+    - recipe[mesos::master]
+    - recipe[mesos::slave]
+  attributes:
+    mesos:
+      version: '0.20.1'
+      zookeeper_server_list: [ '127.0.0.1' ]
+      zookeeper_port: 2181
+      zookeeper_path: 'mesos'
+      master:
+        flags:
+          authenticate: no
+          authenticate_slaves: false
+          logging_level: INFO
+          cluster: 'MyMesosCluster'
+      slave:
+        flags:
+          attributes:
+            test: 'test_value'
+          resources:
+            cpu:   '24'
+            ports: '[21000-24000]'
+            bugs:  '{a,b,c}'
 
 - name: 0-21-0
   run_list:
