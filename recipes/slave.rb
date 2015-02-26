@@ -42,14 +42,14 @@ end
 directory '/etc/mesos-slave/'
 
 template '/etc/default/mesos-slave' do
-  source 'mesos-slave.erb'
+  source 'mesos.erb'
   variables config: node['mesos']['slave']['env']
   notifies :run, 'bash[restart-mesos-slave]', :delayed
 end
 
 # generate our flag config template but only to detect changes
 template '/etc/mesos-chef/mesos-slave-config' do
-  source 'mesos-slave-chef-config.erb'
+  source 'mesos.erb'
   variables config: node['mesos']['slave']['flags']
   mode 0644
   notifies :run, 'ruby_block[update_slave_config]', :immediately
@@ -133,8 +133,9 @@ end
 # Set init to 'start' by default for mesos slave.
 # This ensures that mesos-slave is started on restart
 template '/etc/init/mesos-slave.conf' do
-  source 'mesos-slave.conf.erb'
+  source 'mesos-init.erb'
   variables(
+    type:   'slave',
     action: 'start'
   )
   notifies :run, 'bash[reload-configuration]'

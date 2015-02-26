@@ -7,10 +7,10 @@ default['mesos']['version']                                 = '0.20.1'
 # to /etc/default/mesos-master.
 
 # Ulimit to pass to mesos-master process.
-default['mesos']['master']['env']['ulimit']                 = '-n 16384'
+default['mesos']['master']['env']['ULIMIT']                 = '-n 16384'
 
 # Directory to write mesos-master logs.
-default['mesos']['master']['env']['logs']                   = '/var/log/mesos'
+default['mesos']['master']['env']['LOGS']                   = '/var/log/mesos'
 
 # Configure Mesos via command line options here.
 # NOTE: Any attributes defined under ['mesos']['master']['flags'] will be
@@ -45,10 +45,10 @@ default['mesos']['master']['flags']['quorum']               = 1
 # to /etc/default/mesos-slave
 
 # Ulimit to pass to mesos-slave process.
-default['mesos']['slave']['env']['ulimit']                  = '-n 16384'
+default['mesos']['slave']['env']['ULIMIT']                  = '-n 16384'
 
 # Directory to write mesos-slave logs.
-default['mesos']['slave']['env']['logs']                    = '/var/log/mesos'
+default['mesos']['slave']['env']['LOGS']                    = '/var/log/mesos'
 
 # mesos-slave default port
 default['mesos']['slave']['flags']['port']                  = 5051
