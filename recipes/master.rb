@@ -42,14 +42,14 @@ end
 directory '/etc/mesos-master/'
 
 template '/etc/default/mesos-master' do
-  source 'mesos-master.erb'
+  source 'mesos.erb'
   variables config: node['mesos']['master']['env']
   notifies :run, 'bash[restart-mesos-master]', :delayed
 end
 
 # generate our flag config template but only to detect changes
 template '/etc/mesos-chef/mesos-master-config' do
-  source 'mesos-master-chef-config.erb'
+  source 'mesos.erb'
   variables config: node['mesos']['master']['flags']
   mode 0644
   notifies :run, 'ruby_block[update_master_config]', :immediately
@@ -115,8 +115,9 @@ end
 # Set init to 'start' by default for mesos master.
 # This ensures that mesos-master is started on restart
 template '/etc/init/mesos-master.conf' do
-  source 'mesos-master.conf.erb'
+  source 'mesos-init.erb'
   variables(
+    type:   'master',
     action: 'start'
   )
   notifies :run, 'bash[reload-configuration]'

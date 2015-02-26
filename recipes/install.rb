@@ -109,8 +109,9 @@ end
 # Set init to 'stop' by default for mesos master.
 # Running mesos::master recipe will reset this to 'start'
 template '/etc/init/mesos-master.conf' do
-  source 'mesos-master.conf.erb'
+  source 'mesos-init.erb'
   variables(
+    type:   'master',
     action: 'stop'
   )
 end
@@ -118,8 +119,9 @@ end
 # Set init to 'stop' by default for mesos slave.
 # Running mesos::slave recipe will reset this to 'start'
 template '/etc/init/mesos-slave.conf' do
-  source 'mesos-slave.conf.erb'
+  source 'mesos-init.erb'
   variables(
+    type:   'slave',
     action: 'stop'
   )
 end
