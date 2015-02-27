@@ -114,6 +114,7 @@ template '/etc/init/mesos-master.conf' do
     type:   'master',
     action: 'stop'
   )
+  not_if { node['recipes'].include?('mesos::master') }
 end
 
 # Set init to 'stop' by default for mesos slave.
@@ -124,6 +125,7 @@ template '/etc/init/mesos-slave.conf' do
     type:   'slave',
     action: 'stop'
   )
+  not_if { node['recipes'].include?('mesos::slave') }
 end
 
 if distro == 'debian'
