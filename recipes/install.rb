@@ -67,7 +67,7 @@ when 'debian', 'ubuntu'
     not_if { ::File.exist? '/usr/local/sbin/mesos-master' }
   end
 when 'rhel', 'centos', 'amazon', 'scientific'
-  %w( unzip libcurl ).each do |pkg|
+  %w( unzip libcurl subversion ).each do |pkg|
     yum_package pkg do
       action :install
     end

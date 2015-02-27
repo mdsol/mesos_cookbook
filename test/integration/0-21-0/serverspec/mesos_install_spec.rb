@@ -14,6 +14,7 @@ describe 'mesos install' do
       expect(package 'unzip').to be_installed
       expect(package 'libcurl').to be_installed
       expect(package 'mesos').to be_installed
+      expect(package 'subversion').to be_installed
     end
   end
 end
