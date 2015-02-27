@@ -57,16 +57,30 @@ module MesosHelper
   end
 
   def self.clear_config(server_type)
-    cmd = Mixlib::ShellOut.new("rm -rf /etc/mesos-#{server_type}/*")
+    if server_type == 'slave'
+      cmd = Mixlib::ShellOut.new("find /etc/mesos-#{server_type} -mindepth 1 ! -name 'attributes' ! -name 'resources' -exec rm -rf {} +")
+    else
+      cmd = Mixlib::ShellOut.new("rm -rf /etc/mesos-#{server_type}/*")
+    end
     cmd.run_command
     cmd.error!
   end
 
   def self.set_option(config_key, config_value, server_type, _mesos_version)
-    Chef::Log.info("Found a normal option #{config_key}:#{config_value}")
-    cmd = Mixlib::ShellOut.new("echo #{config_value} > /etc/mesos-#{server_type}/#{config_key}")
-    cmd.run_command
-    cmd.error!
+    case config_key
+    when 'attributes', 'resources'
+      Chef::Log.info("Found an attribute or resource #{config_key}:#{config_value}")
+      config_value.each do |key, value|
+        cmd = Mixlib::ShellOut.new("echo '#{value}' > /etc/mesos-#{server_type}/#{config_key}/#{key}")
+        cmd.run_command
+        cmd.error!
+      end
+    else
+      Chef::Log.info("Found a normal option #{config_key}:#{config_value}")
+      cmd = Mixlib::ShellOut.new("echo #{config_value} > /etc/mesos-#{server_type}/#{config_key}")
+      cmd.run_command
+      cmd.error!
+    end
   end
 
   def self.set_flag(config_key, config_value, server_type, mesos_version)

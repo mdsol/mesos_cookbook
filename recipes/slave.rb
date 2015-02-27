@@ -40,6 +40,8 @@ node['mesos']['slave']['flags'].keys.each do |config_key|
 end
 
 directory '/etc/mesos-slave/'
+directory '/etc/mesos-slave/attributes/'
+directory '/etc/mesos-slave/resources/'
 
 template '/etc/default/mesos-slave' do
   source 'mesos.erb'
