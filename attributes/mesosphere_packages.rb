@@ -1,4 +1,89 @@
 default['mesos']['mesosphere_packages'] = {
+  '0.21.1' => {
+    'ubuntu' => {
+      '14.04' => {
+        'package_url' => 'http://downloads.mesosphere.io/master/ubuntu/14.04/mesos_0.21.1-1.1.ubuntu1404_amd64.deb',
+        'checksum' => 'beda46628cacb97e730ed8f4b5659c24d71aca0e9624602f6c9b1208f405c12e',
+        'python_egg' => 'http://downloads.mesosphere.io/master/ubuntu/14.04/mesos-0.21.1-py2.7-linux-x86_64.egg'
+      },
+      '13.10' => {
+        'package_url' => 'http://downloads.mesosphere.io/master/ubuntu/13.10/mesos_0.21.1-1.1.ubuntu1310_amd64.deb',
+        'checksum' => '5aa4117ba86e75a32a1f42f3f53d98107b7f1e2cb65bd0b677e3b07d9e471842',
+        'python_egg' => 'http://downloads.mesosphere.io/master/ubuntu/13.10/mesos-0.21.1-py2.7-linux-x86_64.egg'
+      },
+      '13.04' => {
+        'package_url' => 'http://downloads.mesosphere.io/master/ubuntu/13.04/mesos_0.21.1-1.1.ubuntu1304_amd64.deb',
+        'checksum' => '90c31d24699e3bb7b372b3fca26febe2b2bdb313d99905999cc4f281dc07ecb0',
+        'python_egg' => 'http://downloads.mesosphere.io/master/ubuntu/13.04/mesos-0.21.1-py2.7-linux-x86_64.egg'
+      },
+      '12.10' => {
+        'package_url' => 'http://downloads.mesosphere.io/master/ubuntu/12.10/mesos_0.21.1-1.1.ubuntu1210_amd64.deb',
+        'checksum' => 'cfa39f6fbf6d5d385b9bc8f5932bc5d4218cf927b6aa861d32b37449787a48e5',
+        'python_egg' => 'http://downloads.mesosphere.io/master/ubuntu/12.10/mesos-0.21.1-py2.7-linux-x86_64.egg'
+      },
+      '12.04' => {
+        'package_url' => 'http://downloads.mesosphere.io/master/ubuntu/12.04/mesos_0.21.1-1.1.ubuntu1204_amd64.deb',
+        'checksum' => 'c277b9e0c05cdb98bff738b34c8b4a460e10476779a109fde8caf337d5b47f1a',
+        'python_egg' => 'http://downloads.mesosphere.io/master/ubuntu/12.04/mesos-0.21.1-py2.7-linux-x86_64.egg'
+      }
+    },
+    'debian' => {
+      '7.8' => {
+        'package_url' => 'http://downloads.mesosphere.io/master/debian/7/mesos_0.21.1-1.2.debian77_amd64.deb',
+        'checksum' => '888643e0160b5bf9b30cc62d5e7ddb87f12fe4460e57e9bba7669e1b42b521fa',
+        'python_egg' => 'http://downloads.mesosphere.io/master/debian/7/mesos-0.21.1-py2.7-linux-x86_64.egg'
+      },
+      '7.7' => {
+        'package_url' => 'http://downloads.mesosphere.io/master/debian/7/mesos_0.21.1-1.2.debian77_amd64.deb',
+        'checksum' => '888643e0160b5bf9b30cc62d5e7ddb87f12fe4460e57e9bba7669e1b42b521fa',
+        'python_egg' => 'http://downloads.mesosphere.io/master/debian/7/mesos-0.21.1-py2.7-linux-x86_64.egg'
+      },
+      '7.5' => {
+        'package_url' => 'http://downloads.mesosphere.io/master/debian/7/mesos_0.21.1-1.2.debian77_amd64.deb',
+        'checksum' => '888643e0160b5bf9b30cc62d5e7ddb87f12fe4460e57e9bba7669e1b42b521fa',
+        'python_egg' => 'http://downloads.mesosphere.io/master/debian/7/mesos-0.21.1-py2.7-linux-x86_64.egg'
+      },
+      '7.1' => {
+        'package_url' => 'http://downloads.mesosphere.io/master/debian/7/mesos_0.21.1-1.2.debian77_amd64.deb',
+        'checksum' => '888643e0160b5bf9b30cc62d5e7ddb87f12fe4460e57e9bba7669e1b42b521fa',
+        'python_egg' => 'http://downloads.mesosphere.io/master/debian/7/mesos-0.21.1-py2.7-linux-x86_64.egg'
+      }
+    },
+    'centos' => {
+      '6.6' => {
+        'package_url' => 'http://downloads.mesosphere.io/master/centos/6/mesos-0.21.1-1.1.centos65.x86_64.rpm',
+        'checksum' => 'c7d152e20f7d543510e946860f3917c61d55314a6a2ff6d43d7efb55387ccca6',
+        'python_egg' => 'http://downloads.mesosphere.io/master/centos/6/mesos-0.21.1-py2.6.egg'
+      },
+      '6.5' => {
+        'package_url' => 'http://downloads.mesosphere.io/master/centos/6/mesos-0.21.1-1.1.centos65.x86_64.rpm',
+        'checksum' => 'c7d152e20f7d543510e946860f3917c61d55314a6a2ff6d43d7efb55387ccca6',
+        'python_egg' => 'http://downloads.mesosphere.io/master/centos/6/mesos-0.21.1-py2.6.egg'
+      },
+      '6.4' => {
+        'package_url' => 'http://downloads.mesosphere.io/master/centos/6/mesos-0.21.1-1.1.centos65.x86_64.rpm',
+        'checksum' => 'c7d152e20f7d543510e946860f3917c61d55314a6a2ff6d43d7efb55387ccca6',
+        'python_egg' => 'http://downloads.mesosphere.io/master/centos/6/mesos-0.21.1-py2.6.egg'
+      },
+      '7' => {
+        'package_url' => 'http://downloads.mesosphere.io/master/centos/7/mesos-0.21.1-1.1.centos701406.x86_64.rpm',
+        'checksum' => 'ee54fe6e54c71d376230a18b3abb252c7dd04a5fe8613f1fcd637ab3b6a1d370',
+        'python_egg' => 'http://downloads.mesosphere.io/master/centos/7/mesos-0.21.1-py2.7-linux-x86_64.egg'
+      }
+    },
+    'redhat' => {
+      '6.5' => {
+        'package_url' => 'http://downloads.mesosphere.io/master/redhat/6/mesos-0.21.1-1.1.redhat65.x86_64.rpm',
+        'checksum' => 'e7df8c3a8022277b08c080722a916edefae87fd9c8835b5eced723e21d3e0ba9',
+        'python_egg' => 'http://downloads.mesosphere.io/master/redhat/6/mesos-0.21.1-py2.6-linux-x86_64.egg'
+      },
+      '6.4' => {
+        'package_url' => 'http://downloads.mesosphere.io/master/redhat/6/mesos-0.21.1-1.1.redhat65.x86_64.rpm',
+        'checksum' => 'e7df8c3a8022277b08c080722a916edefae87fd9c8835b5eced723e21d3e0ba9',
+        'python_egg' => 'http://downloads.mesosphere.io/master/redhat/6/mesos-0.21.1-py2.6-linux-x86_64.egg'
+      }
+    }
+  },
   '0.21.0' => {
     'ubuntu' => {
       '14.04' => {
