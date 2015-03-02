@@ -19,4 +19,4 @@ end
 
 depends 'yum', '~> 3.0'
 
-recommends 'zookeeper'
+recommends 'exhibitor'
