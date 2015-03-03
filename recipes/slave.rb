@@ -76,7 +76,7 @@ if node['mesos']['zookeeper_server_list'].count > 0
 end
 
 if node['mesos']['zookeeper_exhibitor_discovery'] && node['mesos']['zookeeper_exhibitor_url']
-  zk_nodes = discover_zookeepers_with_retry(node['mesos']['zookeeper_exhibitor_url'])
+  zk_nodes = MesosHelper.discover_zookeepers_with_retry(node['mesos']['zookeeper_exhibitor_url'])
 
   zk_server_list = zk_nodes['servers']
   zk_port = zk_nodes['port']
