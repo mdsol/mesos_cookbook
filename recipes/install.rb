@@ -55,7 +55,7 @@ when 'debian', 'ubuntu'
     end
   end
 
-  apt_repository "mesosphere" do
+  apt_repository 'mesosphere' do
     uri "http://repos.mesosphere.io/#{node['platform']}"
     distribution node['lsb']['codename']
     keyserver 'keyserver.ubuntu.com'
@@ -63,10 +63,10 @@ when 'debian', 'ubuntu'
     components ['main']
   end
 
-  package "mesos" do
+  package 'mesos' do
     action :install
     # --no-install-recommends to skip installing zk. unnecessary.
-    options "--no-install-recommends"
+    options '--no-install-recommends'
     # Glob is necessary to select the deb version string
     version "#{node['mesos']['version']}*"
   end
