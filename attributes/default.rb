@@ -98,10 +98,6 @@ default['mesos']['zookeeper_exhibitor_discovery']           = false
 # Netflix Exhibitor ZooKeeper ensemble url.
 default['mesos']['zookeeper_exhibitor_url']                 = nil
 
-# Setting this option to true will update mesos node hostnames to their public
-# EC2 hostname.
-default['mesos']['set_ec2_hostname']                        = true
-
 case node['platform_family']
 when 'rhel'
   default['java']['jdk_version'] = '7'
