@@ -55,16 +55,20 @@ when 'debian', 'ubuntu'
     end
   end
 
-  remote_file "#{Chef::Config[:file_cache_path]}/mesos.deb" do
-    source package_url
-    checksum package_checksum
-    action :create
-    not_if { ::File.exist? '/usr/local/sbin/mesos-master' }
+  apt_repository 'mesosphere' do
+    uri "http://repos.mesosphere.io/#{node['platform']}"
+    distribution node['lsb']['codename']
+    keyserver 'keyserver.ubuntu.com'
+    key 'E56151BF'
+    components ['main']
   end
 
-  dpkg_package 'mesos' do
-    source "#{Chef::Config[:file_cache_path]}/mesos.deb"
-    not_if { ::File.exist? '/usr/local/sbin/mesos-master' }
+  package 'mesos' do
+    action :install
+    # --no-install-recommends to skip installing zk. unnecessary.
+    options '--no-install-recommends'
+    # Glob is necessary to select the deb version string
+    version "#{node['mesos']['version']}*"
   end
 when 'rhel', 'centos', 'amazon', 'scientific'
   %w( unzip libcurl subversion ).each do |pkg|
