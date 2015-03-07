@@ -110,5 +110,12 @@ module MesosHelper
     !!config_value == config_value || config_value.to_s.downcase.strip =~ /^(true|yes|false|no)$/
     # rubocop:enableStyle/DoubleNegation
   end
+
+  def self.mesos_rpm_version_release(mesos_version)
+    cmd = Mixlib::ShellOut.new("repoquery --queryformat '%{VERSION}-%{RELEASE}' -q mesos-#{mesos_version}*")
+    cmd.run_command
+    cmd.error!
+    cmd.stdout.strip
+  end
 end
 # rubocop:eable Style/ClassAndModuleChildren
