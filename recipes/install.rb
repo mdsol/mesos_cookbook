@@ -18,9 +18,6 @@
 #
 
 include_recipe 'chef-sugar'
-
-include_recipe 'apt' if debian?
-
 include_recipe 'java::default'
 
 distro = node['platform']
@@ -42,10 +39,10 @@ unless node['mesos']['mesosphere_packages'][mesos_version][distro].key?(distro_v
   Chef::Application.fatal!("There is no metadata defined for your OS version: #{distro_version}", 1002)
 end
 
-package_url = node['mesos']['mesosphere_packages'][mesos_version][distro][distro_version]['package_url']
-package_checksum = node['mesos']['mesosphere_packages'][mesos_version][distro][distro_version]['checksum']
-
 directory '/etc/mesos-chef'
+
+# Configure package repositories
+include_recipe 'mesos::repo'
 
 case distro
 when 'debian', 'ubuntu'
@@ -55,14 +52,6 @@ when 'debian', 'ubuntu'
     end
   end
 
-  apt_repository 'mesosphere' do
-    uri "http://repos.mesosphere.io/#{node['platform']}"
-    distribution node['lsb']['codename']
-    keyserver 'keyserver.ubuntu.com'
-    key 'E56151BF'
-    components ['main']
-  end
-
   package 'mesos' do
     action :install
     # --no-install-recommends to skip installing zk. unnecessary.
@@ -70,7 +59,11 @@ when 'debian', 'ubuntu'
     # Glob is necessary to select the deb version string
     version "#{node['mesos']['version']}*"
   end
-when 'rhel', 'centos', 'amazon', 'scientific'
+when 'rhel', 'redhat', 'centos', 'amazon', 'scientific'
+  compile_time do
+    package 'yum-utils'
+  end
+
   %w( unzip libcurl subversion ).each do |pkg|
     yum_package pkg do
       action :install
@@ -97,15 +90,8 @@ when 'rhel', 'centos', 'amazon', 'scientific'
     mode 0644
   end
 
-  remote_file "#{Chef::Config[:file_cache_path]}/mesos-#{node['mesos']['version']}.rpm" do
-    source package_url
-    checksum package_checksum
-    action :create
-    not_if { ::File.exist? '/usr/local/sbin/mesos-master' }
-  end
-
-  rpm_package 'mesos' do
-    source "#{Chef::Config[:file_cache_path]}/mesos-#{node['mesos']['version']}.rpm"
+  yum_package 'mesos' do
+    version MesosHelper.mesos_rpm_version_release(node['mesos']['version'])
     not_if { ::File.exist? '/usr/local/sbin/mesos-master' }
   end
 end
