@@ -97,21 +97,6 @@ unless zk_server_list.nil? && zk_port.nil? && zk_path.nil?
   end
 end
 
-# If we are on ec2 set the public dns as the hostname so that
-# mesos master redirection works properly.
-if node.attribute?('ec2') && node['mesos']['set_ec2_hostname']
-  bash 'set-aws-public-hostname' do
-    user 'root'
-    code <<-EOH
-      PUBLIC_DNS=`wget -q -O - http://instance-data.ec2.internal/latest/meta-data/public-hostname`
-      hostname $PUBLIC_DNS
-      echo $PUBLIC_DNS > /etc/hostname
-      HOSTNAME=$PUBLIC_DNS  # Fix the bash built-in hostname variable too
-    EOH
-    not_if 'hostname | grep amazonaws.com'
-  end
-end
-
 # Set init to 'start' by default for mesos master.
 # This ensures that mesos-master is started on restart
 template '/etc/init/mesos-master.conf' do
