@@ -181,25 +181,3 @@ suites:
           gc_delay: 1days
           checkpoint: true
           switch_user: yes
-
-- name: 0-19-0
-  run_list:
-    - recipe[mesos::master]
-    - recipe[mesos::slave]
-  attributes:
-    mesos:
-      version: '0.19.0'
-      zookeeper_server_list: [ '127.0.0.1' ]
-      zookeeper_port: 2181
-      zookeeper_path: 'mesos'
-      master:
-        flags:
-          authenticate: no
-          authenticate_slaves: no
-          logging_level: INFO
-          cluster: 'MyMesosCluster'
-      slave:
-        flags:
-          gc_delay: 1days
-          checkpoint: true
-          switch_user: yes
