@@ -30,10 +30,6 @@ Tested on
 * Debian Wheezy
 * CentOS 6
 
-Note: Mesosphere RPM’s are provided for Redhat Enterprise Linux 6 and 7 but
-due to licensing issues those distributions are not officially tested for this
-cookbook however we may test on Fedora in the future.
-
 Supported Mesos Versions
 ------------------------
 
@@ -69,22 +65,16 @@ as well as in this Google Sheets document which keeps track of what configuratio
 options are available per Mesos version here:
 https://docs.google.com/spreadsheets/d/1IER03xhtOSj9unW5AYIqn-tu-laAHlPSOYhM6xw4QHg/edit#gid=0
 
-This cookbook also ensures that only Mesos versions that are defined in
-[attributes/mesosphere_packages.rb](attributes/mesosphere_packages.rb) hash can be
-installed.  If you wish to install a custom mesos package or version simply override
-the hash `[‘mesos’][‘mesosphere_packages’]` with the location of your mesos package
-along with a valid SHA256 checksum.
-
 ## Recipes
 
 ### default
 The default mesos recipe will run mesos::install.
 
 ### install
-The install recipe pulls down the specified version of the mesosphere mesos
-package and installs it.  It also configures to stop both mesos-master and
-mesos-slave init files so that they don't automatically start on server
-restart.
+The install recipe installs the specified version of the mesosphere mesos
+RPM or Debian package and installs it.  It also configures to stop both
+mesos-master and mesos-slave init files so that they don't automatically
+start on server restart.
 
 ### master
 The master recipe runs mesos::install as well as creating several
@@ -140,7 +130,7 @@ json_class:          Chef::Role
 name:                mesos_master
 override_attributes:
   mesos:
-    version: 0.21.0
+    version: 0.21.1
     cluster_name: mesos-sandbox
     zookeeper_server_list: [ '203.0.113.2', '203.0.113.3', '203.0.113.4' ]
     zookeeper_port: 2181
@@ -160,7 +150,7 @@ json_class:          Chef::Role
 name:                mesos_slave
 override_attributes:
   mesos:
-    version: 0.21.0
+    version: 0.21.1
     cluster_name: mesos-sandbox
     zookeeper_path: 'mesos'
     zookeeper_exhibitor_discovery: true
@@ -176,9 +166,6 @@ Please see the [Contributing](CONTRIBUTING.md) and [Issue Reporting](ISSUES.md) 
 License and Author
 ------------------
 * Author: [Ray Rodriguez](https://github.com/rayrod2030)(rayrod2030@gmail.com)
-* Author: [Mark Corwin](https://github.com/mjcdiggity)
-* Contributor: [Asher Feldman](https://github.com/asher)
-* Contributor: [Steven Borrelli](https://github.com/stevendborrelli)
 
 Copyright 2015 Medidata Solutions Worldwide
 
