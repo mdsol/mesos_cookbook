@@ -13,7 +13,7 @@ version '2.0.0'
 end
 
 # Cookbook dependencies
-%w( java apt docker chef-sugar ).each do |cb|
+%w( java apt chef-sugar ).each do |cb|
   depends cb
 end
 

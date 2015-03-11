@@ -90,16 +90,6 @@ uses the zookeeper attributes and/or exhibitor attributes to configure the
 mesos-slave using zookeeper.  Lastly it sets the mesos-slave init config to
 'start' so that mesos-slave is started on server restart.
 
-### docker
-This recipe is no longer needed for Mesos versions 0.20.0 and higher since those
-versions introduced native docker support.  Once this cookbook drops support for
-Mesos 0.19.x this recipe will be removed.
-
-The docker recipe installs docker via [Brian Flad's docker cookbook][] as well
-as [Jason Dusek's mesos-docker script][] as a mesos executor.  After running
-this recipe on a mesos slave you should be able to run the mesos-docker
-examples listed in [Jason Dusek's docker on mesos blog post][].
-
 Dependencies
 ------------
 
@@ -108,7 +98,6 @@ The following cookbooks are dependencies:
 * [apt][]
 * [yum][]
 * [java][]
-* [docker][]
 * [chef-sugar][]
 
 The following cookbooks are suggested:
@@ -183,9 +172,6 @@ specific language governing permissions and limitations under the License.
 [Apache Mesos]: http://mesos.apache.org
 [Netflix Exhibitor]: https://github.com/Netflix/exhibitor
 [Mesosphere]: http://mesosphere.io
-[Brian Flad's docker cookbook]: https://github.com/bflad/chef-docker
-[Jason Dusek's mesos-docker script]: https://github.com/mesosphere/mesos-docker
-[Jason Dusek's docker on mesos blog post]: http://mesosphere.io/2013/09/26/docker-on-mesos/
 [Medidata Solutions]: http://www.mdsol.com
 [marathon]: https://github.com/mdsol/marathon_cookbook
 [chronos]: https://github.com/mdsol/chronos_cookbook
@@ -193,6 +179,5 @@ specific language governing permissions and limitations under the License.
 [apt]: https://github.com/opscode-cookbooks/apt
 [yum]: https://github.com/chef-cookbooks/yum
 [java]: https://github.com/agileorbit-cookbooks/java
-[docker]: https://github.com/bflad/chef-docker
 [chef-sugar]: https://github.com/sethvargo/chef-sugar
 
