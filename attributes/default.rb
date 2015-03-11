@@ -103,5 +103,4 @@ when 'rhel'
   default['java']['jdk_version'] = '7'
 end
 
-include_attribute 'mesos::mesosphere_packages'
 include_attribute 'mesos::mesos_options'

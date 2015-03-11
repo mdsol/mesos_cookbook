@@ -21,23 +21,6 @@ include_recipe 'chef-sugar'
 include_recipe 'java::default'
 
 distro = node['platform']
-distro_version = node['platform_version']
-mesos_version = node['mesos']['version']
-
-# First check if we have metadata for configured version
-unless node['mesos']['mesosphere_packages'].key?(mesos_version)
-  Chef::Application.fatal!("There is no metadata defined for your configured Mesos version: #{mesos_version}", 1000)
-end
-
-# Next check if we support this distro
-unless node['mesos']['mesosphere_packages'][mesos_version].key?(distro)
-  Chef::Application.fatal!("There is no metadata defined for your OS: #{distro}", 1001)
-end
-
-# Finally check if we support this particular distro version
-unless node['mesos']['mesosphere_packages'][mesos_version][distro].key?(distro_version)
-  Chef::Application.fatal!("There is no metadata defined for your OS version: #{distro_version}", 1002)
-end
 
 directory '/etc/mesos-chef'
 
