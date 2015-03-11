@@ -2,6 +2,7 @@ AllCops:
   Exclude:
     - vendor/**/*
     - bin/**/*
+    - .kitchen/**/*
 
 ClassLength:
   Enabled: false
@@ -16,4 +17,11 @@ MethodLength:
 NumericLiterals:
   Enabled: false
 ClassAndModuleChildren:
+  Enabled: false
+Style/StringLiterals:
+  Enabled: true
+  EnforcedStyle: single_quotes
+Metrics/LineLength:
+  Enabled: false
+Style/ExtraSpacing:
   Enabled: false
