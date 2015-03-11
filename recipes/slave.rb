@@ -2,7 +2,7 @@
 # Cookbook Name:: mesos
 # Recipe:: slave
 #
-# Copyright (C) 2013 Medidata Solutions, Inc.
+# Copyright (C) 2015 Medidata Solutions, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,27 +17,57 @@
 # limitations under the License.
 #
 
-class ::Chef::Recipe
-  include ::Mesos
+class Chef::Recipe
+  include MesosHelper
 end
 
 include_recipe 'mesos::install'
 
-zk_server_list = []
-zk_port = ''
-zk_path = ''
+# Check for valid configuration options
+node['mesos']['slave']['flags'].keys.each do |config_key|
+  options_hash = node['mesos']['options']['slave']
+  unless options_hash.key? config_key
+    Chef::Application.fatal!("Detected an invalid configuration option: #{config_key}. Aborting!", 1000)
+  end
 
-template '/etc/default/mesos' do
-  source 'mesos.erb'
-  variables config: node['mesos']['common']
-  notifies :run, 'bash[restart-mesos-slave]', :delayed
+  unless options_hash[config_key]['version'].include?(node['mesos']['version'])
+    Chef::Application.fatal!("Detected a configuration option that isn't available for this version of Mesos: #{config_key}. Aborting!", 1000)
+  end
+
+  if options_hash[config_key]['deprecated'] == true
+    Chef::Log.warn("The following configuration option is deprecated: #{config_key}.")
+  end
 end
+
+directory '/etc/mesos-slave/'
+directory '/etc/mesos-slave/attributes/'
+directory '/etc/mesos-slave/resources/'
 
 template '/etc/default/mesos-slave' do
   source 'mesos.erb'
-  variables config: node['mesos']['slave']
+  variables config: node['mesos']['slave']['env']
   notifies :run, 'bash[restart-mesos-slave]', :delayed
 end
+
+# generate our flag config template but only to detect changes
+template '/etc/mesos-chef/mesos-slave-config' do
+  source 'mesos.erb'
+  variables config: node['mesos']['slave']['flags']
+  mode 0644
+  notifies :run, 'ruby_block[update_slave_config]', :immediately
+end
+
+ruby_block 'update_slave_config' do
+  block do
+    MesosHelper.update_mesos_options(node['mesos']['slave']['flags'], MesosServerType::SLAVE, node['mesos']['version'])
+  end
+  action :nothing
+  notifies :run, 'bash[restart-mesos-slave]', :delayed
+end
+
+zk_server_list = []
+zk_port = ''
+zk_path = ''
 
 if node['mesos']['zookeeper_server_list'].count > 0
   zk_server_list = node['mesos']['zookeeper_server_list']
@@ -46,7 +76,7 @@ if node['mesos']['zookeeper_server_list'].count > 0
 end
 
 if node['mesos']['zookeeper_exhibitor_discovery'] && node['mesos']['zookeeper_exhibitor_url']
-  zk_nodes = discover_zookeepers_with_retry(node['mesos']['zookeeper_exhibitor_url'])
+  zk_nodes = MesosHelper.discover_zookeepers_with_retry(node['mesos']['zookeeper_exhibitor_url'])
 
   zk_server_list = zk_nodes['servers']
   zk_port = zk_nodes['port']
@@ -63,10 +93,15 @@ unless zk_server_list.count == 0 && zk_port.empty? && zk_path.empty?
     variables(
       zookeeper_server_list: zk_server_list,
       zookeeper_port: zk_port,
-      zookeeper_path: zk_path,
+      zookeeper_path: zk_path
     )
     notifies :run, 'bash[restart-mesos-slave]', :delayed
   end
+end
+
+# this directory doesn't exist on newer versions of Mesos, i.e. 0.21.0+
+directory '/usr/local/var/mesos/deploy/' do
+  recursive true
 end
 
 template '/usr/local/var/mesos/deploy/mesos-slave-env.sh.template' do
@@ -75,34 +110,20 @@ template '/usr/local/var/mesos/deploy/mesos-slave-env.sh.template' do
     zookeeper_server_list: zk_server_list,
     zookeeper_port: zk_port,
     zookeeper_path: zk_path,
-    logs_dir: node['mesos']['common']['logs_dir'],
-    work_dir: node['mesos']['slave']['work_dir'],
-    isolation_type: node['mesos']['isolation_type'],
+    logs_dir: node['mesos']['logs_dir'],
+    work_dir: node['mesos']['work_dir'],
+    isolation_type: node['mesos']['isolation_type']
   )
   notifies :run, 'bash[restart-mesos-slave]', :delayed
-end
-
-# If we are on ec2 set the public dns as the hostname so that
-# mesos slave reports work properly in the UI.
-if node.attribute?('ec2') && node['mesos']['set_ec2_hostname']
-  bash 'set-aws-public-hostname' do
-    user 'root'
-    code <<-EOH
-      PUBLIC_DNS=`wget -q -O - http://instance-data.ec2.internal/latest/meta-data/public-hostname`
-      hostname $PUBLIC_DNS
-      echo $PUBLIC_DNS > /etc/hostname
-      HOSTNAME=$PUBLIC_DNS  # Fix the bash built-in hostname variable too
-    EOH
-    not_if 'hostname | grep amazonaws.com'
-  end
 end
 
 # Set init to 'start' by default for mesos slave.
 # This ensures that mesos-slave is started on restart
 template '/etc/init/mesos-slave.conf' do
-  source 'mesos-slave.conf.erb'
+  source 'mesos-init.erb'
   variables(
-    action: 'start',
+    type:   'slave',
+    action: 'start'
   )
   notifies :run, 'bash[reload-configuration]'
 end
@@ -131,7 +152,7 @@ if node['platform'] == 'debian'
     code <<-EOH
     service mesos-slave start
     EOH
-    not_if 'service mesos-slave status|grep start/running'
+    not_if 'service mesos-slave status|grep "start\|is running"'
   end
 else
   bash 'start-mesos-slave' do
@@ -139,7 +160,7 @@ else
     code <<-EOH
     start mesos-slave
     EOH
-    not_if 'status mesos-slave|grep start/running'
+    not_if 'status mesos-slave|grep "start\|running"'
   end
 end
 
@@ -150,7 +171,7 @@ if node['platform'] == 'debian'
     code <<-EOH
     service mesos-slave restart
     EOH
-    not_if 'service mesos-slave status|grep stop/waiting'
+    not_if 'service mesos-slave status|grep "stop\|is not running"'
   end
 else
   bash 'restart-mesos-slave' do
@@ -159,6 +180,6 @@ else
     code <<-EOH
     restart mesos-slave
     EOH
-    not_if 'status mesos-slave|grep stop/waiting'
+    not_if 'status mesos-slave|grep "stop\|waiting"'
   end
 end

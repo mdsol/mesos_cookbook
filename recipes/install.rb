@@ -2,7 +2,7 @@
 # Cookbook Name:: mesos
 # Recipe:: install
 #
-# Copyright (C) 2013 Medidata Solutions, Inc.
+# Copyright (C) 2015 Medidata Solutions, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,46 +17,37 @@
 # limitations under the License.
 #
 
-include_recipe 'apt'
+include_recipe 'chef-sugar'
 include_recipe 'java::default'
 
 distro = node['platform']
-distro_version = node['platform_version']
+
+directory '/etc/mesos-chef'
+
+# Configure package repositories
+include_recipe 'mesos::repo'
 
 case distro
 when 'debian', 'ubuntu'
-  %w( unzip default-jre-headless libcurl3 ).each do |pkg|
+  %w( unzip default-jre-headless libcurl3 libsvn1).each do |pkg|
     package pkg do
       action :install
     end
   end
 
-  if distro == 'debian'
-    match = distro_version.match(/(\d{1})(\.?\d+)?/i)
-
-    unless match.nil?
-      major_version, _minor_version = match.captures
-      distro_version = major_version
-    end
-  elsif distro == 'ubuntu'
-    # For now we need to use the latest 13.x based deb
-    # package until a trusty mesos deb is available
-    # on mesosphere site.
-    distro_version = '13.10' if distro_version == '14.04'
+  package 'mesos' do
+    action :install
+    # --no-install-recommends to skip installing zk. unnecessary.
+    options '--no-install-recommends'
+    # Glob is necessary to select the deb version string
+    version "#{node['mesos']['version']}*"
+  end
+when 'rhel', 'redhat', 'centos', 'amazon', 'scientific'
+  compile_time do
+    package 'yum-utils'
   end
 
-  remote_file "#{Chef::Config[:file_cache_path]}/mesos.deb" do
-    source "http://downloads.mesosphere.io/master/#{distro}/#{distro_version}/mesos_#{node['mesos']['version']}_amd64.deb"
-    action :create
-    not_if { ::File.exist? '/usr/local/sbin/mesos-master' }
-  end
-
-  dpkg_package 'mesos' do
-    source "#{Chef::Config[:file_cache_path]}/mesos.deb"
-    not_if { ::File.exist? '/usr/local/sbin/mesos-master' }
-  end
-when 'rhel', 'centos', 'amazon', 'scientific'
-  %w( unzip libcurl ).each do |pkg|
+  %w( unzip libcurl subversion ).each do |pkg|
     yum_package pkg do
       action :install
     end
@@ -82,14 +73,8 @@ when 'rhel', 'centos', 'amazon', 'scientific'
     mode 0644
   end
 
-  remote_file "#{Chef::Config[:file_cache_path]}/mesos-#{node['mesos']['version']}.rpm" do
-    source "http://downloads.mesosphere.io/master/centos/6/mesos_#{node['mesos']['version']}_x86_64.rpm"
-    action :create
-    not_if { ::File.exist? '/usr/local/sbin/mesos-master' }
-  end
-
-  rpm_package 'mesos' do
-    source "#{Chef::Config[:file_cache_path]}/mesos-#{node['mesos']['version']}.rpm"
+  yum_package 'mesos' do
+    version MesosHelper.mesos_rpm_version_release(node['mesos']['version'])
     not_if { ::File.exist? '/usr/local/sbin/mesos-master' }
   end
 end
@@ -97,19 +82,23 @@ end
 # Set init to 'stop' by default for mesos master.
 # Running mesos::master recipe will reset this to 'start'
 template '/etc/init/mesos-master.conf' do
-  source 'mesos-master.conf.erb'
+  source 'mesos-init.erb'
   variables(
-    action: 'stop',
+    type:   'master',
+    action: 'stop'
   )
+  not_if { node['recipes'].include?('mesos::master') }
 end
 
 # Set init to 'stop' by default for mesos slave.
 # Running mesos::slave recipe will reset this to 'start'
 template '/etc/init/mesos-slave.conf' do
-  source 'mesos-slave.conf.erb'
+  source 'mesos-init.erb'
   variables(
-    action: 'stop',
+    type:   'slave',
+    action: 'stop'
   )
+  not_if { node['recipes'].include?('mesos::slave') }
 end
 
 if distro == 'debian'

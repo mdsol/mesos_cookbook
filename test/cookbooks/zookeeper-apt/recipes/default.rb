@@ -3,7 +3,9 @@
 # zookeeperd apt packages.
 #
 
-%w(zookeeper zookeeperd).each do |pkg|
+include_recipe 'apt::default'
+
+%w( zookeeper zookeeperd curl ).each do |pkg|
   package pkg do
     action :install
   end

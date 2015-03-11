@@ -26,14 +26,18 @@ describe file('/etc/init/mesos-slave.conf') do
   it { should be_file }
 end
 
-describe file('/usr/local/sbin/mesos-master') do
+describe file('/usr/sbin/mesos-master') do
+  it { should be_file }
+end
+
+describe file('/usr/sbin/mesos-slave') do
   it { should be_file }
 end
 
 describe command('mesos-master --version') do
-  its(:stdout) { should match(/mesos 0\.20\.1/) }
+  its(:stdout) { should match(/mesos 0\.21\.1/) }
 end
 
 describe command('mesos-slave --version') do
-  its(:stdout) { should match(/mesos 0\.20\.1/) }
+  its(:stdout) { should match(/mesos 0\.21\.1/) }
 end

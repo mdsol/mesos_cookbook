@@ -1,8 +1,8 @@
 source 'https://rubygems.org'
 
 gem 'berkshelf', github: 'berkshelf/berkshelf'
-gem 'foodcritic', '~> 3.0'
-gem 'rubocop', '~> 0.18'
+gem 'foodcritic', '~> 4.0'
+gem 'rubocop', '~> 0.28'
 gem 'chefspec'
 gem 'serverspec'
 gem 'berkflow'

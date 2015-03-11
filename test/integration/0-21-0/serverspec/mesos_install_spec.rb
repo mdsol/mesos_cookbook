@@ -14,6 +14,7 @@ describe 'mesos install' do
       expect(package 'unzip').to be_installed
       expect(package 'libcurl').to be_installed
       expect(package 'mesos').to be_installed
+      expect(package 'subversion').to be_installed
     end
   end
 end
@@ -31,9 +32,9 @@ describe file('/usr/local/sbin/mesos-master') do
 end
 
 describe command('mesos-master --version') do
-  its(:stdout) { should match(/mesos 0\.20\.1/) }
+  its(:stdout) { should match(/mesos 0\.21\.0/) }
 end
 
 describe command('mesos-slave --version') do
-  its(:stdout) { should match(/mesos 0\.20\.1/) }
+  its(:stdout) { should match(/mesos 0\.21\.0/) }
 end
