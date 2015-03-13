@@ -1,5 +1,6 @@
 Mesos Cookbook
 ==============
+[![Cookbook](http://img.shields.io/cookbook/v/mesos.svg)](https://github.com/mdsol/mesos_cookbook)
 [![Build Status](https://secure.travis-ci.org/mdsol/mesos_cookbook.png?branch=master)](http://travis-ci.org/mdsol/mesos_cookbook)
 
 Application cookbook for installing the [Apache Mesos][] cluster manager.
