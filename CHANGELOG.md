@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased][unreleased]
+### Changed
+- Metadata uses suggests instead of recommends for the exhibitor cookbook.
+
 ## [3.0.0] - 2015-03-11
 ### Changed
 - Mesos is now installed via the Mesosphere RPM and deb package repositories.
@@ -75,6 +79,7 @@ flags.
 
 - Initial Cookbook release
 
+[unreleased]: https://github.com/mdsol/mesos_cookbook/compare/3.0.0...HEAD
 [3.0.0]: https://github.com/mdsol/mesos_cookbook/compare/2.0.0...3.0.0
 [2.0.0]: https://github.com/mdsol/mesos_cookbook/compare/1.0.6...2.0.0
 [1.0.6]: https://github.com/mdsol/mesos_cookbook/compare/1.0.5...1.0.6
