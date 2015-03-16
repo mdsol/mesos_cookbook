@@ -39,62 +39,27 @@ node['mesos']['master']['flags'].keys.each do |config_key|
   end
 end
 
-directory '/etc/mesos-master/'
-
-template '/etc/default/mesos-master' do
-  source 'mesos.erb'
-  variables config: node['mesos']['master']['env']
-  notifies :run, 'bash[restart-mesos-master]', :delayed
-end
-
-# generate our flag config template but only to detect changes
-template '/etc/mesos-chef/mesos-master-config' do
-  source 'mesos.erb'
-  variables config: node['mesos']['master']['flags']
-  mode 0644
-  notifies :run, 'ruby_block[update_master_config]', :immediately
-end
-
-ruby_block 'update_master_config' do
-  block do
-    MesosHelper.update_mesos_options(node['mesos']['master']['flags'], MesosServerType::MASTER, node['mesos']['version'])
-  end
-  action :nothing
-  notifies :run, 'bash[restart-mesos-master]', :delayed
-end
-
-if node['mesos']['zookeeper_server_list'].count > 0
-  zk_server_list = node['mesos']['zookeeper_server_list']
-  zk_port = node['mesos']['zookeeper_port']
-  zk_path = node['mesos']['zookeeper_path']
-end
-
 if node['mesos']['zookeeper_exhibitor_discovery'] && node['mesos']['zookeeper_exhibitor_url']
   zk_nodes = MesosHelper.discover_zookeepers_with_retry(node['mesos']['zookeeper_exhibitor_url'])
 
   if zk_nodes.nil?
-    Chef::Application.fatal!('Failed to discover zookeepers.  Cannot continue')
+    Chef::Application.fatal!('Failed to discover zookeepers. Cannot continue.')
   end
 
-  zk_server_list = zk_nodes['servers']
-  zk_port = zk_nodes['port']
-  zk_path = node['mesos']['zookeeper_path']
+  default['mesos']['master']['zk'] = 'zk://' + zk_nodes['servers'].map { |s| "#{s}:#{zk_nodes['port']}" }.join(',') + '/' +  node['mesos']['zookeeper_path']
+
 end
 
-unless zk_server_list.nil? && zk_port.nil? && zk_path.nil?
-  Chef::Log.info("Zookeeper Server List: #{zk_server_list}")
-  Chef::Log.info("Zookeeper Port: #{zk_port}")
-  Chef::Log.info("Zookeeper Path: #{zk_path}")
-
-  template '/etc/mesos-master/zk' do
-    source 'zk.erb'
-    variables(
-      zookeeper_server_list: zk_server_list,
-      zookeeper_port: zk_port,
-      zookeeper_path: zk_path
-    )
-    notifies :run, 'bash[restart-mesos-master]', :delayed
-  end
+# Mesos-master configuration wrapper
+template '/etc/mesos-chef/mesos-master' do
+  owner 'root'
+  group 'root'
+  mode '0755'
+  source 'mesos-wrapper.erb'
+  variables(env:   node['mesos']['master']['env'],
+            bin:   '/usr/local/sbin/mesos-master',
+            flags: node['mesos']['master']['flags'])
+  notifies :run, 'bash[reload-configuration]'
 end
 
 # Set init to 'start' by default for mesos master.
@@ -102,8 +67,8 @@ end
 template '/etc/init/mesos-master.conf' do
   source 'mesos-init.erb'
   variables(
-    type:   'master',
-    action: 'start'
+    wrapper: '/etc/mesos-chef/mesos-master',
+    action:  'start'
   )
   notifies :run, 'bash[reload-configuration]'
 end

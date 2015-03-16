@@ -49,20 +49,20 @@ suites:
   attributes:
     mesos:
       version: '0.20.1'
-      zookeeper_server_list: [ '127.0.0.1' ]
-      zookeeper_port: 2181
-      zookeeper_path: 'mesos'
       master:
         flags:
           authenticate: no
           authenticate_slaves: false
           logging_level: INFO
           cluster: 'MyMesosCluster'
+          zk: 'zk://127.0.0.1:2181/mesos'
+          quorum: 1
       slave:
         flags:
           gc_delay: 1days
           checkpoint: true
           switch_user: yes
+          master: 'zk://127.0.0.1:2181/mesos'
 
 - name: attributes
   run_list:
@@ -71,9 +71,6 @@ suites:
   attributes:
     mesos:
       version: '0.20.1'
-      zookeeper_server_list: [ '127.0.0.1' ]
-      zookeeper_port: 2181
-      zookeeper_path: 'mesos'
       master:
         flags:
           authenticate: no
@@ -96,20 +93,20 @@ suites:
   attributes:
     mesos:
       version: '0.21.0'
-      zookeeper_server_list: [ '127.0.0.1' ]
-      zookeeper_port: 2181
-      zookeeper_path: 'mesos'
       master:
         flags:
           authenticate: no
           authenticate_slaves: false
           logging_level: INFO
           cluster: 'MyMesosCluster'
+          zk: 'zk://127.0.0.1:2181/mesos'
+          quorum: 1
       slave:
         flags:
           gc_delay: 1days
           checkpoint: true
           switch_user: yes
+          master: 'zk://127.0.0.1:2181/mesos'
 
 - name: 0-20-0
   run_list:
@@ -118,20 +115,20 @@ suites:
   attributes:
     mesos:
       version: '0.20.0'
-      zookeeper_server_list: [ '127.0.0.1' ]
-      zookeeper_port: 2181
-      zookeeper_path: 'mesos'
       master:
         flags:
           authenticate: no
           authenticate_slaves: false
           logging_level: INFO
           cluster: 'MyMesosCluster'
+          zk: 'zk://127.0.0.1:2181/mesos'
+          quorum: 1
       slave:
         flags:
           gc_delay: 1days
           checkpoint: true
           switch_user: yes
+          master: 'zk://127.0.0.1:2181/mesos'
 
 - name: 0-19-1
   run_list:
@@ -140,17 +137,17 @@ suites:
   attributes:
     mesos:
       version: '0.19.1'
-      zookeeper_server_list: [ '127.0.0.1' ]
-      zookeeper_port: 2181
-      zookeeper_path: 'mesos'
       master:
         flags:
           authenticate: no
           authenticate_slaves: false
           logging_level: INFO
           cluster: 'MyMesosCluster'
+          zk: 'zk://127.0.0.1:2181/mesos'
+          quorum: 1
       slave:
         flags:
           gc_delay: 1days
           checkpoint: true
           switch_user: yes
+          master: 'zk://127.0.0.1:2181/mesos'

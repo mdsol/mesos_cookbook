@@ -1,18 +1,6 @@
 require_relative '../../../kitchen/data/spec_helper'
 
 # mesos master service
-describe file('/etc/default/mesos') do
-  it { should be_file }
-end
-
-describe file('/etc/default/mesos-master') do
-  it { should be_file }
-end
-
-describe file('/etc/mesos/zk') do
-  it { should be_file }
-end
-
 describe 'mesos master service' do
   it 'should be running' do
     case RSpec.configuration.os
@@ -32,8 +20,6 @@ end
 
 describe file('/var/log/mesos/mesos-master.INFO') do
   its(:content) { should match(/INFO level logging started/) }
-  its(:content) { should match(/Joining the ZK group/) }
-  its(:content) { should match(/Elected as the leading master!/) }
 end
 
 describe command('curl -sD - http://localhost:5050/state.json') do
