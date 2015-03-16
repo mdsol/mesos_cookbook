@@ -1,6 +1,6 @@
 Mesos Cookbook
 ==============
-[![Cookbook](http://img.shields.io/cookbook/v/mesos.svg)](https://github.com/mdsol/mesos_cookbook)
+[![Cookbook](http://img.shields.io/cookbook/v/mesos.svg)](https://supermarket.chef.io/cookbooks/mesos)
 [![Build Status](https://secure.travis-ci.org/mdsol/mesos_cookbook.png?branch=master)](http://travis-ci.org/mdsol/mesos_cookbook)
 [![Gitter chat](https://img.shields.io/badge/Gitter-mdsol%2Fmesos_cookbook-brightgreen.svg)](https://gitter.im/mdsol/mesos_cookbook)
 
@@ -8,13 +8,6 @@ Application cookbook for installing the [Apache Mesos][] cluster manager.
 Mesos provides efficient resource isolation and sharing across distributed
 applications, or frameworks.  This cookbook installs Mesos via packages
 provided by [Mesosphere][].
-
-This cookbook serves as the base for the following additional Mesos framework
-cookbooks maintained by [Medidata Solutions][]:
-
-* [marathon][] - This cookbook installs the Apache Mesos Marathon framework.
-* [chronos][] - This cookbook installs the Apache Mesos Chronos framework.
-
 
 Requirements
 ------------
@@ -104,7 +97,7 @@ The following cookbooks are dependencies:
 
 The following cookbooks are suggested:
 
-* [zookeeper][] (used for discovering ZooKeeper ensembles via [Netflix Exhibitor][])
+* [exhibitor][] (used for discovering ZooKeeper ensembles via [Netflix Exhibitor][])
 
 Usage
 -----
@@ -175,11 +168,8 @@ specific language governing permissions and limitations under the License.
 [Netflix Exhibitor]: https://github.com/Netflix/exhibitor
 [Mesosphere]: http://mesosphere.io
 [Medidata Solutions]: http://www.mdsol.com
-[marathon]: https://github.com/mdsol/marathon_cookbook
-[chronos]: https://github.com/mdsol/chronos_cookbook
-[zookeeper]: https://github.com/SimpleFinance/chef-zookeeper
+[exhibitor]: https://github.com/SimpleFinance/chef-exhibitor
 [apt]: https://github.com/opscode-cookbooks/apt
 [yum]: https://github.com/chef-cookbooks/yum
 [java]: https://github.com/agileorbit-cookbooks/java
 [chef-sugar]: https://github.com/sethvargo/chef-sugar
-
