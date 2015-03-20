@@ -79,13 +79,29 @@ when 'rhel', 'redhat', 'centos', 'amazon', 'scientific'
   end
 end
 
+#
+# SysVinit templates
+#
+template '/etc/init.d/mesos-master' do
+  source 'sysvinit.erb'
+  variables(wrapper: '/etc/mesos-chef/mesos-master')
+end
+
+template '/etc/init/mesos-slave' do
+  source 'sysvinit.erb'
+  variables(wrapper: '/etc/mesos-chef/mesos-slave')
+end
+
+#
+# UpStart templates
+#
 # Set init to 'stop' by default for mesos master.
 # Running mesos::master recipe will reset this to 'start'
 template '/etc/init/mesos-master.conf' do
-  source 'mesos-init.erb'
+  source 'upstart.erb'
   variables(
-    type:   'master',
-    action: 'stop'
+    wrapper: '/etc/mesos-chef/mesos-master',
+    action:  'stop'
   )
   not_if { node['recipes'].include?('mesos::master') }
 end
@@ -93,10 +109,10 @@ end
 # Set init to 'stop' by default for mesos slave.
 # Running mesos::slave recipe will reset this to 'start'
 template '/etc/init/mesos-slave.conf' do
-  source 'mesos-init.erb'
+  source 'upstart.erb'
   variables(
-    type:   'slave',
-    action: 'stop'
+    wrapper: '/etc/mesos-chef/mesos-master',
+    action:  'stop'
   )
   not_if { node['recipes'].include?('mesos::slave') }
 end

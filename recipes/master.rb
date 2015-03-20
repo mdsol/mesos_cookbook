@@ -46,7 +46,7 @@ if node['mesos']['zookeeper_exhibitor_discovery'] && node['mesos']['zookeeper_ex
     Chef::Application.fatal!('Failed to discover zookeepers. Cannot continue.')
   end
 
-  default['mesos']['master']['zk'] = 'zk://' + zk_nodes['servers'].map { |s| "#{s}:#{zk_nodes['port']}" }.join(',') + '/' +  node['mesos']['zookeeper_path']
+  default['mesos']['master']['zk'] = 'zk://' + zk_nodes['servers'].sort.map { |s| "#{s}:#{zk_nodes['port']}" }.join(',') + '/' +  node['mesos']['zookeeper_path']
 
 end
 
@@ -55,7 +55,7 @@ template '/etc/mesos-chef/mesos-master' do
   owner 'root'
   group 'root'
   mode '0755'
-  source 'mesos-wrapper.erb'
+  source 'wrapper.erb'
   variables(env:   node['mesos']['master']['env'],
             bin:   '/usr/local/sbin/mesos-master',
             flags: node['mesos']['master']['flags'])
@@ -65,7 +65,7 @@ end
 # Set init to 'start' by default for mesos master.
 # This ensures that mesos-master is started on restart
 template '/etc/init/mesos-master.conf' do
-  source 'mesos-init.erb'
+  source 'upstart.erb'
   variables(
     wrapper: '/etc/mesos-chef/mesos-master',
     action:  'start'

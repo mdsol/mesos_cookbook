@@ -54,7 +54,7 @@ template '/etc/mesos-chef/mesos-slave' do
   owner 'root'
   group 'root'
   mode '0755'
-  source 'mesos-wrapper.erb'
+  source 'wrapper.erb'
   variables(env:   node['mesos']['slave']['env'],
             bin:   '/usr/local/sbin/mesos-slave',
             flags: node['mesos']['slave']['flags'])
@@ -64,7 +64,7 @@ end
 # Set init to 'start' by default for mesos slave.
 # This ensures that mesos-slave is started on restart
 template '/etc/init/mesos-slave.conf' do
-  source 'mesos-init.erb'
+  source 'upstart.erb'
   variables(
     wrapper: '/etc/mesos-chef/mesos-slave',
     action:  'start'
