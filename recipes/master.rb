@@ -50,8 +50,9 @@ if node['mesos']['zookeeper_exhibitor_discovery'] && node['mesos']['zookeeper_ex
 
 end
 
-# Mesos-master configuration wrapper
-template '/etc/mesos-chef/mesos-master' do
+# Mesos master configuration wrapper
+template 'mesos-master-wrapper' do
+  path '/etc/mesos-chef/mesos-master'
   owner 'root'
   group 'root'
   mode '0755'
@@ -59,72 +60,24 @@ template '/etc/mesos-chef/mesos-master' do
   variables(env:   node['mesos']['master']['env'],
             bin:   '/usr/local/sbin/mesos-master',
             flags: node['mesos']['master']['flags'])
-  notifies :run, 'bash[reload-configuration]'
 end
 
-# Set init to 'start' by default for mesos master.
-# This ensures that mesos-master is started on restart
-template '/etc/init/mesos-master.conf' do
-  source 'upstart.erb'
-  variables(
-    wrapper: '/etc/mesos-chef/mesos-master',
-    action:  'start'
-  )
-  notifies :run, 'bash[reload-configuration]'
-end
+# Platform to init mapping
+init = case node['platform']
+       when 'debian' then 'sysvinit_debian'
+       else 'upstart'
+       end
 
-if node['platform'] == 'debian'
-  bash 'reload-configuration' do
-    action :nothing
-    user 'root'
-    code <<-EOH
-    update-rc.d mesos-master defaults
-    EOH
+# Mesos master service definition
+service 'mesos-master' do
+  case init
+  when 'sysvinit_debian'
+    provider Chef::Provider::Service::Init::Debian
+  when 'upstart'
+    provider Chef::Provider::Service::Upstart
   end
-else
-  bash 'reload-configuration' do
-    action :nothing
-    user 'root'
-    code <<-EOH
-    initctl reload-configuration
-    EOH
-  end
-end
-
-if node['platform'] == 'debian'
-  bash 'start-mesos-master' do
-    user 'root'
-    code <<-EOH
-    service mesos-master start
-    EOH
-    not_if 'service mesos-master status|grep "start\|is running"'
-  end
-else
-  bash 'start-mesos-master' do
-    user 'root'
-    code <<-EOH
-    start mesos-master
-    EOH
-    not_if 'status mesos-master|grep "start\|running"'
-  end
-end
-
-if node['platform'] == 'debian'
-  bash 'restart-mesos-master' do
-    action :nothing
-    user 'root'
-    code <<-EOH
-    service mesos-master restart
-    EOH
-    not_if 'service mesos-master status|grep "stop\|is not running"'
-  end
-else
-  bash 'restart-mesos-master' do
-    action :nothing
-    user 'root'
-    code <<-EOH
-    restart mesos-master
-    EOH
-    not_if 'status mesos-master|grep "stop\|waiting"'
-  end
+  supports status: true, restart: true
+  subscribes :restart, 'template[mesos-master-init]'
+  subscribes :restart, 'template[mesos-master-wrapper]'
+  action [:enable, :start]
 end

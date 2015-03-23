@@ -49,8 +49,9 @@ directory '/usr/local/var/mesos/deploy/' do
   recursive true
 end
 
-# mesos-slave configuration wrapper
-template '/etc/mesos-chef/mesos-slave' do
+# Mesos slave configuration wrapper
+template 'mesos-slave-wrapper' do
+  path '/etc/mesos-chef/mesos-slave'
   owner 'root'
   group 'root'
   mode '0755'
@@ -58,72 +59,24 @@ template '/etc/mesos-chef/mesos-slave' do
   variables(env:   node['mesos']['slave']['env'],
             bin:   '/usr/local/sbin/mesos-slave',
             flags: node['mesos']['slave']['flags'])
-  notifies :run, 'bash[reload-configuration]'
 end
 
-# Set init to 'start' by default for mesos slave.
-# This ensures that mesos-slave is started on restart
-template '/etc/init/mesos-slave.conf' do
-  source 'upstart.erb'
-  variables(
-    wrapper: '/etc/mesos-chef/mesos-slave',
-    action:  'start'
-  )
-  notifies :run, 'bash[reload-configuration]'
-end
+# Platform to init mapping
+init = case node['platform']
+       when 'debian' then 'sysvinit_debian'
+       else 'upstart'
+       end
 
-if node['platform'] == 'debian'
-  bash 'reload-configuration' do
-    action :nothing
-    user 'root'
-    code <<-EOH
-    update-rc.d mesos-slave defaults
-    EOH
+# Mesos master service definition
+service 'mesos-slave' do
+  case init
+  when 'sysvinit_debian'
+    provider Chef::Provider::Service::Init::Debian
+  when 'upstart'
+    provider Chef::Provider::Service::Upstart
   end
-else
-  bash 'reload-configuration' do
-    action :nothing
-    user 'root'
-    code <<-EOH
-    initctl reload-configuration
-    EOH
-  end
-end
-
-if node['platform'] == 'debian'
-  bash 'start-mesos-slave' do
-    user 'root'
-    code <<-EOH
-    service mesos-slave start
-    EOH
-    not_if 'service mesos-slave status|grep "start\|is running"'
-  end
-else
-  bash 'start-mesos-slave' do
-    user 'root'
-    code <<-EOH
-    start mesos-slave
-    EOH
-    not_if 'status mesos-slave|grep "start\|running"'
-  end
-end
-
-if node['platform'] == 'debian'
-  bash 'restart-mesos-slave' do
-    action :nothing
-    user 'root'
-    code <<-EOH
-    service mesos-slave restart
-    EOH
-    not_if 'service mesos-slave status|grep "stop\|is not running"'
-  end
-else
-  bash 'restart-mesos-slave' do
-    action :nothing
-    user 'root'
-    code <<-EOH
-    restart mesos-slave
-    EOH
-    not_if 'status mesos-slave|grep "stop\|waiting"'
-  end
+  supports status: true, restart: true
+  subscribes :restart, 'template[mesos-slave-init]'
+  subscribes :restart, 'template[mesos-slave-wrapper]'
+  action [:enable, :start]
 end

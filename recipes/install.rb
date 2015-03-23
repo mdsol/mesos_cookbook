@@ -80,57 +80,61 @@ when 'rhel', 'redhat', 'centos', 'amazon', 'scientific'
 end
 
 #
-# SysVinit templates
+# Support for multiple init systems
 #
-template '/etc/init.d/mesos-master' do
-  source 'sysvinit.erb'
-  variables(wrapper: '/etc/mesos-chef/mesos-master')
+
+# Platform to init mapping
+init = case node['platform']
+       when 'debian' then 'sysvinit_debian'
+       else 'upstart'
+       end
+
+# Init templates
+template 'mesos-master-init' do
+  case init
+  when 'sysvinit_debian'
+    path '/etc/init.d/mesos-master'
+    source 'sysvinit_debian.erb'
+  when 'upstart'
+    path '/etc/init/mesos-master.conf'
+    source 'upstart.erb'
+  end
+  variables(name:    'mesos-master',
+            wrapper: '/etc/mesos-chef/mesos-master')
 end
 
-template '/etc/init/mesos-slave' do
-  source 'sysvinit.erb'
-  variables(wrapper: '/etc/mesos-chef/mesos-slave')
+template 'mesos-slave-init' do
+  case init
+  when 'sysvinit_debian'
+    path '/etc/init.d/mesos-slave'
+    source 'sysvinit_debian.erb'
+  when 'upstart'
+    path '/etc/init/mesos-slave.conf'
+    source 'upstart.erb'
+  end
+  variables(name:    'mesos-slave',
+            wrapper: '/etc/mesos-chef/mesos-slave')
 end
 
-#
-# UpStart templates
-#
-# Set init to 'stop' by default for mesos master.
-# Running mesos::master recipe will reset this to 'start'
-template '/etc/init/mesos-master.conf' do
-  source 'upstart.erb'
-  variables(
-    wrapper: '/etc/mesos-chef/mesos-master',
-    action:  'stop'
-  )
+# Disable services by default
+service 'mesos-master-default' do
+  case init
+  when 'sysvinit_debian'
+    provider Chef::Provider::Service::Init::Debian
+  when 'upstart'
+    provider Chef::Provider::Service::Upstart
+  end
+  action [:stop, :disable]
   not_if { node['recipes'].include?('mesos::master') }
 end
 
-# Set init to 'stop' by default for mesos slave.
-# Running mesos::slave recipe will reset this to 'start'
-template '/etc/init/mesos-slave.conf' do
-  source 'upstart.erb'
-  variables(
-    wrapper: '/etc/mesos-chef/mesos-master',
-    action:  'stop'
-  )
+service 'mesos-slave-default' do
+  case init
+  when 'sysvinit_debian'
+    provider Chef::Provider::Service::Init::Debian
+  when 'upstart'
+    provider Chef::Provider::Service::Upstart
+  end
+  action [:stop, :disable]
   not_if { node['recipes'].include?('mesos::slave') }
-end
-
-if distro == 'debian'
-  bash 'reload-configuration-debian' do
-    user 'root'
-    code <<-EOH
-    update-rc.d -f mesos-master remove
-    EOH
-    not_if { ::File.exist? '/usr/local/sbin/mesos-master' }
-  end
-else
-  bash 'reload-configuration' do
-    user 'root'
-    code <<-EOH
-    initctl reload-configuration
-    EOH
-    not_if { ::File.exist? '/usr/local/sbin/mesos-master' }
-  end
 end
