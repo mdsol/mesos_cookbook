@@ -2,9 +2,18 @@
 # attributes/mesosphere_packages.rb.
 default['mesos']['version']                                 = '0.20.1'
 
+# Init system to use
+default['mesos']['init'] = case node['platform']
+                           when 'debian' then 'sysvinit_debian'
+                           else 'upstart'
+                           end
+
 #
 # Mesos MASTER configuration
 #
+
+# Mesos master binary location
+default['mesos']['master']['bin']                           = '/usr/local/sbin/mesos-master'
 
 # Ulimit to pass to mesos-master process.
 default['mesos']['master']['env']['ULIMIT']                 = '-n 16384'
@@ -27,6 +36,9 @@ default['mesos']['master']['flags']['work_dir']             = '/tmp/mesos'
 #
 # Mesos SLAVE configuration
 #
+
+# Mesos slave binary location
+default['mesos']['slave']['bin']                            = '/usr/local/sbin/mesos-slave'
 
 # Ulimit to pass to mesos-slave process.
 default['mesos']['slave']['env']['ULIMIT']                  = '-n 16384'

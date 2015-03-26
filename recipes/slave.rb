@@ -57,19 +57,13 @@ template 'mesos-slave-wrapper' do
   mode '0755'
   source 'wrapper.erb'
   variables(env:   node['mesos']['slave']['env'],
-            bin:   '/usr/local/sbin/mesos-slave',
+            bin:   node['mesos']['slave']['bin'],
             flags: node['mesos']['slave']['flags'])
 end
 
-# Platform to init mapping
-init = case node['platform']
-       when 'debian' then 'sysvinit_debian'
-       else 'upstart'
-       end
-
 # Mesos master service definition
 service 'mesos-slave' do
-  case init
+  case node['mesos']['init']
   when 'sysvinit_debian'
     provider Chef::Provider::Service::Init::Debian
   when 'upstart'

@@ -83,15 +83,9 @@ end
 # Support for multiple init systems
 #
 
-# Platform to init mapping
-init = case node['platform']
-       when 'debian' then 'sysvinit_debian'
-       else 'upstart'
-       end
-
 # Init templates
 template 'mesos-master-init' do
-  case init
+  case node['mesos']['init']
   when 'sysvinit_debian'
     path '/etc/init.d/mesos-master'
     source 'sysvinit_debian.erb'
@@ -104,7 +98,7 @@ template 'mesos-master-init' do
 end
 
 template 'mesos-slave-init' do
-  case init
+  case node['mesos']['init']
   when 'sysvinit_debian'
     path '/etc/init.d/mesos-slave'
     source 'sysvinit_debian.erb'
@@ -118,7 +112,7 @@ end
 
 # Disable services by default
 service 'mesos-master-default' do
-  case init
+  case node['mesos']['init']
   when 'sysvinit_debian'
     provider Chef::Provider::Service::Init::Debian
   when 'upstart'
@@ -129,7 +123,7 @@ service 'mesos-master-default' do
 end
 
 service 'mesos-slave-default' do
-  case init
+  case node['mesos']['init']
   when 'sysvinit_debian'
     provider Chef::Provider::Service::Init::Debian
   when 'upstart'
