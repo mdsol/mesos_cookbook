@@ -1,7 +1,0 @@
-<% # ZK multi-node syntax: zk://host1:port1,host2:port2,.../path
-  zk_url_list = []
-  @zookeeper_server_list.each do |zk_server|
-    zk_url_list << "#{zk_server}:#{@zookeeper_port}"
-  end
-%>
-<%= 'zk://' + zk_url_list.join(',') + '/' + @zookeeper_path %>

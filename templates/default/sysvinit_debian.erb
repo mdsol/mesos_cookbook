@@ -1,0 +1,56 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          <%= @name %>
+# Required-Start:    $local_fs $remote_fs $network $syslog
+# Required-Stop:     $local_fs $remote_fs $network $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: starts <%= @name %>
+# Description:       Mesos
+### END INIT INFO
+set -ue
+
+NAME="<%= @name %>"
+DESC="<%= @name %>"
+
+. /lib/lsb/init-functions
+
+PID=/var/run/<%= @name %>.pid
+
+start() {
+  start-stop-daemon --start --background --quiet \
+                    --pidfile "$PID" --make-pidfile \
+                    --exec <%= @wrapper %> 
+}
+
+stop() {
+  start-stop-daemon --stop --quiet --pidfile "$PID"
+}
+
+case "$1" in
+  start)
+    echo -n "Starting $DESC: "
+    start
+    echo "$NAME."
+    ;;
+  stop)
+    echo -n "Stopping $DESC: "
+    stop
+    echo "$NAME."
+    ;;
+  restart)
+    echo -n "Restarting $DESC: "
+    stop
+    sleep 1
+    start
+    echo "$NAME."
+    ;;
+  status)
+    status_of_proc -p "$PID" "$NAME" "$NAME"
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|restart|status}" >&2
+    exit 1
+    ;;
+esac
+

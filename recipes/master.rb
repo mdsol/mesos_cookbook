@@ -39,127 +39,39 @@ node['mesos']['master']['flags'].keys.each do |config_key|
   end
 end
 
-directory '/etc/mesos-master/'
-
-template '/etc/default/mesos-master' do
-  source 'mesos.erb'
-  variables config: node['mesos']['master']['env']
-  notifies :run, 'bash[restart-mesos-master]', :delayed
-end
-
-# generate our flag config template but only to detect changes
-template '/etc/mesos-chef/mesos-master-config' do
-  source 'mesos.erb'
-  variables config: node['mesos']['master']['flags']
-  mode 0644
-  notifies :run, 'ruby_block[update_master_config]', :immediately
-end
-
-ruby_block 'update_master_config' do
-  block do
-    MesosHelper.update_mesos_options(node['mesos']['master']['flags'], MesosServerType::MASTER, node['mesos']['version'])
-  end
-  action :nothing
-  notifies :run, 'bash[restart-mesos-master]', :delayed
-end
-
-if node['mesos']['zookeeper_server_list'].count > 0
-  zk_server_list = node['mesos']['zookeeper_server_list']
-  zk_port = node['mesos']['zookeeper_port']
-  zk_path = node['mesos']['zookeeper_path']
-end
-
 if node['mesos']['zookeeper_exhibitor_discovery'] && node['mesos']['zookeeper_exhibitor_url']
   zk_nodes = MesosHelper.discover_zookeepers_with_retry(node['mesos']['zookeeper_exhibitor_url'])
 
   if zk_nodes.nil?
-    Chef::Application.fatal!('Failed to discover zookeepers.  Cannot continue')
+    Chef::Application.fatal!('Failed to discover zookeepers. Cannot continue.')
   end
 
-  zk_server_list = zk_nodes['servers']
-  zk_port = zk_nodes['port']
-  zk_path = node['mesos']['zookeeper_path']
+  default['mesos']['master']['zk'] = 'zk://' + zk_nodes['servers'].sort.map { |s| "#{s}:#{zk_nodes['port']}" }.join(',') + '/' +  node['mesos']['zookeeper_path']
+
 end
 
-unless zk_server_list.nil? && zk_port.nil? && zk_path.nil?
-  Chef::Log.info("Zookeeper Server List: #{zk_server_list}")
-  Chef::Log.info("Zookeeper Port: #{zk_port}")
-  Chef::Log.info("Zookeeper Path: #{zk_path}")
-
-  template '/etc/mesos-master/zk' do
-    source 'zk.erb'
-    variables(
-      zookeeper_server_list: zk_server_list,
-      zookeeper_port: zk_port,
-      zookeeper_path: zk_path
-    )
-    notifies :run, 'bash[restart-mesos-master]', :delayed
-  end
+# Mesos master configuration wrapper
+template 'mesos-master-wrapper' do
+  path '/etc/mesos-chef/mesos-master'
+  owner 'root'
+  group 'root'
+  mode '0755'
+  source 'wrapper.erb'
+  variables(env:   node['mesos']['master']['env'],
+            bin:   node['mesos']['master']['bin'],
+            flags: node['mesos']['master']['flags'])
 end
 
-# Set init to 'start' by default for mesos master.
-# This ensures that mesos-master is started on restart
-template '/etc/init/mesos-master.conf' do
-  source 'mesos-init.erb'
-  variables(
-    type:   'master',
-    action: 'start'
-  )
-  notifies :run, 'bash[reload-configuration]'
-end
-
-if node['platform'] == 'debian'
-  bash 'reload-configuration' do
-    action :nothing
-    user 'root'
-    code <<-EOH
-    update-rc.d mesos-master defaults
-    EOH
+# Mesos master service definition
+service 'mesos-master' do
+  case node['mesos']['init']
+  when 'sysvinit_debian'
+    provider Chef::Provider::Service::Init::Debian
+  when 'upstart'
+    provider Chef::Provider::Service::Upstart
   end
-else
-  bash 'reload-configuration' do
-    action :nothing
-    user 'root'
-    code <<-EOH
-    initctl reload-configuration
-    EOH
-  end
-end
-
-if node['platform'] == 'debian'
-  bash 'start-mesos-master' do
-    user 'root'
-    code <<-EOH
-    service mesos-master start
-    EOH
-    not_if 'service mesos-master status|grep "start\|is running"'
-  end
-else
-  bash 'start-mesos-master' do
-    user 'root'
-    code <<-EOH
-    start mesos-master
-    EOH
-    not_if 'status mesos-master|grep "start\|running"'
-  end
-end
-
-if node['platform'] == 'debian'
-  bash 'restart-mesos-master' do
-    action :nothing
-    user 'root'
-    code <<-EOH
-    service mesos-master restart
-    EOH
-    not_if 'service mesos-master status|grep "stop\|is not running"'
-  end
-else
-  bash 'restart-mesos-master' do
-    action :nothing
-    user 'root'
-    code <<-EOH
-    restart mesos-master
-    EOH
-    not_if 'status mesos-master|grep "stop\|waiting"'
-  end
+  supports status: true, restart: true
+  subscribes :restart, 'template[mesos-master-init]'
+  subscribes :restart, 'template[mesos-master-wrapper]'
+  action [:enable, :start]
 end

@@ -17,14 +17,6 @@ describe 'mesos install' do
   end
 end
 
-describe file('/etc/init/mesos-master.conf') do
-  it { should be_file }
-end
-
-describe file('/etc/init/mesos-slave.conf') do
-  it { should be_file }
-end
-
 describe file('/usr/local/sbin/mesos-master') do
   it { should be_file }
 end
