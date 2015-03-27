@@ -67,7 +67,7 @@ The default mesos recipe will run mesos::install.
 
 ### install
 The install recipe installs the specified version of the mesosphere mesos
-RPM or Debian package and installs it.  It also configures to stop both
+RPM or Debian package and installs it.  It’s also configured to stop both
 mesos-master and mesos-slave init files so that they don't automatically
 start on server restart.
 
@@ -84,6 +84,10 @@ mesos-slave configuration files that are used at startup.  This recipe also
 uses the zookeeper attributes and/or exhibitor attributes to configure the
 mesos-slave using zookeeper.  Lastly it sets the mesos-slave init config to
 'start' so that mesos-slave is started on server restart.
+
+### repo
+The repo recipe contains logic for setting up Mesosphere debian and RPM
+repositories.
 
 Dependencies
 ------------
