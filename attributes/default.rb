@@ -1,6 +1,6 @@
 # Mesosphere Mesos version.  The version configured here must exist in
 # attributes/mesosphere_packages.rb.
-default['mesos']['version']                                 = '0.20.1'
+default['mesos']['version']                                 = '0.21.1'
 
 # Init system to use
 default['mesos']['init'] = case node['platform']
@@ -13,7 +13,11 @@ default['mesos']['init'] = case node['platform']
 #
 
 # Mesos master binary location
-default['mesos']['master']['bin']                           = '/usr/local/sbin/mesos-master'
+if node['mesos']['version'] == '0.21.1' || node['mesos']['version'] == '0.22.0'
+  default['mesos']['master']['bin']                         = '/usr/sbin/mesos-master'
+else
+  default['mesos']['master']['bin']                         = '/usr/local/sbin/mesos-master'
+end
 
 # Ulimit to pass to mesos-master process.
 default['mesos']['master']['env']['ULIMIT']                 = '-n 16384'
@@ -38,7 +42,11 @@ default['mesos']['master']['flags']['work_dir']             = '/tmp/mesos'
 #
 
 # Mesos slave binary location
-default['mesos']['slave']['bin']                            = '/usr/local/sbin/mesos-slave'
+if node['mesos']['version'] == '0.21.1' || node['mesos']['version'] == '0.22.0'
+  default['mesos']['slave']['bin']                          = '/usr/sbin/mesos-slave'
+else
+  default['mesos']['slave']['bin']                          = '/usr/local/sbin/mesos-slave'
+end
 
 # Ulimit to pass to mesos-slave process.
 default['mesos']['slave']['env']['ULIMIT']                  = '-n 16384'
