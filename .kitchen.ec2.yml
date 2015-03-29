@@ -28,7 +28,7 @@ busser:
 
 provisioner:
   name: chef_zero
-  require_chef_omnibus: 12.0.3
+  require_chef_omnibus: 12.1.2
   data_path: test/shared
 
 platforms:
@@ -79,32 +79,32 @@ suites:
     - recipe[mesos::slave]
   attributes:
     mesos:
-      version: '0.20.1'
-      zookeeper_server_list: [ '127.0.0.1' ]
-      zookeeper_port: 2181
-      zookeeper_path: 'mesos'
+      version: '0.21.1'
       master:
         flags:
           authenticate: no
           authenticate_slaves: false
           logging_level: INFO
           cluster: 'MyMesosCluster'
+          zk: 'zk://127.0.0.1:2181/mesos'
+          quorum: 1
       slave:
         flags:
           gc_delay: 1days
           checkpoint: true
           switch_user: yes
+          master: 'zk://127.0.0.1:2181/mesos'
 
-- name: 0-21-1
+- name: attributes
   run_list:
     - recipe[mesos::master]
     - recipe[mesos::slave]
+  provisioner:
+    name: chef_zero
+    require_chef_omnibus: 11.12.4
   attributes:
     mesos:
       version: '0.21.1'
-      zookeeper_server_list: [ '127.0.0.1' ]
-      zookeeper_port: 2181
-      zookeeper_path: 'mesos'
       master:
         flags:
           authenticate: no
@@ -113,8 +113,33 @@ suites:
           cluster: 'MyMesosCluster'
       slave:
         flags:
+          attributes:
+            test: 'test_value'
+          resources:
+            cpu:   '24'
+            ports: '[21000-24000]'
+            bugs:  '{a,b,c}'
+
+- name: 0-22-0
+  run_list:
+    - recipe[mesos::master]
+    - recipe[mesos::slave]
+  attributes:
+    mesos:
+      version: '0.22.0'
+      master:
+        flags:
+          authenticate: no
+          authenticate_slaves: false
+          logging_level: INFO
+          cluster: 'MyMesosCluster'
+          zk: 'zk://127.0.0.1:2181/mesos'
+          quorum: 1
+      slave:
+        flags:
           gc_delay: 1days
-          checkpoint: true
+          switch_user: yes
+          master: 'zk://127.0.0.1:2181/mesos'
 
 - name: 0-21-0
   run_list:
@@ -123,20 +148,42 @@ suites:
   attributes:
     mesos:
       version: '0.21.0'
-      zookeeper_server_list: [ '127.0.0.1' ]
-      zookeeper_port: 2181
-      zookeeper_path: 'mesos'
       master:
         flags:
           authenticate: no
           authenticate_slaves: false
           logging_level: INFO
           cluster: 'MyMesosCluster'
+          zk: 'zk://127.0.0.1:2181/mesos'
+          quorum: 1
       slave:
         flags:
           gc_delay: 1days
           checkpoint: true
           switch_user: yes
+          master: 'zk://127.0.0.1:2181/mesos'
+
+- name: 0-20-1
+  run_list:
+    - recipe[mesos::master]
+    - recipe[mesos::slave]
+  attributes:
+    mesos:
+      version: '0.20.1'
+      master:
+        flags:
+          authenticate: no
+          authenticate_slaves: false
+          logging_level: INFO
+          cluster: 'MyMesosCluster'
+          zk: 'zk://127.0.0.1:2181/mesos'
+          quorum: 1
+      slave:
+        flags:
+          gc_delay: 1days
+          checkpoint: true
+          switch_user: yes
+          master: 'zk://127.0.0.1:2181/mesos'
 
 - name: 0-20-0
   run_list:
@@ -145,39 +192,17 @@ suites:
   attributes:
     mesos:
       version: '0.20.0'
-      zookeeper_server_list: [ '127.0.0.1' ]
-      zookeeper_port: 2181
-      zookeeper_path: 'mesos'
       master:
         flags:
           authenticate: no
           authenticate_slaves: false
           logging_level: INFO
           cluster: 'MyMesosCluster'
+          zk: 'zk://127.0.0.1:2181/mesos'
+          quorum: 1
       slave:
         flags:
           gc_delay: 1days
           checkpoint: true
           switch_user: yes
-
-- name: 0-19-1
-  run_list:
-    - recipe[mesos::master]
-    - recipe[mesos::slave]
-  attributes:
-    mesos:
-      version: '0.19.1'
-      zookeeper_server_list: [ '127.0.0.1' ]
-      zookeeper_port: 2181
-      zookeeper_path: 'mesos'
-      master:
-        flags:
-          authenticate: no
-          authenticate_slaves: false
-          logging_level: INFO
-          cluster: 'MyMesosCluster'
-      slave:
-        flags:
-          gc_delay: 1days
-          checkpoint: true
-          switch_user: yes
+          master: 'zk://127.0.0.1:2181/mesos'

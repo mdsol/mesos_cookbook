@@ -48,7 +48,7 @@ suites:
     - recipe[mesos::slave]
   attributes:
     mesos:
-      version: '0.20.1'
+      version: '0.21.1'
       master:
         flags:
           authenticate: no
@@ -68,9 +68,12 @@ suites:
   run_list:
     - recipe[mesos::master]
     - recipe[mesos::slave]
+  provisioner:
+    name: chef_zero
+    require_chef_omnibus: 11.12.4
   attributes:
     mesos:
-      version: '0.20.1'
+      version: '0.21.1'
       master:
         flags:
           authenticate: no
@@ -85,6 +88,27 @@ suites:
             cpu:   '24'
             ports: '[21000-24000]'
             bugs:  '{a,b,c}'
+
+- name: 0-22-0
+  run_list:
+    - recipe[mesos::master]
+    - recipe[mesos::slave]
+  attributes:
+    mesos:
+      version: '0.22.0'
+      master:
+        flags:
+          authenticate: no
+          authenticate_slaves: false
+          logging_level: INFO
+          cluster: 'MyMesosCluster'
+          zk: 'zk://127.0.0.1:2181/mesos'
+          quorum: 1
+      slave:
+        flags:
+          gc_delay: 1days
+          switch_user: yes
+          master: 'zk://127.0.0.1:2181/mesos'
 
 - name: 0-21-0
   run_list:
@@ -108,13 +132,13 @@ suites:
           switch_user: yes
           master: 'zk://127.0.0.1:2181/mesos'
 
-- name: 0-20-0
+- name: 0-20-1
   run_list:
     - recipe[mesos::master]
     - recipe[mesos::slave]
   attributes:
     mesos:
-      version: '0.20.0'
+      version: '0.20.1'
       master:
         flags:
           authenticate: no
@@ -130,13 +154,13 @@ suites:
           switch_user: yes
           master: 'zk://127.0.0.1:2181/mesos'
 
-- name: 0-19-1
+- name: 0-20-0
   run_list:
     - recipe[mesos::master]
     - recipe[mesos::slave]
   attributes:
     mesos:
-      version: '0.19.1'
+      version: '0.20.0'
       master:
         flags:
           authenticate: no

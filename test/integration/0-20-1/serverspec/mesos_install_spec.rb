@@ -8,6 +8,7 @@ describe 'mesos install' do
       expect(package 'unzip').to be_installed
       expect(package 'default-jre-headless').to be_installed
       expect(package 'libcurl3').to be_installed
+      expect(package 'libsvn1').to be_installed
       expect(package 'mesos').to be_installed
     when 'RedHat'
       expect(package 'unzip').to be_installed
@@ -22,9 +23,9 @@ describe file('/usr/local/sbin/mesos-master') do
 end
 
 describe command('mesos-master --version') do
-  its(:stdout) { should match(/mesos 0\.19\.1/) }
+  its(:stdout) { should match(/mesos 0\.20\.1/) }
 end
 
 describe command('mesos-slave --version') do
-  its(:stdout) { should match(/mesos 0\.19\.1/) }
+  its(:stdout) { should match(/mesos 0\.20\.1/) }
 end
