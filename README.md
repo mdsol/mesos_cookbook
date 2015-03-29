@@ -119,10 +119,10 @@ name:                mesos_master
 override_attributes:
   mesos:
     version: 0.21.1
-    cluster_name: mesos-sandbox
-    zookeeper_server_list: [ '203.0.113.2', '203.0.113.3', '203.0.113.4' ]
-    zookeeper_port: 2181
-    zookeeper_path: 'mesos-sandbox'
+    master:
+      flags:
+        cluster: 'mesos-sandbox'
+        zk: 'zk://127.0.0.1:2181/mesos'
 run_list:
   recipe[mesos::master]
 ```
@@ -139,10 +139,9 @@ name:                mesos_slave
 override_attributes:
   mesos:
     version: 0.21.1
-    cluster_name: mesos-sandbox
-    zookeeper_path: 'mesos'
-    zookeeper_exhibitor_discovery: true
-    zookeeper_exhibitor_url: 'http://zk-exhibitor-endpoint.example.com:8080'
+    slave:
+      flags:
+        master: 'zk://127.0.0.1:2181/mesos'
 run_list:
   recipe[mesos::slave]
 ```
