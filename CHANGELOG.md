@@ -5,9 +5,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased][unreleased]
 
 ## [3.2.3] - 2015-03-29
+### Fixed
 - Fixed master and slave recipes to use node override for zk endpoints.
 
 ## [3.2.2] - 2015-03-29
+### Fixed
 - Fixed master and slave recipes to use node instead of default to set zk endpoints.
 
 ## [3.2.1] - 2015-03-29
