@@ -3,10 +3,12 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][unreleased]
+## [3.2.2] - 2015-03-29
+- Fixed master and slave recipes to use node instead of default to set zk endpoints.
 
 ## [3.2.1] - 2015-03-29
 ### Fixed
-- Updated zk exhibitor discovery logic to use new master and slave flags.
+- Fixed zk exhibitor discovery logic to use new master and slave flags.
 
 ## [3.2.0] - 2015-03-29
 ### Changed
@@ -100,7 +102,8 @@ flags.
 
 - Initial Cookbook release
 
-[unreleased]: https://github.com/mdsol/mesos_cookbook/compare/3.2.1...HEAD
+[unreleased]: https://github.com/mdsol/mesos_cookbook/compare/3.2.2...HEAD
+[3.2.2]: https://github.com/mdsol/mesos_cookbook/compare/3.2.1...3.2.2
 [3.2.1]: https://github.com/mdsol/mesos_cookbook/compare/3.2.0...3.2.1
 [3.2.0]: https://github.com/mdsol/mesos_cookbook/compare/3.1.0...3.2.0
 [3.1.0]: https://github.com/mdsol/mesos_cookbook/compare/3.0.0...3.1.0
