@@ -46,8 +46,7 @@ if node['mesos']['zookeeper_exhibitor_discovery'] && node['mesos']['zookeeper_ex
     Chef::Application.fatal!('Failed to discover zookeepers. Cannot continue.')
   end
 
-  default['mesos']['master']['zk'] = 'zk://' + zk_nodes['servers'].sort.map { |s| "#{s}:#{zk_nodes['port']}" }.join(',') + '/' +  node['mesos']['zookeeper_path']
-
+  default['mesos']['master']['flags']['zk'] = 'zk://' + zk_nodes['servers'].sort.map { |s| "#{s}:#{zk_nodes['port']}" }.join(',') + '/' +  node['mesos']['zookeeper_path']
 end
 
 # Mesos master configuration wrapper
