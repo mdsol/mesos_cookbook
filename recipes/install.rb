@@ -20,14 +20,17 @@
 include_recipe 'chef-sugar'
 include_recipe 'java::default'
 
-distro = node['platform']
+#
+# Install default repos
+#
 
-directory '/etc/mesos-chef'
+include_recipe 'mesos::repo' if node['mesos']['repo']
 
-# Configure package repositories
-include_recipe 'mesos::repo'
+#
+# Install package
+#
 
-case distro
+case node['platform']
 when 'debian', 'ubuntu'
   %w( unzip default-jre-headless libcurl3 libsvn1).each do |pkg|
     package pkg do
@@ -82,6 +85,8 @@ end
 #
 # Support for multiple init systems
 #
+
+directory '/etc/mesos-chef'
 
 # Init templates
 template 'mesos-master-init' do
