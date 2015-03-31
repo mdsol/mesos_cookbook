@@ -20,10 +20,7 @@
 include_recipe 'apt' if debian?
 include_recipe 'yum' if rhel?
 
-distro = node['platform']
-distro_version = node['platform_version']
-
-case distro
+case node['platform']
 when 'debian', 'ubuntu'
   # Add mesosphere deb repository
   apt_repository 'mesosphere' do
@@ -35,29 +32,21 @@ when 'debian', 'ubuntu'
   end
 when 'rhel', 'redhat', 'centos', 'amazon', 'scientific'
   # Add mesosphere RPM repository
-  if distro_version.start_with?('6')
-    compile_time do
-      remote_file "#{Chef::Config[:file_cache_path]}/mesosphere-el-repo-6-2.noarch.rpm" do
-        source 'http://repos.mesosphere.io/el/6/noarch/RPMS/mesosphere-el-repo-6-2.noarch.rpm'
-        action :create
-      end
-
-      rpm_package 'mesosphere-el-repo-6-2' do
-        source "#{Chef::Config[:file_cache_path]}/mesosphere-el-repo-6-2.noarch.rpm"
-        action :install
-      end
-    end
-  elsif distro_version.start_with?('7')
-    compile_time do
-      remote_file "#{Chef::Config[:file_cache_path]}/mesosphere-el-repo-7-1.noarch.rpm" do
+  compile_time do
+    remote_file 'mesos-rpm-yum' do
+      case node['platform_version'].split('.').first
+      when '7'
         source 'http://repos.mesosphere.io/el/7/noarch/RPMS/mesosphere-el-repo-7-1.noarch.rpm'
-        action :create
+      when '6'
+        source 'http://repos.mesosphere.io/el/6/noarch/RPMS/mesosphere-el-repo-6-2.noarch.rpm'
       end
+      path "#{Chef::Config[:file_cache_path]}/mesosphere-el-repo.noarch.rpm"
+      action :create
+    end
 
-      rpm_package 'mesosphere-el-repo-7-1' do
-        source "#{Chef::Config[:file_cache_path]}/mesosphere-el-repo-7-1.noarch.rpm"
-        action :install
-      end
+    rpm_package 'mesos-rpm-yum' do
+      source "#{Chef::Config[:file_cache_path]}/mesosphere-el-repo.noarch.rpm"
+      action :install
     end
   end
 end
