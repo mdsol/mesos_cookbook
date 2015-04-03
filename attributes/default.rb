@@ -1,12 +1,14 @@
-# Mesosphere Mesos version.  The version configured here must exist in
-# attributes/mesosphere_packages.rb.
-default['mesos']['version']                                 = '0.21.1'
+# Enable default repo
+default['mesos']['repo']    = true
+
+# Mesosphere Mesos version.
+default['mesos']['version'] = '0.21.1'
 
 # Init system to use
-default['mesos']['init'] = case node['platform']
-                           when 'debian' then 'sysvinit_debian'
-                           else 'upstart'
-                           end
+default['mesos']['init']    = case node['platform']
+                              when 'debian' then 'sysvinit_debian'
+                              else 'upstart'
+                              end
 
 #
 # Mesos MASTER configuration

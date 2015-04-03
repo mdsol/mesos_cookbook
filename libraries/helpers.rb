@@ -29,12 +29,5 @@ module MesosHelper
     Chef::Log.warn("Error while attempting to discover exhibitor zookeepers: Retry #{6 - tries} of 5")
     retry unless (tries -= 1).zero?
   end
-
-  def self.mesos_rpm_version_release(mesos_version)
-    cmd = Mixlib::ShellOut.new("repoquery --queryformat '%{VERSION}-%{RELEASE}' -q mesos-#{mesos_version}*")
-    cmd.run_command
-    cmd.error!
-    cmd.stdout.strip
-  end
 end
 # rubocop:eable Style/ClassAndModuleChildren

@@ -20,14 +20,17 @@
 include_recipe 'chef-sugar'
 include_recipe 'java::default'
 
-distro = node['platform']
+#
+# Install default repos
+#
 
-directory '/etc/mesos-chef'
+include_recipe 'mesos::repo' if node['mesos']['repo']
 
-# Configure package repositories
-include_recipe 'mesos::repo'
+#
+# Install package
+#
 
-case distro
+case node['platform']
 when 'debian', 'ubuntu'
   %w( unzip default-jre-headless libcurl3 libsvn1).each do |pkg|
     package pkg do
@@ -73,8 +76,14 @@ when 'rhel', 'redhat', 'centos', 'amazon', 'scientific'
     mode 0644
   end
 
+  # get the version-release string via repoquery
+  cmd = Mixlib::ShellOut.new("repoquery --queryformat '%{VERSION}-%{RELEASE}' -q mesos-#{node['mesos']['version']}*")
+  cmd.run_command
+  cmd.error!
+  rpm_version = cmd.stdout.strip
+
   yum_package 'mesos' do
-    version MesosHelper.mesos_rpm_version_release(node['mesos']['version'])
+    version rpm_version
     not_if { ::File.exist? '/usr/local/sbin/mesos-master' }
   end
 end
@@ -82,6 +91,8 @@ end
 #
 # Support for multiple init systems
 #
+
+directory '/etc/mesos-chef'
 
 # Init templates
 template 'mesos-master-init' do
