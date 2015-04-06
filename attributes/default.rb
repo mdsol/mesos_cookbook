@@ -7,8 +7,8 @@ default['mesos']['version'] = '0.22.1'
 # Init system to use
 default['mesos']['init']    = case node['platform']
                               when 'debian' then 'sysvinit_debian'
-                              when 'centos', 'redhat'
-                                if node['platform_version'].to_i >= 7 then 'systemd' end
+                              when 'centos', 'amazon', 'scientific'
+                                node['platform_version'].to_i >= 7 ? 'systemd' : 'upstart'
                               else 'upstart'
                               end
 
