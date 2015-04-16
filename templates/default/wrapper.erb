@@ -4,6 +4,9 @@
 # evironmental variables
 <%= @env.map{|k,v| "#{k}=\"#{v}\""}.join("\n") %>
 
+# set ulimit if defined
+[[ ! ${ULIMIT:-} ]] || ulimit $ULIMIT
+
 # stdout and stderr to syslog
 exec 1> >(exec logger -p user.info -t "<%= ::File.basename(@bin) %>")
 exec 2> >(exec logger -p user.err  -t "<%= ::File.basename(@bin) %>")
