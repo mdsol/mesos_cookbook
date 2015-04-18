@@ -26,7 +26,7 @@ when 'debian', 'ubuntu'
   apt_repository 'mesosphere' do
     uri "http://repos.mesosphere.io/#{node['platform']}"
     distribution node['lsb']['codename']
-    keyserver 'keyserver.ubuntu.com'
+    keyserver 'hkp://keyserver.ubuntu.com:80'
     key 'E56151BF'
     components ['main']
   end
