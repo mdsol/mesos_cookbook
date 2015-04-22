@@ -12,6 +12,7 @@ gem 'chef', '~> 11.12.2'
 group :integration do
   gem 'rake'
   gem 'test-kitchen'
+  gem 'vagrant-wrapper'
   gem 'kitchen-vagrant'
   gem 'kitchen-docker'
   gem 'kitchen-ec2'
