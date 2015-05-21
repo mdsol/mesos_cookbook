@@ -15,7 +15,7 @@ default['mesos']['init']    = case node['platform']
 #
 
 # Mesos master binary location
-if node['mesos']['version'] == '0.21.1' || node['mesos']['version'] == '0.22.0'
+if node['mesos']['version'] == '0.21.1' || node['mesos']['version'] == '0.22.0' || node['mesos']['version'] == '0.22.1'
   default['mesos']['master']['bin']                         = '/usr/sbin/mesos-master'
 else
   default['mesos']['master']['bin']                         = '/usr/local/sbin/mesos-master'
@@ -44,7 +44,7 @@ default['mesos']['master']['flags']['work_dir']             = '/tmp/mesos'
 #
 
 # Mesos slave binary location
-if node['mesos']['version'] == '0.21.1' || node['mesos']['version'] == '0.22.0'
+if node['mesos']['version'] == '0.21.1' || node['mesos']['version'] == '0.22.0' || node['mesos']['version'] == '0.22.1'
   default['mesos']['slave']['bin']                          = '/usr/sbin/mesos-slave'
 else
   default['mesos']['slave']['bin']                          = '/usr/local/sbin/mesos-slave'
