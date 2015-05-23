@@ -24,6 +24,9 @@ end
 # Ulimit to pass to mesos-master process.
 default['mesos']['master']['env']['ULIMIT']                 = '-n 16384'
 
+# Send stdout & stderr to syslog
+default['mesos']['master']['syslog']                        = true
+
 # mesos-master default port
 default['mesos']['master']['flags']['port']                 = 5050
 
@@ -52,6 +55,9 @@ end
 
 # Ulimit to pass to mesos-slave process.
 default['mesos']['slave']['env']['ULIMIT']                  = '-n 16384'
+
+# Send stdout & stderr to syslog
+default['mesos']['slave']['syslog']                        = true
 
 # mesos-slave default port
 default['mesos']['slave']['flags']['port']                  = 5051
