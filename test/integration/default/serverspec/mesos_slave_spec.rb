@@ -31,3 +31,8 @@ describe command('curl -sD - http://localhost:5051/state.json') do
   its(:stdout) { should match(/"checkpoint":"true"/) }
   its(:stdout) { should match(/"switch_user":"true"/) }
 end
+
+describe file('/etc/mesos-chef/mesos-slave') do
+  its(:content) { should contain 'exec 1> >\\(exec logger -p user.info -t "mesos-slave"\\)' }
+  its(:content) { should contain 'exec 2> >\\(exec logger -p user.err  -t "mesos-slave"\\)' }
+end
