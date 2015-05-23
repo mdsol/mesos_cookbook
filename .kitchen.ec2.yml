@@ -141,6 +141,27 @@ suites:
           switch_user: yes
           master: 'zk://127.0.0.1:2181/mesos'
 
+- name: 0-22-1
+  run_list:
+    - recipe[mesos::master]
+    - recipe[mesos::slave]
+  attributes:
+    mesos:
+      version: '0.22.1'
+      master:
+        flags:
+          authenticate: no
+          authenticate_slaves: false
+          logging_level: INFO
+          cluster: 'MyMesosCluster'
+          zk: 'zk://127.0.0.1:2181/mesos'
+          quorum: 1
+      slave:
+        flags:
+          gc_delay: 1days
+          switch_user: yes
+          master: 'zk://127.0.0.1:2181/mesos'
+
 - name: 0-21-0
   run_list:
     - recipe[mesos::master]
