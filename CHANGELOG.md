@@ -4,6 +4,16 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][unreleased]
 
+## [3.3.0] - 2015-07-05
+### Added
+- Added support for Apache Mesos 0.22.1.
+- Added vagrant-wrapper in gemfile for testing.
+- Set ulimit for init service if defined.
+- Install mesosphere packages from a package mirror.
+
+### Changed
+- Switched to using port 80 for Ubuntu Keyservers to get through corporate firewalls.
+
 ## [3.2.3] - 2015-03-29
 ### Fixed
 - Fixed master and slave recipes to use node override for zk endpoints.
