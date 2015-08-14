@@ -31,3 +31,8 @@ describe command('curl -sD - http://localhost:5050/state.json') do
   its(:stdout) { should match(/"authenticate_slaves":"false"/) }
   its(:stdout) { should match(/"activated_slaves":\s*1/) }
 end
+
+describe file('/etc/mesos-chef/mesos-master') do
+  its(:content) { should contain 'exec 1> >\\(exec logger -p user.info -t "mesos-master"\\)' }
+  its(:content) { should contain 'exec 2> >\\(exec logger -p user.err  -t "mesos-master"\\)' }
+end
