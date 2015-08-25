@@ -4,6 +4,15 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][unreleased]
 
+## [3.4.0] - 2015-08-25
+### Added
+- Added support for Apache Mesos 0.23.0.
+
+### Changed
+- Removed support for Ubuntu 13.10.
+- Removed support for Mesos 0.20.x.
+- Changed all compile_time calls to at_compile_time for Chef 12.2.x compatibility with ChefSugar.
+
 ## [3.3.0] - 2015-07-05
 ### Added
 - Added support for Apache Mesos 0.22.1.
@@ -118,8 +127,10 @@ flags.
 
 - Initial Cookbook release
 
-[unreleased]: https://github.com/mdsol/mesos_cookbook/compare/3.2.3...HEAD
-[3.2.3]: https://github.com/mdsol/mesos_cookbook/compare/3.2.3...3.2.3
+[unreleased]: https://github.com/mdsol/mesos_cookbook/compare/3.4.0...HEAD
+[3.3.0]: https://github.com/mdsol/mesos_cookbook/compare/3.3.0...3.4.0
+[3.3.0]: https://github.com/mdsol/mesos_cookbook/compare/3.2.3...3.3.0
+[3.2.3]: https://github.com/mdsol/mesos_cookbook/compare/3.2.2...3.2.3
 [3.2.2]: https://github.com/mdsol/mesos_cookbook/compare/3.2.1...3.2.2
 [3.2.1]: https://github.com/mdsol/mesos_cookbook/compare/3.2.0...3.2.1
 [3.2.0]: https://github.com/mdsol/mesos_cookbook/compare/3.1.0...3.2.0
