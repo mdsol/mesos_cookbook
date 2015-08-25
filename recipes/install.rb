@@ -46,7 +46,7 @@ when 'debian', 'ubuntu'
     version "#{node['mesos']['version']}*"
   end
 when 'rhel', 'redhat', 'centos', 'amazon', 'scientific'
-  compile_time do
+  at_compile_time do
     package 'yum-utils'
   end
 

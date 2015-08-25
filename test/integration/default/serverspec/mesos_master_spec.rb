@@ -30,6 +30,7 @@ describe command('curl -sD - http://localhost:5050/state.json') do
   its(:stdout) { should match(/"authenticate":"false"/) }
   its(:stdout) { should match(/"authenticate_slaves":"false"/) }
   its(:stdout) { should match(/"activated_slaves":\s*1/) }
+  its(:stdout) { should match(/"max_slave_ping_timeouts":"10"/) }
 end
 
 describe file('/etc/mesos-chef/mesos-master') do

@@ -28,7 +28,7 @@ end
 describe command('curl -sD - http://localhost:5051/state.json') do
   its(:stdout) { should match(/"logging_level":"INFO"/) }
   its(:stdout) { should match(/"gc_delay":"1days"/) }
-  its(:stdout) { should match(/"checkpoint":"true"/) }
+  its(:stdout) { should match(/"revocable_cpu_low_priority":"false"/) }
   its(:stdout) { should match(/"switch_user":"true"/) }
 end
 
