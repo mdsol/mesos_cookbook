@@ -20,7 +20,6 @@ Platform
 Tested on
 
 * Ubuntu 14.04
-* Ubuntu 13.10
 * Ubuntu 12.04
 * Debian Wheezy
 * CentOS 6
@@ -30,12 +29,11 @@ Supported Mesos Versions
 
 This cookbook supports the following Apache Mesos versions:
 
+* 0.23.0
 * 0.22.1
 * 0.22.0
 * 0.21.1
 * 0.21.0
-* 0.20.1
-* 0.20.0
 
 We intend to support at most the three latest versions of Apache Mesos including
 all patch releases for supported major versions. Ex. 0.21.0 + 0.21.1 etc..
@@ -119,7 +117,7 @@ json_class:          Chef::Role
 name:                mesos_master
 override_attributes:
   mesos:
-    version: 0.21.1
+    version: 0.23.0
     master:
       flags:
         cluster: 'mesos-sandbox'
@@ -139,7 +137,7 @@ json_class:          Chef::Role
 name:                mesos_slave
 override_attributes:
   mesos:
-    version: 0.21.1
+    version: 0.23.0
     slave:
       flags:
         master: 'zk://127.0.0.1:2181/mesos'

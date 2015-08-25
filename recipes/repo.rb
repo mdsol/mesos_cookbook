@@ -32,7 +32,7 @@ when 'debian', 'ubuntu'
   end
 when 'rhel', 'redhat', 'centos', 'amazon', 'scientific'
   # Add mesosphere RPM repository
-  compile_time do
+  at_compile_time do
     remote_file 'mesos-rpm-yum' do
       case node['platform_version'].split('.').first
       when '7'

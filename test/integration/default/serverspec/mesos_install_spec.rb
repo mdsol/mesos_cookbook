@@ -23,9 +23,9 @@ describe file('/usr/sbin/mesos-master') do
 end
 
 describe command('mesos-master --version') do
-  its(:stdout) { should match(/mesos 0\.21\.1/) }
+  its(:stdout) { should match(/mesos 0\.23\.0/) }
 end
 
 describe command('mesos-slave --version') do
-  its(:stdout) { should match(/mesos 0\.21\.1/) }
+  its(:stdout) { should match(/mesos 0\.23\.0/) }
 end
