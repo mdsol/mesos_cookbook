@@ -128,7 +128,7 @@ flags.
 - Initial Cookbook release
 
 [unreleased]: https://github.com/mdsol/mesos_cookbook/compare/3.4.0...HEAD
-[3.3.0]: https://github.com/mdsol/mesos_cookbook/compare/3.3.0...3.4.0
+[3.4.0]: https://github.com/mdsol/mesos_cookbook/compare/3.3.0...3.4.0
 [3.3.0]: https://github.com/mdsol/mesos_cookbook/compare/3.2.3...3.3.0
 [3.2.3]: https://github.com/mdsol/mesos_cookbook/compare/3.2.2...3.2.3
 [3.2.2]: https://github.com/mdsol/mesos_cookbook/compare/3.2.1...3.2.2
