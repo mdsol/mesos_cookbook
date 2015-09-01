@@ -435,7 +435,7 @@ default['mesos']['options'] = {
       'deprecated' => false
     },
     'enforce_container_disk_quota' => {
-      'version' => ['0.22.0', '0.22.1'],
+      'version' => ['0.22.0', '0.22.1', '0.23.0'],
       'default' => false,
       'flag' => true,
       'deprecated' => false
