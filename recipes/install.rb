@@ -46,41 +46,19 @@ when 'debian', 'ubuntu'
     version "#{node['mesos']['version']}*"
   end
 when 'rhel', 'redhat', 'centos', 'amazon', 'scientific'
-  at_compile_time do
-    package 'yum-utils'
-  end
-
   %w( unzip libcurl subversion ).each do |pkg|
     yum_package pkg do
       action :install
     end
   end
 
-  yum_package 'jdk' do
-    action :purge
-  end
-
-  execute 'update java alternatives' do
-    command '/usr/sbin/alternatives --auto java'
-    action :run
-  end
-
-  execute 'ldconfig' do
-    command '/sbin/ldconfig'
-    action :nothing
-  end
-
-  file '/etc/ld.so.conf.d/jre.conf' do
-    content "#{node['java']['java_home']}/jre/lib/amd64/server"
-    notifies :run, 'execute[ldconfig]', :immediately
-    mode 0644
-  end
-
-  # get the version-release string via repoquery
-  cmd = Mixlib::ShellOut.new("repoquery --queryformat '%{VERSION}-%{RELEASE}' -q mesos-#{node['mesos']['version']}*")
-  cmd.run_command
-  cmd.error!
-  rpm_version = cmd.stdout.strip
+  # refresh Yum cache before querying
+  Chef::Provider::Package::Yum::YumCache.instance.refresh
+  # get the version-release string directly from the Yum provider rpmdb
+  rpm_version = Chef::Provider::Package::Yum::YumCache.instance
+                .instance_variable_get('@rpmdb').lookup('mesos')
+                .find { |pkg| pkg.version.v == node['mesos']['version'] }
+                .version.to_s
 
   yum_package 'mesos' do
     version rpm_version
