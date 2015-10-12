@@ -4,6 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][unreleased]
 
+- Improved upstart script to start after network
+
 ## [3.4.0] - 2015-08-25
 ### Added
 - Added support for Apache Mesos 0.23.0.
