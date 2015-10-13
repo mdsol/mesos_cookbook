@@ -75,6 +75,9 @@ directory '/etc/mesos-chef'
 # Init templates
 template 'mesos-master-init' do
   case node['mesos']['init']
+  when 'systemd'
+    path '/usr/lib/systemd/system/mesos-master.service'
+    source 'systemd.erb'
   when 'sysvinit_debian'
     path '/etc/init.d/mesos-master'
     source 'sysvinit_debian.erb'
@@ -88,6 +91,9 @@ end
 
 template 'mesos-slave-init' do
   case node['mesos']['init']
+  when 'systemd'
+    path '/usr/lib/systemd/system/mesos-slave.service'
+    source 'systemd.erb'
   when 'sysvinit_debian'
     path '/etc/init.d/mesos-slave'
     source 'sysvinit_debian.erb'
@@ -99,9 +105,21 @@ template 'mesos-slave-init' do
             wrapper: '/etc/mesos-chef/mesos-slave')
 end
 
+# Reload systemd on template change
+execute 'systemctl-daemon-reload' do
+  command '/bin/systemctl --system daemon-reload'
+  subscribes :run, 'template[mesos-master-init]'
+  subscribes :run, 'template[mesos-slave-init]'
+  action :nothing
+  only_if { node['mesos']['init'] == 'systemd' }
+end
+
 # Disable services by default
 service 'mesos-master-default' do
+  service_name 'mesos-master'
   case node['mesos']['init']
+  when 'systemd'
+    provider Chef::Provider::Service::Systemd
   when 'sysvinit_debian'
     provider Chef::Provider::Service::Init::Debian
   when 'upstart'
@@ -112,7 +130,10 @@ service 'mesos-master-default' do
 end
 
 service 'mesos-slave-default' do
+  service_name 'mesos-slave'
   case node['mesos']['init']
+  when 'systemd'
+    provider Chef::Provider::Service::Systemd
   when 'sysvinit_debian'
     provider Chef::Provider::Service::Init::Debian
   when 'upstart'

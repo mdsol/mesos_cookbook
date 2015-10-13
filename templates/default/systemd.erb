@@ -1,0 +1,13 @@
+[Unit]
+Description=Mesos <%= @name %>
+After=network.target
+Wants=network.target
+
+[Service]
+ExecStart=<%= @wrapper %>
+Restart=always
+RestartSec=20
+LimitNOFILE=16384
+
+[Install]
+WantedBy=multi-user.target

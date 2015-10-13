@@ -65,6 +65,8 @@ end
 # Mesos master service definition
 service 'mesos-slave' do
   case node['mesos']['init']
+  when 'systemd'
+    provider Chef::Provider::Service::Systemd
   when 'sysvinit_debian'
     provider Chef::Provider::Service::Init::Debian
   when 'upstart'
