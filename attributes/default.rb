@@ -110,5 +110,3 @@ case node['platform_family']
 when 'rhel'
   default['java']['jdk_version'] = '7'
 end
-
-include_attribute 'mesos::mesos_options'
