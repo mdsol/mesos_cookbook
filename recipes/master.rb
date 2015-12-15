@@ -23,22 +23,25 @@ end
 
 include_recipe 'mesos::install'
 
-# Check for valid configuration options
-node['mesos']['master']['flags'].keys.each do |config_key|
-  options_hash = node['mesos']['options']['master']
-  unless options_hash.key? config_key
-    Chef::Application.fatal!("Detected an invalid configuration option: #{config_key}. Aborting!", 1000)
-  end
-
-  unless options_hash[config_key]['version'].include?(node['mesos']['version'])
-    Chef::Application.fatal!("Detected a configuration option that isn't available for this version of Mesos: #{config_key}. Aborting!", 1000)
-  end
-
-  if options_hash[config_key]['deprecated'] == true
-    Chef::Log.warn("The following configuration option is deprecated: #{config_key}.")
+# Mesos configuration validation
+ruby_block 'mesos-master-configuration-validation' do
+  block do
+    # Get Mesos --help
+    help = Mixlib::ShellOut.new("#{node['mesos']['master']['bin']} --help")
+    help.run_command
+    help.error!
+    # Extract options
+    options = help.stdout.strip.scan(/^  --(?:\[no-\])?(\w+)/).flatten - ['help']
+    # Check flags are in the list
+    node['mesos']['master']['flags'].keys.each do |flag|
+      unless options.include?(flag)
+        Chef::Application.fatal!("Invalid Mesos configuration option: #{flag}. Aborting!", 1000)
+      end
+    end
   end
 end
 
+# ZooKeeper Exhibitor discovery
 if node['mesos']['zookeeper_exhibitor_discovery'] && node['mesos']['zookeeper_exhibitor_url']
   zk_nodes = MesosHelper.discover_zookeepers_with_retry(node['mesos']['zookeeper_exhibitor_url'])
 
@@ -46,7 +49,7 @@ if node['mesos']['zookeeper_exhibitor_discovery'] && node['mesos']['zookeeper_ex
     Chef::Application.fatal!('Failed to discover zookeepers. Cannot continue.')
   end
 
-  node.override['mesos']['master']['flags']['zk'] = 'zk://' + zk_nodes['servers'].sort.map { |s| "#{s}:#{zk_nodes['port']}" }.join(',') + '/' +  node['mesos']['zookeeper_path']
+  node.override['mesos']['master']['flags']['zk'] = 'zk://' + zk_nodes['servers'].sort.map { |s| "#{s}:#{zk_nodes['port']}" }.join(',') + '/' + node['mesos']['zookeeper_path']
 end
 
 # Mesos master configuration wrapper
