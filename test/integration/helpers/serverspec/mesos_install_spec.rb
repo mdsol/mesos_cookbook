@@ -1,4 +1,4 @@
-require_relative '../../../kitchen/data/spec_helper'
+require 'spec_helper'
 
 # verify packages
 describe 'mesos install' do
@@ -18,14 +18,6 @@ describe 'mesos install' do
   end
 end
 
-describe file('/usr/local/sbin/mesos-master') do
+describe file('/usr/sbin/mesos-master') do
   it { should be_file }
-end
-
-describe command('mesos-master --version') do
-  its(:stdout) { should match(/mesos 0\.20\.1/) }
-end
-
-describe command('mesos-slave --version') do
-  its(:stdout) { should match(/mesos 0\.20\.1/) }
 end

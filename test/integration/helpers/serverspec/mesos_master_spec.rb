@@ -1,4 +1,4 @@
-require_relative '../../../kitchen/data/spec_helper'
+require 'spec_helper'
 
 # mesos master service
 describe 'mesos master service' do
@@ -20,7 +20,6 @@ end
 
 describe file('/var/log/mesos/mesos-master.INFO') do
   its(:content) { should match(/INFO level logging started/) }
-  its(:content) { should match(/Joining the ZK group/) }
   its(:content) { should match(/Elected as the leading master!/) }
 end
 
