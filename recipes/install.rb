@@ -76,7 +76,7 @@ directory '/etc/mesos-chef'
 template 'mesos-master-init' do
   case node['mesos']['init']
   when 'systemd'
-    path '/usr/lib/systemd/system/mesos-master.service'
+    path '/etc/systemd/system/mesos-master.service'
     source 'systemd.erb'
   when 'sysvinit_debian'
     path '/etc/init.d/mesos-master'
@@ -92,7 +92,7 @@ end
 template 'mesos-slave-init' do
   case node['mesos']['init']
   when 'systemd'
-    path '/usr/lib/systemd/system/mesos-slave.service'
+    path '/etc/systemd/system/mesos-slave.service'
     source 'systemd.erb'
   when 'sysvinit_debian'
     path '/etc/init.d/mesos-slave'
