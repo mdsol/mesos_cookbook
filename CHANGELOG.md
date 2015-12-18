@@ -2,9 +2,19 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased][unreleased]
+## [3.5.0] - 2015-12-21
+### Added
+- Systemd support
+- Dynamic configuration guard
+- Set default `cgroups_hierarchy` attribute
 
-- Improved upstart script to start after network
+### Changed
+- Improved upstart script to start after network (@kamaradclimber)
+- Default to Mesos 0.25.0
+- Removed support for Mesos < 0.23.0
+- Refactored testing suite
+- Platform list updated to match Mesosphere package
+- Tested with Chef 12.5.1
 
 ## [3.4.0] - 2015-08-25
 ### Added

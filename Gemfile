@@ -5,9 +5,8 @@ gem 'foodcritic', '~> 4.0'
 gem 'rubocop', '~> 0.28'
 gem 'chefspec'
 gem 'serverspec'
-gem 'berkflow'
 
-gem 'chef', '~> 11.12.2'
+gem 'chef', '~> 12.5.1'
 
 group :integration do
   gem 'rake'

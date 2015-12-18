@@ -17,7 +17,6 @@
 # limitations under the License.
 #
 
-# rubocop:disable Style/ClassAndModuleChildren
 module MesosHelper
   # Adds retry logic to exhibitor discovery
   #
