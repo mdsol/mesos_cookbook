@@ -12,28 +12,28 @@ provided by [Mesosphere][].
 Requirements
 ------------
 
-- Chef >= 11
-- Ruby 1.9.3 or higher
+- Chef >= 12.5.1
 
 Platform
 --------
 Tested on
 
+* Ubuntu 15.04
 * Ubuntu 14.04
 * Ubuntu 12.04
-* Debian Wheezy
-* CentOS 6
+* Debian 8.2
+* CentOS 7.1
+* CentOS 6.7
 
-Supported Mesos Versions
+Supported Mesos versions
 ------------------------
 
-This cookbook supports the following Apache Mesos versions:
+This cookbook is tested against the following Apache Mesos versions:
 
+* 0.25.0
+* 0.24.1
+* 0.24.0
 * 0.23.0
-* 0.22.1
-* 0.22.0
-* 0.21.1
-* 0.21.0
 
 We intend to support at most the three latest versions of Apache Mesos including
 all patch releases for supported major versions. Ex. 0.21.0 + 0.21.1 etc..
@@ -47,17 +47,17 @@ values for attributes can be found in the individual attribute files.
 Configuring Mesos via attributes
 -----------------------------------------
 This cookbook introduces a few points of validation to prevent passing Mesos
-invalid configuration options.  The file [attributes/mesos_options.rb](attributes/mesos_options.rb)
-contains a hash of all valid Mesos configuration options for all Mesos versions
-supported by this cookbook.  This cookbook will fail to converge if you try to
-use an invalid configuration option as a command line flag attribute under
-`[‘mesos’][‘master’][‘flags]` or `[‘mesos’][‘slave’][‘flags]` hashes.
+invalid configuration options. The ruby block
+`mesos-slave-configuration-validation` and
+`mesos-master-configuration-validation` extract a hash of all valid Mesos
+configuration options from the `--help` output of the master and slave binary
+and check it against the provided attributes. This cookbook will fail to
+converge if you try to use an invalid configuration option as a command line
+flag attribute under `['mesos']['master']['flags']`
+or `['mesos']['slave']['flags']` hashes.
 
-The valid list of Mesos options are available in the Mesos documentation for the
-latest options here: http://mesos.apache.org/documentation/latest/configuration/
-as well as in this Google Sheets document which keeps track of what configuration
-options are available per Mesos version here:
-https://docs.google.com/spreadsheets/d/1IER03xhtOSj9unW5AYIqn-tu-laAHlPSOYhM6xw4QHg/edit#gid=0
+The valid list of Mesos options may be found at:
+https://github.com/apache/mesos/blob/master/docs/configuration.md
 
 ## Recipes
 
