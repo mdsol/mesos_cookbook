@@ -117,7 +117,7 @@ json_class:          Chef::Role
 name:                mesos_master
 override_attributes:
   mesos:
-    version: 0.23.0
+    version: 0.25.0
     master:
       flags:
         cluster: 'mesos-sandbox'
@@ -137,7 +137,7 @@ json_class:          Chef::Role
 name:                mesos_slave
 override_attributes:
   mesos:
-    version: 0.23.0
+    version: 0.25.0
     slave:
       flags:
         master: 'zk://127.0.0.1:2181/mesos'
@@ -152,6 +152,7 @@ Please see the [Contributing](CONTRIBUTING.md) and [Issue Reporting](ISSUES.md) 
 License and Author
 ------------------
 * Author: [Ray Rodriguez](https://github.com/rayrod2030)(rayrod2030@gmail.com)
+* Author: [Robert Veznaver](https://github.com/rveznaver)(robert.veznaver@gmail.com)
 
 Copyright 2015 Medidata Solutions Worldwide
 
