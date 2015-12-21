@@ -1,180 +1,108 @@
-<%
-# To keep the YAML as simple as possible, some values are computed here
-AWS_ACCESS_KEY_ID = ENV['AWS_ACCESS_KEY_ID'] ||'(ENTER_ACCESS_KEY_ID)'
-AWS_ACCESS_KEY_SECRET = ENV['AWS_SECRET_KEY'] || '(ENTER_AWS_SECRET_ID)'
-AWS_FLAVOR_ID = ENV['AWS_FLAVOR_ID'] || '(ENTER_AWS_FLAVOR_ID)'
-AWS_SSH_KEY_ID = ENV['AWS_SSH_KEY_ID'] || 'default'
-AWS_SSH_KEYPATH = File.expand_path(ENV['AWS_SSH_KEY_PATH'] || "#{ENV['HOME']}/.ssh/id_rsa")
-USER = ENV['USER'] || '(ENTER_USER)'
-%>
+# This configuration uses the kitchen-ec2 plugin
+# https://github.com/test-kitchen/kitchen-ec2
+#
+# The following environmental variables are required:
+# - AWS_ACCESS_KEY_ID
+# - AWS_SECRET_ACCESS_KEY
+# - AWS_SSH_KEY_ID
+# - AWS_SUBNET_ID
+#
+# Please make sure the default VPC security group
+# for the given subnet id allows inbound SSH.
 ---
 driver:
   name: ec2
-  aws_access_key_id: <%= AWS_ACCESS_KEY_ID %>
-  aws_secret_access_key: <%= AWS_ACCESS_KEY_SECRET %>
-  aws_ssh_key_id: <%= AWS_SSH_KEY_ID %>
-  ssh_key: <%= AWS_SSH_KEYPATH %>
   region: us-east-1
-  availability_zone: us-east-1c
-  flavor_id: <%= AWS_FLAVOR_ID %>
-  require_chef_omnibus: true
+  instance_type: t2.micro # AWS Free Tier
+  associate_public_ip: true
+  subnet_id: <%= ENV['AWS_SUBNET_ID'] %>
   tags:
     created-by: 'test-kitchen'
-    launched-by: <%= USER %>
-    Name: 'test-kitchen-mesos-cookbook-<%= Time.now.to_i %>'
+    launched-by: <%= ENV['USER'] %>
+    Name: 'test-kitchen mesos-cookbook <%= Time.now.strftime("%d/%m/%Y %H:%M") %>'
 
 busser:
   sudo: true
 
 provisioner:
   name: chef_zero
-  require_chef_omnibus: 12.1.2
-  data_path: test/shared
+  require_chef_omnibus: 12.5.1
 
 platforms:
-- name: ubuntu-14.04
-  run_list:
-    - recipe[apt]
-    - recipe[zookeeper-apt]
-  driver_config:
-    image_id: ami-64e27e0c
-    username: ubuntu
-
-- name: ubuntu-12.04
-  run_list:
-    - recipe[apt]
-    - recipe[zookeeper-apt]
-  driver_config:
-    image_id: ami-ccaed0a4
-    username: ubuntu
-
-- name: debian-wheezy
-  run_list:
-    - recipe[apt]
-    - recipe[zookeeper-apt]
-  driver_config:
-    image_id: ami-e0efab88
-    username: admin
-    block_device_mappings:
-
-- name: centos-6.4
-  run_list:
-    - recipe[yum::default]
-    - recipe[zookeeper-yum]
-  driver_config:
-    image_id: ami-52009e3b
-    username: ec2-user
-    block_device_mappings:
+  - name: amazon-2015.09.1
+    run_list:
+      - recipe[yum]
+    driver:
+      image_id: ami-60b6c60a
+    transport:
+      username: ec2-user
+# https://cloud-images.ubuntu.com/locator/ec2/
+  - name: ubuntu-15.04
+    run_list:
+      - recipe[apt]
+      - recipe[curl]
+    driver:
+      image_id: ami-2a4d1a40
+    transport:
+      username: ubuntu
+  - name: ubuntu-14.04
+    run_list:
+      - recipe[apt]
+      - recipe[curl]
+    driver:
+      image_id: ami-5c207736
+    transport:
+      username: ubuntu
+  - name: ubuntu-12.04
+    run_list:
+      - recipe[apt]
+      - recipe[curl]
+    driver:
+      image_id: ami-4505522f
+    transport:
+      username: ubuntu
+# https://wiki.debian.org/Cloud/AmazonEC2Image
+  - name: debian-8.1
+    run_list:
+      - recipe[apt]
+    driver:
+      image_id: ami-116d857a
+    transport:
+      username: admin
+# https://wiki.centos.org/Cloud/AWS
+  - name: centos-7
+    run_list:
+      - recipe[yum]
+    driver:
+      image_id: ami-61bbf104
+    transport:
+      username: centos
+  - name: centos-6
+    run_list:
+      - recipe[yum]
+    driver:
+      image_id: ami-57cd8732
+    transport:
+      username: centos
 
 suites:
-- name: default
+- &default
+  name: 0-25-0
   run_list:
     - recipe[mesos::master]
     - recipe[mesos::slave]
+- <<: *default
+  name: 0-24-1
   attributes:
     mesos:
-      version: '0.23.0'
-      master:
-        flags:
-          authenticate: no
-          authenticate_slaves: false
-          logging_level: INFO
-          cluster: 'MyMesosCluster'
-          zk: 'zk://127.0.0.1:2181/mesos'
-          quorum: 1
-          max_slave_ping_timeouts: 10
-      slave:
-        flags:
-          gc_delay: 1days
-          switch_user: yes
-          master: 'zk://127.0.0.1:2181/mesos'
-          revocable_cpu_low_priority: false
-
-- name: attributes
-  run_list:
-    - recipe[mesos::master]
-    - recipe[mesos::slave]
-  provisioner:
-    name: chef_zero
-    require_chef_omnibus: 11.12.4
+      version: 0.24.1
+- <<: *default
+  name: 0-24-0
   attributes:
     mesos:
-      version: '0.21.1'
-      master:
-        flags:
-          authenticate: no
-          authenticate_slaves: false
-          logging_level: INFO
-          cluster: 'MyMesosCluster'
-      slave:
-        flags:
-          attributes:
-            test: 'test_value'
-          resources:
-            cpu:   '24'
-            ports: '[21000-24000]'
-            bugs:  '{a,b,c}'
-
-- name: 0-22-0
-  run_list:
-    - recipe[mesos::master]
-    - recipe[mesos::slave]
+      version: 0.24.0
+- <<: *default
+  name: 0-23-0
   attributes:
     mesos:
-      version: '0.22.0'
-      master:
-        flags:
-          authenticate: no
-          authenticate_slaves: false
-          logging_level: INFO
-          cluster: 'MyMesosCluster'
-          zk: 'zk://127.0.0.1:2181/mesos'
-          quorum: 1
-      slave:
-        flags:
-          gc_delay: 1days
-          switch_user: yes
-          master: 'zk://127.0.0.1:2181/mesos'
-
-- name: 0-22-1
-  run_list:
-    - recipe[mesos::master]
-    - recipe[mesos::slave]
-  attributes:
-    mesos:
-      version: '0.22.1'
-      master:
-        flags:
-          authenticate: no
-          authenticate_slaves: false
-          logging_level: INFO
-          cluster: 'MyMesosCluster'
-          zk: 'zk://127.0.0.1:2181/mesos'
-          quorum: 1
-      slave:
-        flags:
-          gc_delay: 1days
-          switch_user: yes
-          master: 'zk://127.0.0.1:2181/mesos'
-
-- name: 0-21-0
-  run_list:
-    - recipe[mesos::master]
-    - recipe[mesos::slave]
-  attributes:
-    mesos:
-      version: '0.21.0'
-      master:
-        flags:
-          authenticate: no
-          authenticate_slaves: false
-          logging_level: INFO
-          cluster: 'MyMesosCluster'
-          zk: 'zk://127.0.0.1:2181/mesos'
-          quorum: 1
-      slave:
-        flags:
-          gc_delay: 1days
-          checkpoint: true
-          switch_user: yes
-          master: 'zk://127.0.0.1:2181/mesos'
+      version: 0.23.0

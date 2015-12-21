@@ -30,15 +30,19 @@ when 'debian', 'ubuntu'
     key 'E56151BF'
     components ['main']
   end
-when 'rhel', 'redhat', 'centos', 'amazon', 'scientific'
+when 'redhat', 'centos', 'scientific', 'amazon'
   # Add mesosphere RPM repository
   at_compile_time do
     remote_file 'mesos-rpm-yum' do
-      case node['platform_version'].split('.').first
-      when '7'
-        source 'http://repos.mesosphere.io/el/7/noarch/RPMS/mesosphere-el-repo-7-1.noarch.rpm'
-      when '6'
+      if node['platform'] == 'amazon'
         source 'http://repos.mesosphere.io/el/6/noarch/RPMS/mesosphere-el-repo-6-2.noarch.rpm'
+      else
+        case node['platform_version'].split('.').first
+        when '7'
+          source 'http://repos.mesosphere.io/el/7/noarch/RPMS/mesosphere-el-repo-7-1.noarch.rpm'
+        when '6'
+          source 'http://repos.mesosphere.io/el/6/noarch/RPMS/mesosphere-el-repo-6-2.noarch.rpm'
+        end
       end
       path "#{Chef::Config[:file_cache_path]}/mesosphere-el-repo.noarch.rpm"
       action :create
