@@ -17,8 +17,7 @@
 # limitations under the License.
 #
 
-include_recipe 'chef-sugar'
-include_recipe 'java::default'
+include_recipe 'java'
 
 #
 # Install default repos
@@ -30,8 +29,8 @@ include_recipe 'mesos::repo' if node['mesos']['repo']
 # Install package
 #
 
-case node['platform']
-when 'debian', 'ubuntu'
+case node['platform_family']
+when 'debian'
   %w( unzip default-jre-headless libcurl3 libsvn1).each do |pkg|
     package pkg do
       action :install
@@ -45,7 +44,7 @@ when 'debian', 'ubuntu'
     # Glob is necessary to select the deb version string
     version "#{node['mesos']['version']}*"
   end
-when 'rhel', 'redhat', 'centos', 'amazon', 'scientific'
+when 'rhel'
   %w( unzip libcurl subversion ).each do |pkg|
     yum_package pkg do
       action :install

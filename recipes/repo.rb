@@ -17,12 +17,10 @@
 # limitations under the License.
 #
 
-include_recipe 'apt' if debian?
-include_recipe 'yum' if rhel?
+case node['platform_family']
+when 'debian'
+  include_recipe 'apt'
 
-case node['platform']
-when 'debian', 'ubuntu'
-  # Add mesosphere deb repository
   apt_repository 'mesosphere' do
     uri "http://repos.mesosphere.io/#{node['platform']}"
     distribution node['lsb']['codename']
@@ -30,8 +28,9 @@ when 'debian', 'ubuntu'
     key 'E56151BF'
     components ['main']
   end
-when 'redhat', 'centos', 'scientific', 'amazon'
-  # Add mesosphere RPM repository
+when 'rhel'
+  include_recipe 'yum'
+
   version = case node['platform']
             when 'amazon' then '6'
             else node['platform_version'].split('.').first
