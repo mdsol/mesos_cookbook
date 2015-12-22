@@ -32,25 +32,13 @@ when 'debian', 'ubuntu'
   end
 when 'redhat', 'centos', 'scientific', 'amazon'
   # Add mesosphere RPM repository
-  at_compile_time do
-    remote_file 'mesos-rpm-yum' do
-      if node['platform'] == 'amazon'
-        source 'http://repos.mesosphere.io/el/6/noarch/RPMS/mesosphere-el-repo-6-2.noarch.rpm'
-      else
-        case node['platform_version'].split('.').first
-        when '7'
-          source 'http://repos.mesosphere.io/el/7/noarch/RPMS/mesosphere-el-repo-7-1.noarch.rpm'
-        when '6'
-          source 'http://repos.mesosphere.io/el/6/noarch/RPMS/mesosphere-el-repo-6-2.noarch.rpm'
-        end
-      end
-      path "#{Chef::Config[:file_cache_path]}/mesosphere-el-repo.noarch.rpm"
-      action :create
-    end
-
-    rpm_package 'mesos-rpm-yum' do
-      source "#{Chef::Config[:file_cache_path]}/mesosphere-el-repo.noarch.rpm"
-      action :install
-    end
+  version = case node['platform']
+            when 'amazon' then '6'
+            else node['platform_version'].split('.').first
+            end
+  yum_repository 'mesosphere' do
+    description 'Mesosphere Packages for Enteprise Linux'
+    baseurl "http://repos.mesosphere.io/el/#{version}/$basearch/"
+    gpgkey 'https://repos.mesosphere.io/el/RPM-GPG-KEY-mesosphere'
   end
 end

@@ -52,16 +52,14 @@ when 'rhel', 'redhat', 'centos', 'amazon', 'scientific'
     end
   end
 
-  # refresh Yum cache before querying
-  Chef::Provider::Package::Yum::YumCache.instance.refresh
-  # get the version-release string directly from the Yum provider rpmdb
-  rpm_version = Chef::Provider::Package::Yum::YumCache.instance
-                .instance_variable_get('@rpmdb').lookup('mesos')
-                .find { |pkg| pkg.version.v == node['mesos']['version'] }
-                .version.to_s
-
   yum_package 'mesos' do
-    version rpm_version
+    version lazy {
+      # get the version-release string directly from the Yum provider rpmdb
+      Chef::Provider::Package::Yum::YumCache.instance
+        .instance_variable_get('@rpmdb').lookup('mesos')
+        .find { |pkg| pkg.version.v == node['mesos']['version'] }
+        .version.to_s
+    }
     not_if { ::File.exist? '/usr/local/sbin/mesos-master' }
   end
 end
