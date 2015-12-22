@@ -17,8 +17,7 @@
 # limitations under the License.
 #
 
-include_recipe 'chef-sugar'
-include_recipe 'java::default'
+include_recipe 'java'
 
 #
 # Install default repos
@@ -30,8 +29,8 @@ include_recipe 'mesos::repo' if node['mesos']['repo']
 # Install package
 #
 
-case node['platform']
-when 'debian', 'ubuntu'
+case node['platform_family']
+when 'debian'
   %w( unzip default-jre-headless libcurl3 libsvn1).each do |pkg|
     package pkg do
       action :install
@@ -45,23 +44,21 @@ when 'debian', 'ubuntu'
     # Glob is necessary to select the deb version string
     version "#{node['mesos']['version']}*"
   end
-when 'rhel', 'redhat', 'centos', 'amazon', 'scientific'
+when 'rhel'
   %w( unzip libcurl subversion ).each do |pkg|
     yum_package pkg do
       action :install
     end
   end
 
-  # refresh Yum cache before querying
-  Chef::Provider::Package::Yum::YumCache.instance.refresh
-  # get the version-release string directly from the Yum provider rpmdb
-  rpm_version = Chef::Provider::Package::Yum::YumCache.instance
-                .instance_variable_get('@rpmdb').lookup('mesos')
-                .find { |pkg| pkg.version.v == node['mesos']['version'] }
-                .version.to_s
-
   yum_package 'mesos' do
-    version rpm_version
+    version lazy {
+      # get the version-release string directly from the Yum provider rpmdb
+      Chef::Provider::Package::Yum::YumCache.instance
+        .instance_variable_get('@rpmdb').lookup('mesos')
+        .find { |pkg| pkg.version.v == node['mesos']['version'] }
+        .version.to_s
+    }
     not_if { ::File.exist? '/usr/local/sbin/mesos-master' }
   end
 end

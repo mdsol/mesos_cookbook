@@ -12,7 +12,7 @@ version '3.5.0'
 end
 
 # Cookbook dependencies
-%w( java apt chef-sugar ).each do |cb|
+%w( java apt ).each do |cb|
   depends cb
 end
 

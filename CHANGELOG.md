@@ -4,6 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][unreleased]
 
+- Remove dependency on chef-sugar
+- Set up yum repo with `yum_repository` provider
 - Fix Amazon Linux support
 
 ## [3.5.0] - 2015-12-21

@@ -17,12 +17,10 @@
 # limitations under the License.
 #
 
-include_recipe 'apt' if debian?
-include_recipe 'yum' if rhel?
+case node['platform_family']
+when 'debian'
+  include_recipe 'apt'
 
-case node['platform']
-when 'debian', 'ubuntu'
-  # Add mesosphere deb repository
   apt_repository 'mesosphere' do
     uri "http://repos.mesosphere.io/#{node['platform']}"
     distribution node['lsb']['codename']
@@ -30,27 +28,16 @@ when 'debian', 'ubuntu'
     key 'E56151BF'
     components ['main']
   end
-when 'redhat', 'centos', 'scientific', 'amazon'
-  # Add mesosphere RPM repository
-  at_compile_time do
-    remote_file 'mesos-rpm-yum' do
-      if node['platform'] == 'amazon'
-        source 'http://repos.mesosphere.io/el/6/noarch/RPMS/mesosphere-el-repo-6-2.noarch.rpm'
-      else
-        case node['platform_version'].split('.').first
-        when '7'
-          source 'http://repos.mesosphere.io/el/7/noarch/RPMS/mesosphere-el-repo-7-1.noarch.rpm'
-        when '6'
-          source 'http://repos.mesosphere.io/el/6/noarch/RPMS/mesosphere-el-repo-6-2.noarch.rpm'
-        end
-      end
-      path "#{Chef::Config[:file_cache_path]}/mesosphere-el-repo.noarch.rpm"
-      action :create
-    end
+when 'rhel'
+  include_recipe 'yum'
 
-    rpm_package 'mesos-rpm-yum' do
-      source "#{Chef::Config[:file_cache_path]}/mesosphere-el-repo.noarch.rpm"
-      action :install
-    end
+  version = case node['platform']
+            when 'amazon' then '6'
+            else node['platform_version'].split('.').first
+            end
+  yum_repository 'mesosphere' do
+    description 'Mesosphere Packages for Enteprise Linux'
+    baseurl "http://repos.mesosphere.io/el/#{version}/$basearch/"
+    gpgkey 'https://repos.mesosphere.io/el/RPM-GPG-KEY-mesosphere'
   end
 end
