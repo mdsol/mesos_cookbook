@@ -59,7 +59,6 @@ when 'rhel'
         .find { |pkg| pkg.version.v == node['mesos']['version'] }
         .version.to_s
     }
-    not_if { ::File.exist? '/usr/local/sbin/mesos-master' }
   end
 end
 
