@@ -4,9 +4,13 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][unreleased]
 
-- Remove dependency on chef-sugar
-- Set up yum repo with `yum_repository` provider
+## [3.5.1] - 2015-12-23
+### Fixed
 - Fix Amazon Linux support
+
+### Changed
+- Set up yum repo with `yum_repository` provider
+- Remove dependency on chef-sugar
 
 ## [3.5.0] - 2015-12-21
 ### Added
@@ -145,7 +149,8 @@ flags.
 
 - Initial Cookbook release
 
-[unreleased]: https://github.com/mdsol/mesos_cookbook/compare/3.5.0...HEAD
+[unreleased]: https://github.com/mdsol/mesos_cookbook/compare/3.1.0...HEAD
+[3.5.1]: https://github.com/mdsol/mesos_cookbook/compare/3.5.0...3.5.1
 [3.5.0]: https://github.com/mdsol/mesos_cookbook/compare/3.4.0...3.5.0
 [3.4.0]: https://github.com/mdsol/mesos_cookbook/compare/3.3.0...3.4.0
 [3.3.0]: https://github.com/mdsol/mesos_cookbook/compare/3.2.3...3.3.0
@@ -163,3 +168,4 @@ flags.
 [1.0.2]: https://github.com/mdsol/mesos_cookbook/compare/1.0.1...1.0.2
 [1.0.1]: https://github.com/mdsol/mesos_cookbook/compare/1.0.0...1.0.1
 [1.0.0]: https://github.com/mdsol/mesos_cookbook/compare/0.1.0...1.0.0
+[0.1.0]: https://github.com/mdsol/mesos_cookbook/compare/0.1.0...0.1.0
