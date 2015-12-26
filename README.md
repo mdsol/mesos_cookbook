@@ -96,7 +96,6 @@ The following cookbooks are dependencies:
 * [apt][]
 * [yum][]
 * [java][]
-* [chef-sugar][]
 
 The following cookbooks are suggested:
 
@@ -175,4 +174,3 @@ specific language governing permissions and limitations under the License.
 [apt]: https://github.com/opscode-cookbooks/apt
 [yum]: https://github.com/chef-cookbooks/yum
 [java]: https://github.com/agileorbit-cookbooks/java
-[chef-sugar]: https://github.com/sethvargo/chef-sugar
