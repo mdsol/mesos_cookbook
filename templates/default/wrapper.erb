@@ -19,7 +19,9 @@ exec <%= @bin %> \
 <%-   case value                                                           -%>
 <%-   when Hash                                                            -%>
   <%=   "--#{flag}='"%><%= value.map{|k,v| "#{k}:#{v}"}.join(';') %><%= "'" %> \
-<%-   when String, Integer                                                 -%>
+<%-   when String                                                          -%>
+  <%=   "--#{flag}='#{value}'"                                             %> \
+<%-   when Integer                                                         -%>
   <%=   "--#{flag}=#{value}"                                                %> \
 <%-   else                                                                 -%>
   <%=   "--#{value ? '' : 'no-'}#{flag}"                                    %> \

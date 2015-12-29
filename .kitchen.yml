@@ -37,6 +37,11 @@ platforms:
 suites:
 - &default
   name: 0-25-0
+  attributes:
+    mesos:
+      slave:
+        flags:
+          attributes: 'attribute01:value01;attribute02:value02'
   run_list:
     - recipe[mesos::master]
     - recipe[mesos::slave]
