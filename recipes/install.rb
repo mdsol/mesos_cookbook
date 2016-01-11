@@ -75,6 +75,7 @@ template 'mesos-master-init' do
     path '/etc/systemd/system/mesos-master.service'
     source 'systemd.erb'
   when 'sysvinit_debian'
+    mode 0755
     path '/etc/init.d/mesos-master'
     source 'sysvinit_debian.erb'
   when 'upstart'
@@ -91,6 +92,7 @@ template 'mesos-slave-init' do
     path '/etc/systemd/system/mesos-slave.service'
     source 'systemd.erb'
   when 'sysvinit_debian'
+    mode 0755
     path '/etc/init.d/mesos-slave'
     source 'sysvinit_debian.erb'
   when 'upstart'
