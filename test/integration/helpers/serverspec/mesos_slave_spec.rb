@@ -5,7 +5,7 @@ describe 'mesos slave service' do
   it 'should be running' do
     case RSpec.configuration.os
     when 'Debian'
-      expect(service 'mesos-slave').to be_running
+      expect(service('mesos-slave')).to be_running
     end
   end
 end

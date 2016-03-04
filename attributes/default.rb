@@ -64,11 +64,11 @@ default['mesos']['slave']['flags']['strict']        = true
 default['mesos']['slave']['flags']['recover']       = 'reconnect'
 
 # Workaround for setting default cgroups hierarchy root
-if node['mesos']['init'] == 'systemd'
-  default['mesos']['slave']['flags']['cgroups_hierarchy'] = '/sys/fs/cgroup'
-else
-  default['mesos']['slave']['flags']['cgroups_hierarchy'] = '/cgroup'
-end
+default['mesos']['slave']['flags']['cgroups_hierarchy'] = if node['mesos']['init'] == 'systemd'
+                                                            '/sys/fs/cgroup'
+                                                          else
+                                                            '/cgroup'
+                                                          end
 
 # Use the following options if you are using Exhibitor to manage Zookeeper
 # in your environment.
