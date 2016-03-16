@@ -65,6 +65,7 @@ platforms:
   - name: debian-8.1
     run_list:
       - recipe[apt]
+      - recipe[curl]
     driver:
       image_id: ami-116d857a
     transport:
