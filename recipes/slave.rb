@@ -57,7 +57,7 @@ template 'mesos-slave-wrapper' do
   path '/etc/mesos-chef/mesos-slave'
   owner 'root'
   group 'root'
-  mode '0755'
+  mode '0750'
   source 'wrapper.erb'
   variables(env:    node['mesos']['slave']['env'],
             bin:    node['mesos']['slave']['bin'],
