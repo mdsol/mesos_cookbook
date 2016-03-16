@@ -57,7 +57,7 @@ template 'mesos-master-wrapper' do
   path '/etc/mesos-chef/mesos-master'
   owner 'root'
   group 'root'
-  mode '0755'
+  mode '0750'
   source 'wrapper.erb'
   variables(env:    node['mesos']['master']['env'],
             bin:    node['mesos']['master']['bin'],
