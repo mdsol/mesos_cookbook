@@ -30,13 +30,11 @@ Supported Mesos versions
 
 This cookbook is tested against the following Apache Mesos versions:
 
-* 0.25.0
-* 0.24.1
-* 0.24.0
-* 0.23.0
+* 0.28.0
+* 0.27.2
+* 0.26.0
 
-We intend to support at most the three latest versions of Apache Mesos including
-all patch releases for supported major versions. Ex. 0.21.0 + 0.21.1 etc..
+We intend to support at most the three latest versions of Apache Mesos.
 
 Attributes
 ----------
