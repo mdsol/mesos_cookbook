@@ -33,6 +33,12 @@ platforms:
   - name: centos-6.7
     run_list:
       - recipe[yum]
+  - name: box-cutter/ol67
+    run_list:
+      - recipe[yum]
+  - name: box-cutter/ol72
+    run_list:
+      - recipe[yum]
 
 suites:
 - &default
