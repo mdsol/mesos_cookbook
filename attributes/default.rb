@@ -5,7 +5,7 @@ default['java']['jdk_version'] = '7'
 default['mesos']['repo']       = true
 
 # Mesosphere Mesos version.
-default['mesos']['version']    = '0.25.0'
+default['mesos']['version']    = '0.28.0'
 
 # Init system to use
 default['mesos']['init']       = case node['platform']

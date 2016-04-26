@@ -43,67 +43,50 @@ platforms:
       - recipe[curl]
     driver:
       image_id: ami-2a4d1a40
-    transport:
-      username: ubuntu
   - name: ubuntu-14.04
     run_list:
       - recipe[apt]
       - recipe[curl]
     driver:
       image_id: ami-5c207736
-    transport:
-      username: ubuntu
   - name: ubuntu-12.04
     run_list:
       - recipe[apt]
       - recipe[curl]
     driver:
       image_id: ami-4505522f
-    transport:
-      username: ubuntu
 # https://wiki.debian.org/Cloud/AmazonEC2Image
-  - name: debian-8.1
+  - name: debian-8.4
     run_list:
       - recipe[apt]
       - recipe[curl]
     driver:
-      image_id: ami-116d857a
-    transport:
-      username: admin
+      image_id: ami-c8bda8a2
 # https://wiki.centos.org/Cloud/AWS
   - name: centos-7
     run_list:
       - recipe[yum]
     driver:
-      image_id: ami-61bbf104
-    transport:
-      username: centos
+      image_id: ami-6d1c2007
   - name: centos-6
     run_list:
       - recipe[yum]
     driver:
-      image_id: ami-57cd8732
-    transport:
-      username: centos
+      image_id: ami-1c221e76
 
 suites:
 - &default
-  name: 0-25-0
+  name: 0-28-0
   run_list:
     - recipe[mesos::master]
     - recipe[mesos::slave]
 - <<: *default
-  name: 0-24-1
+  name: 0-27-2
   attributes:
     mesos:
-      version: 0.24.1
+      version: 0.27.2
 - <<: *default
-  name: 0-24-0
+  name: 0-26-0
   attributes:
     mesos:
-      version: 0.24.0
-- <<: *default
-  name: 0-23-0
-  attributes:
-    mesos:
-      version: 0.23.0
+      version: 0.26.0

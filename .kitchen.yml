@@ -36,7 +36,7 @@ platforms:
 
 suites:
 - &default
-  name: 0-25-0
+  name: 0-28-0
   attributes:
     mesos:
       slave:
@@ -46,17 +46,12 @@ suites:
     - recipe[mesos::master]
     - recipe[mesos::slave]
 - <<: *default
-  name: 0-24-1
+  name: 0-27-2
   attributes:
     mesos:
-      version: 0.24.1
+      version: 0.27.2
 - <<: *default
-  name: 0-24-0
+  name: 0-26-0
   attributes:
     mesos:
-      version: 0.24.0
-- <<: *default
-  name: 0-23-0
-  attributes:
-    mesos:
-      version: 0.23.0
+      version: 0.26.0
