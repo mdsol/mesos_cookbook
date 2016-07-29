@@ -31,7 +31,7 @@ include_recipe 'mesos::repo' if node['mesos']['repo']
 
 case node['platform_family']
 when 'debian'
-  %w( unzip default-jre-headless libcurl3 libsvn1).each do |pkg|
+  %w(unzip default-jre-headless libcurl3 libsvn1).each do |pkg|
     package pkg do
       action :install
     end
@@ -45,7 +45,7 @@ when 'debian'
     version "#{node['mesos']['version']}*"
   end
 when 'rhel'
-  %w( unzip libcurl subversion ).each do |pkg|
+  %w(unzip libcurl subversion).each do |pkg|
     yum_package pkg do
       action :install
     end
@@ -75,7 +75,7 @@ template 'mesos-master-init' do
     path '/etc/systemd/system/mesos-master.service'
     source 'systemd.erb'
   when 'sysvinit_debian'
-    mode 0755
+    mode 0o755
     path '/etc/init.d/mesos-master'
     source 'sysvinit_debian.erb'
   when 'upstart'
@@ -92,7 +92,7 @@ template 'mesos-slave-init' do
     path '/etc/systemd/system/mesos-slave.service'
     source 'systemd.erb'
   when 'sysvinit_debian'
-    mode 0755
+    mode 0o755
     path '/etc/init.d/mesos-slave'
     source 'sysvinit_debian.erb'
   when 'upstart'
