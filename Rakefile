@@ -37,4 +37,4 @@ RSpec::Core::RakeTask.new(:spec)
 desc 'Run all tests on Travis'
 task travis: %w(style)
 
-task default: %w( style integration:vagrant )
+task default: %w(style integration:vagrant)

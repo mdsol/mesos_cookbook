@@ -27,7 +27,7 @@ include_recipe 'mesos::install'
 ruby_block 'mesos-slave-configuration-validation' do
   block do
     # Get Mesos --help
-    help = Mixlib::ShellOut.new("#{node['mesos']['slave']['bin']} --help")
+    help = Mixlib::ShellOut.new("#{node['mesos']['slave']['bin']} --help --work_dir=#{node['mesos']['slave']['flags']['work_dir']}")
     help.run_command
     help.error!
     # Extract options
