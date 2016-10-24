@@ -12,6 +12,14 @@ provisioner:
   require_chef_omnibus: 12.5.1
 
 platforms:
+  - name: ubuntu-16.04
+    run_list:
+      - recipe[apt]
+      - recipe[curl]
+  - name: ubuntu-15.10
+    run_list:
+      - recipe[apt]
+      - recipe[curl]
   - name: ubuntu-15.04
     run_list:
       - recipe[apt]
@@ -24,16 +32,16 @@ platforms:
     run_list:
       - recipe[apt]
       - recipe[curl]
-  - name: debian-8.2
+  - name: debian-8.6
     run_list:
       - recipe[apt]
-  - name: centos-7.1
+  - name: centos-7.2
     run_list:
       - recipe[yum]
-  - name: centos-6.7
+  - name: centos-6.8
     run_list:
       - recipe[yum]
-  - name: box-cutter/ol67
+  - name: box-cutter/ol68
     run_list:
       - recipe[yum]
   - name: box-cutter/ol72
@@ -42,22 +50,29 @@ platforms:
 
 suites:
 - &default
-  name: 0-28-0
+  name: 1-0-1
+  excludes:
+    - ubuntu-15.04
+  run_list:
+    - recipe[mesos::master]
+    - recipe[mesos::slave]
   attributes:
     mesos:
       slave:
         flags:
           attributes: 'attribute01:value01;attribute02:value02'
-  run_list:
-    - recipe[mesos::master]
-    - recipe[mesos::slave]
 - <<: *default
-  name: 0-27-2
+  name: 1-0-0
+  excludes:
+    - ubuntu-15.04
   attributes:
     mesos:
-      version: 0.27.2
+      version: 1.0.0
 - <<: *default
-  name: 0-26-0
+  name: 0-28-2
+  excludes:
+    - ubuntu-16.04
+    - ubuntu-15.10
   attributes:
     mesos:
-      version: 0.26.0
+      version: 0.28.2

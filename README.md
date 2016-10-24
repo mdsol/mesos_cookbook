@@ -18,21 +18,23 @@ Platform
 --------
 Tested on
 
-* Ubuntu 15.04
+* Ubuntu 16.04
+* Ubuntu 15.10 (1.0.0, 1.0.1)
+* Ubuntu 15.04 (0.28.2)
 * Ubuntu 14.04
 * Ubuntu 12.04
-* Debian 8.2
-* CentOS 7.1
-* CentOS 6.7
+* Debian 8.6
+* CentOS 7.2
+* CentOS 6.8
 
 Supported Mesos versions
 ------------------------
 
 This cookbook is tested against the following Apache Mesos versions:
 
-* 0.28.0
-* 0.27.2
-* 0.26.0
+* 1.0.1
+* 1.0.0
+* 0.28.2
 
 We intend to support at most the three latest versions of Apache Mesos.
 
@@ -114,7 +116,7 @@ json_class:          Chef::Role
 name:                mesos_master
 override_attributes:
   mesos:
-    version: 0.25.0
+    version: 1.0.1
     master:
       flags:
         cluster: 'mesos-sandbox'
@@ -134,7 +136,7 @@ json_class:          Chef::Role
 name:                mesos_slave
 override_attributes:
   mesos:
-    version: 0.25.0
+    version: 1.0.1
     slave:
       flags:
         master: 'zk://127.0.0.1:2181/mesos'

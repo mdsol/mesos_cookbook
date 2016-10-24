@@ -26,9 +26,8 @@ end
 describe command('curl -sD - http://localhost:5050/state.json') do
   its(:stdout) { should match(/"logging_level":"INFO"/) }
   its(:stdout) { should match(/"cluster":"MyMesosCluster"/) }
-  its(:stdout) { should match(/"authenticate":"false"/) }
-  its(:stdout) { should match(/"authenticate_slaves":"false"/) }
-  its(:stdout) { should match(/"activated_slaves":\s*1/) }
+  its(:stdout) { should match(/"authenticate_(slaves|agents)":"false"/) }
+  its(:stdout) { should match(/"activated_(slaves|agents)":\s*1/) }
 end
 
 describe file('/etc/mesos-chef/mesos-master') do

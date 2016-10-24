@@ -20,7 +20,6 @@ end
 
 describe file('/var/log/mesos/mesos-slave.INFO') do
   its(:content) { should match(/INFO level logging started/) }
-  its(:content) { should match(/Slave started on/) }
   its(:content) { should match(/New master detected/) }
 end
 
