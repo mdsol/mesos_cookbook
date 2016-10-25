@@ -1,21 +1,17 @@
-name 'mesos'
-maintainer 'Ray Rodriguez'
+name             'mesos'
+maintainer       'Ray Rodriguez'
 maintainer_email 'rayrod2030@gmail.com'
-license 'Apache 2.0'
-description 'Installs/Configures Apache Mesos'
+license          'Apache 2.0'
+description      'Installs/Configures Apache Mesos'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version '3.5.1'
-# rubocop:enable Style/SingleSpaceBeforeFirstArg
+version          '3.5.1'
+source_url       'https://github.com/mdsol/mesos_cookbook'
+issues_url       'https://github.com/mdsol/mesos_cookbook/issues'
 
 %w(ubuntu debian centos amazon scientific oracle).each do |os|
   supports os
 end
 
-# Cookbook dependencies
-%w(java apt).each do |cb|
-  depends cb
+%w(java apt yum).each do |cookbook|
+  depends cookbook
 end
-
-depends 'yum', '~> 3.0'
-
-suggests 'exhibitor', '0.4.0'
