@@ -2,13 +2,14 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased][unreleased]
+## [3.6.0] - 2016-12-05
 ### Fixed
 - Mesos 1.0.0 and 1.0.1 require the --work_dir flag to be specified
 
 ### Changed
+- Default to Mesos 1.1.0
+- Default Java version to 8
 - Unlock yum cookbook version
-- Default to Mesos 1.0.1
 - Platform list updated to match Mesosphere packages
 
 ## [3.5.1] - 2015-12-23
