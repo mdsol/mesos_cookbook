@@ -1,11 +1,8 @@
+---
 driver:
   name: vagrant
-  customize:
-    cpus:     1
-    memory:   1024
-    nictype1: virtio
-  network:
-    - ["forwarded_port", {guest: 5050, host: 5050, auto_correct: true}]
+  customize: {cpus: 2, memory: 1024}
+  network: [['forwarded_port', {guest: 5050, host: 5050, auto_correct: true}]]
 
 provisioner:
   name: chef_zero
@@ -13,66 +10,40 @@ provisioner:
 
 platforms:
   - name: ubuntu-16.04
-    run_list:
-      - recipe[apt]
-      - recipe[curl]
+    run_list: ['recipe[apt]', 'recipe[curl]']
   - name: ubuntu-15.10
-    run_list:
-      - recipe[apt]
-      - recipe[curl]
-  - name: ubuntu-15.04
-    run_list:
-      - recipe[apt]
-      - recipe[curl]
+    run_list: ['recipe[apt]', 'recipe[curl]']
   - name: ubuntu-14.04
-    run_list:
-      - recipe[apt]
-      - recipe[curl]
+    run_list: ['recipe[apt]', 'recipe[curl]']
   - name: ubuntu-12.04
-    run_list:
-      - recipe[apt]
-      - recipe[curl]
+    run_list: ['recipe[apt]', 'recipe[curl]']
   - name: debian-8.6
-    run_list:
-      - recipe[apt]
+    run_list: ['recipe[apt]']
+    attributes: {java: {jdk_version: '7'}}
   - name: centos-7.2
-    run_list:
-      - recipe[yum]
+    run_list: ['recipe[yum]']
   - name: centos-6.8
-    run_list:
-      - recipe[yum]
-  - name: box-cutter/ol68
-    run_list:
-      - recipe[yum]
-  - name: box-cutter/ol72
-    run_list:
-      - recipe[yum]
+    run_list: ['recipe[yum]']
+# Oracle Linux
+# - name: box-cutter/ol68
+#   run_list: ['recipe[yum]']
+# - name: box-cutter/ol72
+#   run_list: ['recipe[yum]']
 
 suites:
-- &default
-  name: 1-0-1
-  excludes:
-    - ubuntu-15.04
-  run_list:
-    - recipe[mesos::master]
-    - recipe[mesos::slave]
-  attributes:
-    mesos:
-      slave:
-        flags:
-          attributes: 'attribute01:value01;attribute02:value02'
-- <<: *default
-  name: 1-0-0
-  excludes:
-    - ubuntu-15.04
-  attributes:
-    mesos:
-      version: 1.0.0
-- <<: *default
-  name: 0-28-2
-  excludes:
-    - ubuntu-16.04
-    - ubuntu-15.10
-  attributes:
-    mesos:
-      version: 0.28.2
+  - &default
+    name: 1-1-0
+    run_list:
+      - recipe[mesos::master]
+      - recipe[mesos::slave]
+    attributes:
+      mesos:
+        slave:
+          flags:
+            attributes: 'attribute01:value01;attribute02:value02'
+  - <<: *default
+    name: 1-0-1
+    attributes: {mesos: {version: '1.0.1'}}
+  - <<: *default
+    name: 1-0-0
+    attributes: {mesos: {version: '1.0.0'}}

@@ -19,11 +19,10 @@ Platform
 Tested on
 
 * Ubuntu 16.04
-* Ubuntu 15.10 (1.0.0, 1.0.1)
-* Ubuntu 15.04 (0.28.2)
+* Ubuntu 15.10
 * Ubuntu 14.04
 * Ubuntu 12.04
-* Debian 8.6
+* Debian 8.6 (with Java 7)
 * CentOS 7.2
 * CentOS 6.8
 
@@ -32,9 +31,9 @@ Supported Mesos versions
 
 This cookbook is tested against the following Apache Mesos versions:
 
+* 1.1.0
 * 1.0.1
 * 1.0.0
-* 0.28.2
 
 We intend to support at most the three latest versions of Apache Mesos.
 
