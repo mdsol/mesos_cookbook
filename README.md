@@ -12,7 +12,7 @@ provided by [Mesosphere][].
 Requirements
 ------------
 
-- Chef >= 12.5.1
+- Chef >= 12.14.60
 
 Platform
 --------

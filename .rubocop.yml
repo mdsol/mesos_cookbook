@@ -1,8 +1,12 @@
+---
 AllCops:
   Exclude:
     - vendor/**/*
     - bin/**/*
     - .kitchen/**/*
+Metrics/BlockLength:
+  Exclude:
+    - '**/*_spec.rb'
 
 ClassLength:
   Enabled: false

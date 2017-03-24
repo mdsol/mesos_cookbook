@@ -6,7 +6,7 @@ driver:
 
 provisioner:
   name: chef_zero
-  require_chef_omnibus: 12.5.1
+  require_chef_omnibus: 12.14.60
 
 platforms:
   - name: ubuntu-16.04
